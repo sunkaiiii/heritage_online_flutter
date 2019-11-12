@@ -349,3 +349,5 @@ build/
 # End of https://www.gitignore.io/api/dart,swift,xcode,android,intellij,cocoapods,objective-c,androidstudio
 
 **/flutter_export_environment.sh
+.idea/libraries/Dart_Packages.xml
+.idea/libraries/Dart_SDK.xml
