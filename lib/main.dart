@@ -1,21 +1,107 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:heritage_online_flutter/HeritageProjectPage.dart';
 import 'package:heritage_online_flutter/NewsDetailPage.dart';
 import 'package:http/http.dart' as http;
 
-void main() => runApp(SimpleApp());
+void main() => runApp(MainPage());
 
-class SimpleApp extends StatelessWidget {
+
+
+class MainPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return MainPageState();
+  }
+}
+
+class MainPageState extends State<MainPage> {
+  int _tabIndex = 0;
+  var _body ;
+
+  var appBarTitles = ['资讯', '非遗项目'];
+  var tabImages = [
+    [
+      getTabImage('assets/imgs/nav_1_no_sel.png'),
+      getTabImage('assets/imgs/nav_1_sel.png')
+    ],
+    [
+      getTabImage('assets/imgs/nav2_no_sel.png'),
+      getTabImage('assets/imgs/nav2_sel.png')
+    ],
+  ];
+
   @override
   Widget build(BuildContext context) {
+    initData();
     return MaterialApp(
       title: 'E-heritage',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: MainListPage(),
+      theme: ThemeData(primarySwatch: Colors.brown),
+      home: Scaffold(
+        body: _body,
+        bottomNavigationBar: new CupertinoTabBar(
+          items: getBottomNavigation(),
+          currentIndex: _tabIndex,
+          onTap: (index) {
+            setState(() {
+              _tabIndex = index;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  initData(){
+    _body = IndexedStack(
+      children: <Widget>[MainListPage(), HeritageProjectPage()],
+      index: _tabIndex,
+    );
+  }
+
+  getTabIcon(int curIndex) {
+    if (curIndex == _tabIndex) {
+      return tabImages[curIndex][1];
+    }
+    return tabImages[curIndex][0];
+  }
+
+  getBottomNavigation() {
+    List<BottomNavigationBarItem> list = new List();
+    for (int i = 0; i < 2; i++) {
+      list.add(new BottomNavigationBarItem(
+          icon: getTabIcon(i), title: getTabTitle(i)));
+    }
+    return list;
+  }
+
+
+// 根据索引值返回页面顶部标题
+  getTabTitle(int curIndex) {
+    return new Text(
+      appBarTitles[curIndex],
+      //style: getTabTextStyle(curIndex)
     );
   }
 }
+
+
+
+
+getTabImage(path) {
+  return new Image.asset(path, width: 20.0, height: 20.0);
+}
+
+//getTabTextStyle(int curIndex) {
+//  if (curIndex == _tabIndex) {
+//    return tabTextStyleSelected;
+//  }
+//  return tabTextStyleNormal;
+//}
+
+
 
 class MainListPage extends StatefulWidget {
   MainListPage({Key key}) : super(key: key);
@@ -75,11 +161,11 @@ class MainPageListState extends State<MainListPage> {
   }
 
   toDetailPage(widget) {
-    Map<String,String> info=Map();
-    info["content"]=widget["content"];
-    info["title"]=widget["title"];
-    info["link"]=widget["link"];
-    Navigator.push(context, MaterialPageRoute(builder: (_){
+    Map<String, String> info = Map();
+    info["content"] = widget["content"];
+    info["title"] = widget["title"];
+    info["link"] = widget["link"];
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
       return NewsDetailPage(info);
     }));
   }
@@ -88,10 +174,10 @@ class MainPageListState extends State<MainListPage> {
     return Container(
         color: Color.fromARGB(255, 230, 230, 230),
         padding: EdgeInsets.all(4),
-        child: GestureDetector(
-          onTap: ()=>toDetailPage(widgets[i]),
-          child: Card(
-            elevation: 2,
+        child: Card(
+          elevation: 2,
+          child: InkWell(
+            onTap: () => toDetailPage(widgets[i]),
             child: Container(
               child: Column(
                 children: <Widget>[
