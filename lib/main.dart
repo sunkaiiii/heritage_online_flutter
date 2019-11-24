@@ -6,9 +6,9 @@ import 'package:heritage_online_flutter/HeritageProjectPage.dart';
 import 'package:heritage_online_flutter/NewsDetailPage.dart';
 import 'package:http/http.dart' as http;
 
+import '_SliverAppBarDelegate.dart';
+
 void main() => runApp(MainPage());
-
-
 
 class MainPage extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   int _tabIndex = 0;
-  var _body ;
+  var _body;
 
   var appBarTitles = ['资讯', '非遗项目'];
   var tabImages = [
@@ -54,7 +54,7 @@ class MainPageState extends State<MainPage> {
     );
   }
 
-  initData(){
+  initData() {
     _body = IndexedStack(
       children: <Widget>[MainListPage(), HeritageProjectPage()],
       index: _tabIndex,
@@ -77,7 +77,6 @@ class MainPageState extends State<MainPage> {
     return list;
   }
 
-
 // 根据索引值返回页面顶部标题
   getTabTitle(int curIndex) {
     return new Text(
@@ -86,9 +85,6 @@ class MainPageState extends State<MainPage> {
     );
   }
 }
-
-
-
 
 getTabImage(path) {
   return new Image.asset(path, width: 20.0, height: 20.0);
@@ -100,8 +96,6 @@ getTabImage(path) {
 //  }
 //  return tabTextStyleNormal;
 //}
-
-
 
 class MainListPage extends StatefulWidget {
   MainListPage({Key key}) : super(key: key);
@@ -125,7 +119,26 @@ class MainPageListState extends State<MainListPage> {
     if (showLoadingDialog()) {
       return getProgressDialog();
     } else {
-      return getListView();
+      return NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScroll) {
+          return <Widget>[
+            SliverToBoxAdapter(
+              child: Text("adsadsad"),
+            ),
+            SliverPersistentHeader(
+              floating: false,
+              pinned: false,
+              delegate:SliverAppBarDelegate(
+                minHeight: 200,
+                maxHeight: 200,
+                child: Image.asset("assets/imgs/ic_launcher.png", width: 200.0, height: 200.0)
+              ) ,
+            )
+          ];
+        },
+        body: getListView(),
+      );
+      //return getListView();
     }
   }
 
