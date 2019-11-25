@@ -11,12 +11,13 @@ class NewsDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("NewsDetail")),
-      body: Container(
-        child: NewsDetailList(maps["link"]),
-      ),
-    );
+    return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text("NewsDetail"),
+          previousPageTitle: "首页",
+          backgroundColor: CupertinoColors.white,
+        ),
+        child: NewsDetailList(maps["link"]));
   }
 }
 
@@ -69,26 +70,24 @@ class NewsDetailState extends State<NewsDetailList> {
   }
 
   getListView() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Text(result["title"].toString().trim()),
-          Expanded(
-            child: ListView.builder(
-              itemCount: widgets.length,
-              itemBuilder: (BuildContext context, int position) {
-                return getRow(position);
-              },
-            ),
-          )
-        ],
-      ),
-    );
+    return NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScroll) {
+          return <Widget>[
+            SliverToBoxAdapter(
+              child: Text(result["title"].toString().trim()),
+            )
+          ];
+        },
+        body: ListView.builder(
+            itemCount: widgets.length,
+            itemBuilder: (BuildContext context, int position) {
+              return getRow(position);
+            }));
   }
 
   getProgressDialog() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: CupertinoActivityIndicator(),
     );
   }
 

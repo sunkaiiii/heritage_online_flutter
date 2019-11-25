@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/HeritageProjectPage.dart';
 import 'package:heritage_online_flutter/NewsDetailPage.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +18,6 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   int _tabIndex = 0;
-  var _body;
 
   var appBarTitles = ['资讯', '非遗项目'];
   var tabImages = [
@@ -33,16 +31,23 @@ class MainPageState extends State<MainPage> {
     ],
   ];
 
+  var widgets = [MainListPage(), HeritageProjectPage()];
+
   @override
   Widget build(BuildContext context) {
-    initData();
-    return MaterialApp(
+    return CupertinoApp(
       title: 'E-heritage',
-      theme: ThemeData(primarySwatch: Colors.brown),
-      home: Scaffold(
-        body: _body,
-        bottomNavigationBar: new CupertinoTabBar(
+      home: CupertinoTabScaffold(
+        tabBuilder: (context, position) {
+          return CupertinoTabView(
+            builder: (context) {
+              return widgets[position];
+            },
+          );
+        },
+        tabBar: new CupertinoTabBar(
           items: getBottomNavigation(),
+          activeColor: Color(0xFF795548),
           currentIndex: _tabIndex,
           onTap: (index) {
             setState(() {
@@ -51,13 +56,6 @@ class MainPageState extends State<MainPage> {
           },
         ),
       ),
-    );
-  }
-
-  initData() {
-    _body = IndexedStack(
-      children: <Widget>[MainListPage(), HeritageProjectPage()],
-      index: _tabIndex,
     );
   }
 
@@ -166,11 +164,12 @@ class MainPageListState extends State<MainListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("E-heritage"),
+    return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text("资讯"),
+          backgroundColor: CupertinoColors.white,
         ),
-        body: getBody());
+        child: getBody());
   }
 
   toDetailPage(widget) {
@@ -178,20 +177,19 @@ class MainPageListState extends State<MainListPage> {
     info["content"] = widget["content"];
     info["title"] = widget["title"];
     info["link"] = widget["link"];
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
+    Navigator.push(context, CupertinoPageRoute(builder: (_) {
       return NewsDetailPage(info);
     }));
   }
 
   Widget getRow(int i) {
     return Container(
-        color: Color.fromARGB(255, 230, 230, 230),
+        color: CupertinoColors.lightBackgroundGray,
         padding: EdgeInsets.all(4),
-        child: Card(
-          elevation: 2,
-          child: InkWell(
+        child: GestureDetector(
             onTap: () => toDetailPage(widgets[i]),
             child: Container(
+              color: CupertinoColors.white,
               child: Column(
                 children: <Widget>[
                   Image(
@@ -211,7 +209,9 @@ class MainPageListState extends State<MainListPage> {
                         ),
                         Text(
                           "${widgets[i]["date"]}",
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style: TextStyle(
+                              color: CupertinoColors.inactiveGray,
+                              fontSize: 14),
                         ),
                         Text("${widgets[i]["content"]}",
                             style: TextStyle(fontSize: 16))
@@ -220,9 +220,7 @@ class MainPageListState extends State<MainListPage> {
                   )
                 ],
               ),
-            ),
-          ),
-        ));
+            )));
   }
 
   loadData() async {

@@ -6,11 +6,12 @@ import 'dart:convert';
 class HeritageProjectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("非遗项目"),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text("非遗项目"),
+        backgroundColor: CupertinoColors.white,
       ),
-      body: HeritageBodyWidget(),
+      child: HeritageBodyWidget(),
     );
   }
 }
@@ -87,7 +88,7 @@ class HeritageBodyBottomWidget extends StatefulWidget {
 }
 
 class HeritageBodyBottomWidgetState extends State<HeritageBodyBottomWidget> {
-  Map result;
+  List result = [];
 
   @override
   void initState() {
@@ -95,10 +96,59 @@ class HeritageBodyBottomWidgetState extends State<HeritageBodyBottomWidget> {
     loadData();
   }
 
-  void loadData() async {}
+  void loadData() async {
+    String url =
+        "https://sunkai.xyz:5001/api/HeritageProject/GetHeritageProjectList/1";
+    var response = await get(url);
+    setState(() {
+      result = jsonDecode(response.body);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Text("@3123");
+    return ListView.builder(
+        itemCount: result.length,
+        itemBuilder: (context, position) {
+          return getRow(position);
+        });
+  }
+
+  getRow(int i) {
+    Map rowInfo = result[i];
+    return HeritageProjectRow(rowInfo);
+  }
+}
+
+class HeritageProjectRow extends StatefulWidget {
+  Map result;
+
+  HeritageProjectRow(this.result);
+
+  @override
+  State<StatefulWidget> createState() {
+    return HeritageProjectRowState(result);
+  }
+}
+
+class HeritageProjectRowState extends State<HeritageProjectRow> {
+  Map row;
+  bool expended = false;
+
+  HeritageProjectRowState(this.row);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Text(row["num"]),
+          Text(row["title"]),
+          Text(row["type"]),
+          Text(row["rx_time"]),
+          Text(row["province"])
+        ],
+      ),
+    );
   }
 }
