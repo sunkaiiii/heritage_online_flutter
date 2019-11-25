@@ -128,11 +128,11 @@ class MainPageListState extends State<MainListPage> {
             SliverPersistentHeader(
               floating: false,
               pinned: false,
-              delegate:SliverAppBarDelegate(
-                minHeight: 200,
-                maxHeight: 200,
-                child: Image.asset("assets/imgs/ic_launcher.png", width: 200.0, height: 200.0)
-              ) ,
+              delegate: SliverAppBarDelegate(
+                  minHeight: 200,
+                  maxHeight: 200,
+                  child: Image.asset("assets/imgs/ic_launcher.png",
+                      width: 200.0, height: 200.0)),
             )
           ];
         },
@@ -144,7 +144,7 @@ class MainPageListState extends State<MainListPage> {
 
   getProgressDialog() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: CupertinoActivityIndicator(),
     );
   }
 
