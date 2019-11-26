@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heritage_online_flutter/HeritageProjectPage.dart';
 import 'package:heritage_online_flutter/NewsDetailPage.dart';
 import 'package:http/http.dart' as http;
@@ -117,24 +119,38 @@ class MainPageListState extends State<MainListPage> {
     if (showLoadingDialog()) {
       return getProgressDialog();
     } else {
-      return NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScroll) {
-          return <Widget>[
-            SliverToBoxAdapter(
-              child: Text("adsadsad"),
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          color: CupertinoTheme.of(context).brightness == Brightness.light
+              ? CupertinoColors.extraLightBackgroundGray
+              : CupertinoColors.darkBackgroundGray,
+        ),
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          slivers: <Widget>[
+            CupertinoSliverNavigationBar(
+              largeTitle: const Text('资讯'),
             ),
-            SliverPersistentHeader(
-              floating: false,
-              pinned: false,
-              delegate: SliverAppBarDelegate(
-                  minHeight: 200,
-                  maxHeight: 200,
-                  child: Image.asset("assets/imgs/ic_launcher.png",
-                      width: 200.0, height: 200.0)),
+            CupertinoSliverRefreshControl(
+             onRefresh: loadData,
+            ),
+            SliverToBoxAdapter(
+                child: Container(
+              child: Column(
+                children: <Widget>[
+                  Text("321312321321"),
+                  Image.asset("assets/imgs/ic_launcher.png",
+                      width: 200.0, height: 200.0)
+                ],
+              ),
+            )),
+            SliverSafeArea(
+              top: false,
+              sliver: getListView(),
             )
-          ];
-        },
-        body: getListView(),
+          ],
+        ),
       );
       //return getListView();
     }
@@ -147,11 +163,10 @@ class MainPageListState extends State<MainListPage> {
   }
 
   getListView() {
-    return ListView.builder(
-      itemCount: widgets.length,
-      itemBuilder: (BuildContext context, int position) {
-        return getRow(position);
-      },
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        return getRow(index);
+      }, childCount: widgets.length),
     );
   }
 
@@ -164,12 +179,7 @@ class MainPageListState extends State<MainListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text("资讯"),
-          backgroundColor: CupertinoColors.white,
-        ),
-        child: getBody());
+    return CupertinoPageScaffold(child: getBody());
   }
 
   toDetailPage(widget) {
@@ -223,8 +233,21 @@ class MainPageListState extends State<MainListPage> {
             )));
   }
 
-  loadData() async {
-    String url = "https://sunkai.xyz:5001/api/NewsList";
+  Future<void> loadData() async {
+    final Random random = new Random();
+    int page = 0;
+    while (page == 0) {
+      page = random.nextInt(20);
+    }
+    String url = "https://sunkai.xyz:5001/api/NewsList/"+page.toString();
+    Fluttertoast.showToast(
+        msg: url,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        fontSize: 16.0
+    );
+    print("request url: " + url);
     http.Response response = await http.get(url);
     setState(() {
       widgets = json.decode(response.body);
