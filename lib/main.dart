@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,7 +6,6 @@ import 'package:heritage_online_flutter/HeritageProjectPage.dart';
 import 'package:heritage_online_flutter/NewsDetailPage.dart';
 import 'package:http/http.dart' as http;
 
-import '_SliverAppBarDelegate.dart';
 
 void main() => runApp(MainPage());
 
@@ -108,11 +106,13 @@ class MainListPage extends StatefulWidget {
 
 class MainPageListState extends State<MainListPage> {
   List widgets = [];
+  bool isLoading = false;
+  int page = 1;
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    loadData(page);
   }
 
   getBody() {
@@ -133,7 +133,7 @@ class MainPageListState extends State<MainListPage> {
               largeTitle: const Text('资讯'),
             ),
             CupertinoSliverRefreshControl(
-             onRefresh: loadData,
+              onRefresh: refreshData,
             ),
             SliverToBoxAdapter(
                 child: Container(
@@ -165,8 +165,11 @@ class MainPageListState extends State<MainListPage> {
   getListView() {
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
+        if (widgets.length - index < 10 && !isLoading) {
+          loadData(++page);
+        }
         return getRow(index);
-      }, childCount: widgets.length),
+      }, childCount: widgets.length + 1),
     );
   }
 
@@ -193,64 +196,69 @@ class MainPageListState extends State<MainListPage> {
   }
 
   Widget getRow(int i) {
-    return Container(
-        color: CupertinoColors.lightBackgroundGray,
-        padding: EdgeInsets.all(4),
-        child: GestureDetector(
-            onTap: () => toDetailPage(widgets[i]),
-            child: Container(
-              color: CupertinoColors.white,
-              child: Column(
-                children: <Widget>[
-                  Image(
-                    image: NetworkImage(
-                        "https://sunkai.xyz:5001/img/${widgets[i]["img"]}"),
-                    fit: BoxFit.contain,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "${widgets[i]["title"]}",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "${widgets[i]["date"]}",
-                          style: TextStyle(
-                              color: CupertinoColors.inactiveGray,
-                              fontSize: 14),
-                        ),
-                        Text("${widgets[i]["content"]}",
-                            style: TextStyle(fontSize: 16))
-                      ],
+    if (i < widgets.length) {
+      return Container(
+          color: CupertinoColors.lightBackgroundGray,
+          padding: EdgeInsets.all(4),
+          child: GestureDetector(
+              onTap: () => toDetailPage(widgets[i]),
+              child: Container(
+                color: CupertinoColors.white,
+                child: Column(
+                  children: <Widget>[
+                    Image(
+                      image: NetworkImage(
+                          "https://sunkai.xyz:5001/img/${widgets[i]["img"]}"),
+                      fit: BoxFit.contain,
                     ),
-                  )
-                ],
-              ),
-            )));
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "${widgets[i]["title"]}",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "${widgets[i]["date"]}",
+                            style: TextStyle(
+                                color: CupertinoColors.inactiveGray,
+                                fontSize: 14),
+                          ),
+                          Text("${widgets[i]["content"]}",
+                              style: TextStyle(fontSize: 16))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )));
+    }
+    return CupertinoActivityIndicator();
   }
 
-  Future<void> loadData() async {
-    final Random random = new Random();
-    int page = 0;
-    while (page == 0) {
-      page = random.nextInt(20);
-    }
-    String url = "https://sunkai.xyz:5001/api/NewsList/"+page.toString();
+  Future<void> refreshData() {
+    widgets=[];
+    page = 1;
+    return loadData(page);
+  }
+
+  Future<void> loadData(int page) async {
+    isLoading = true;
+    String url = "https://sunkai.xyz:5001/api/NewsList/" + page.toString();
     Fluttertoast.showToast(
         msg: url,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIos: 1,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
     print("request url: " + url);
     http.Response response = await http.get(url);
     setState(() {
-      widgets = json.decode(response.body);
+      widgets.addAll(json.decode(response.body));
+      isLoading = false;
     });
   }
 }

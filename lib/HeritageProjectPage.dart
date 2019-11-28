@@ -89,32 +89,42 @@ class HeritageBodyBottomWidget extends StatefulWidget {
 
 class HeritageBodyBottomWidgetState extends State<HeritageBodyBottomWidget> {
   List result = [];
+  int page = 1;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    loadData(page);
   }
 
-  void loadData() async {
+  void loadData(int page) async {
+    isLoading = true;
     String url =
-        "https://sunkai.xyz:5001/api/HeritageProject/GetHeritageProjectList/1";
+        "https://sunkai.xyz:5001/api/HeritageProject/GetHeritageProjectList/$page";
     var response = await get(url);
     setState(() {
-      result = jsonDecode(response.body);
+      result.addAll(jsonDecode(response.body));
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: result.length,
+        itemCount: result.length + 1,
         itemBuilder: (context, position) {
+          if (result.length - position < 10 && !isLoading) {
+            loadData(++page);
+          }
           return getRow(position);
         });
   }
 
   getRow(int i) {
+    if (i == result.length) {
+      return CupertinoActivityIndicator();
+    }
     Map rowInfo = result[i];
     return HeritageProjectRow(rowInfo);
   }
