@@ -149,16 +149,58 @@ class HeritageProjectRowState extends State<HeritageProjectRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Text(row["num"]),
-          Text(row["title"]),
-          Text(row["type"]),
-          Text(row["rx_time"]),
-          Text(row["province"])
+    return getRow();
+  }
+
+  getRow() {
+    var widgets = <Widget>[];
+    widgets = <Widget>[Text(row["title"] + "(${row["province"]})")];
+    if (expended) {
+      var rowValues = row.values.toList();
+      print("rowValues"+rowValues.toString());
+      widgets.add(Container(
+        height: 200,
+          child: CustomScrollView(
+        slivers: <Widget>[
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200.0,
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 4.0,
+            ),
+            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                alignment: Alignment.center,
+                color: Colors.cyan[100 * (index % 5)],
+                child: Text(rowValues[index]),
+              );
+            }, childCount: rowValues.length),
+          )
         ],
-      ),
-    );
+      )));
+//      widgets.add(Container(
+//          color: Colors.grey,
+//          child: Column(
+//            children: <Widget>[
+//              Text(row["num"]),
+//              Text(row["type"]),
+//              Text(row["rx_time"]),
+//            ],
+//          )));
+    }
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            expended = !expended;
+          });
+        },
+        child: Container(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widgets,
+          ),
+        ));
   }
 }
