@@ -1,115 +1,264 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:heritage_online_flutter/heritage_project_page.dart';
+import 'package:heritage_online_flutter/news_detail_page.dart';
+import 'package:http/http.dart' as http;
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+void main() => runApp(MainPage());
 
-  // This widget is the root of your application.
+class MainPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+  State<StatefulWidget> createState() {
+    return MainPageState();
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class MainPageState extends State<MainPage> {
+  int _tabIndex = 0;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  var appBarTitles = ['资讯', '非遗项目'];
+  var tabImages = [
+    [
+      getTabImage('assets/imgs/nav_1_no_sel.png'),
+      getTabImage('assets/imgs/nav_1_sel.png')
+    ],
+    [
+      getTabImage('assets/imgs/nav2_no_sel.png'),
+      getTabImage('assets/imgs/nav2_sel.png')
+    ],
+  ];
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  var widgets = [MainListPage(), HeritageProjectPage()];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return CupertinoApp(
+      title: 'E-heritage',
+      home: CupertinoTabScaffold(
+        tabBuilder: (context, position) {
+          return CupertinoTabView(
+            builder: (context) {
+              return widgets[position];
+            },
+          );
+        },
+        tabBar: new CupertinoTabBar(
+          items: getBottomNavigation(),
+          activeColor: Color(0xFF795548),
+          currentIndex: _tabIndex,
+          onTap: (index) {
+            setState(() {
+              _tabIndex = index;
+            });
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  getTabIcon(int curIndex) {
+    if (curIndex == _tabIndex) {
+      return tabImages[curIndex][1];
+    }
+    return tabImages[curIndex][0];
+  }
+
+  getBottomNavigation() {
+    List<BottomNavigationBarItem> list = [];
+    for (int i = 0; i < 2; i++) {
+      list.add(new BottomNavigationBarItem(
+          icon: getTabIcon(i), title: getTabTitle(i)));
+    }
+    return list;
+  }
+
+// 根据索引值返回页面顶部标题
+  getTabTitle(int curIndex) {
+    return new Text(
+      appBarTitles[curIndex],
+      //style: getTabTextStyle(curIndex)
+    );
+  }
+}
+
+getTabImage(path) {
+  return new Image.asset(path, width: 20.0, height: 20.0);
+}
+
+//getTabTextStyle(int curIndex) {
+//  if (curIndex == _tabIndex) {
+//    return tabTextStyleSelected;
+//  }
+//  return tabTextStyleNormal;
+//}
+
+class MainListPage extends StatefulWidget {
+  MainListPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return MainPageListState();
+  }
+}
+
+class MainPageListState extends State<MainListPage> {
+  List widgets = [];
+  bool isLoading = false;
+  int page = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData(page);
+  }
+
+  getBody() {
+    if (showLoadingDialog()) {
+      return getProgressDialog();
+    } else {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          color: CupertinoTheme.of(context).brightness == Brightness.light
+              ? CupertinoColors.extraLightBackgroundGray
+              : CupertinoColors.darkBackgroundGray,
+        ),
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          slivers: <Widget>[
+            CupertinoSliverNavigationBar(
+              largeTitle: const Text('资讯'),
+            ),
+            CupertinoSliverRefreshControl(
+              onRefresh: refreshData,
+            ),
+            SliverToBoxAdapter(
+                child: Container(
+              child: Column(
+                children: <Widget>[
+                  Text("321312321321"),
+                  Image.asset("assets/imgs/ic_launcher.png",
+                      width: 200.0, height: 200.0)
+                ],
+              ),
+            )),
+            SliverSafeArea(
+              top: false,
+              sliver: getListView(),
+            )
+          ],
+        ),
+      );
+      //return getListView();
+    }
+  }
+
+  getProgressDialog() {
+    return Center(
+      child: CupertinoActivityIndicator(),
+    );
+  }
+
+  getListView() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        if (widgets.length - index < 10 && !isLoading) {
+          loadData(++page);
+        }
+        return getRow(index);
+      }, childCount: widgets.length + 1),
+    );
+  }
+
+  showLoadingDialog() {
+    if (widgets.length == 0) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(child: getBody());
+  }
+
+  toDetailPage(widget) {
+    Map<String, String> info = Map();
+    info["content"] = widget["content"];
+    info["title"] = widget["title"];
+    info["link"] = widget["link"];
+    Navigator.push(context, CupertinoPageRoute(builder: (_) {
+      return NewsDetailPage(info);
+    }));
+  }
+
+  Widget getRow(int i) {
+    if (i < widgets.length) {
+      return Container(
+          color: CupertinoColors.lightBackgroundGray,
+          padding: EdgeInsets.all(4),
+          child: GestureDetector(
+              onTap: () => toDetailPage(widgets[i]),
+              child: Container(
+                color: CupertinoColors.white,
+                child: Column(
+                  children: <Widget>[
+                    Image(
+                      image: NetworkImage(
+                          "https://sunkai.xyz:5001/img/${widgets[i]["img"]}"),
+                      fit: BoxFit.contain,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "${widgets[i]["title"]}",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "${widgets[i]["date"]}",
+                            style: TextStyle(
+                                color: CupertinoColors.inactiveGray,
+                                fontSize: 14),
+                          ),
+                          Text("${widgets[i]["content"]}",
+                              style: TextStyle(fontSize: 16))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )));
+    }
+    return CupertinoActivityIndicator();
+  }
+
+  Future<void> refreshData() {
+    widgets = [];
+    page = 1;
+    return loadData(page);
+  }
+
+  Future<void> loadData(int page) async {
+    isLoading = true;
+    String url = "https://sunkai.xyz:5001/api/NewsList/" + page.toString();
+    Fluttertoast.showToast(
+        msg: url,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        fontSize: 16.0);
+    print("request url: " + url);
+    http.Response response = await http.get(Uri.parse(url));
+    setState(() {
+      widgets.addAll(json.decode(response.body));
+      isLoading = false;
+    });
   }
 }
