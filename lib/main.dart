@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heritage_online_flutter/heritage_project_page.dart';
+import 'package:heritage_online_flutter/network/repository.dart';
+import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 import 'package:heritage_online_flutter/news_detail_page.dart';
 import 'package:http/http.dart' as http;
 
@@ -105,55 +108,44 @@ class MainListPage extends StatefulWidget {
 }
 
 class MainPageListState extends State<MainListPage> {
-  List widgets = [];
-  bool isLoading = false;
-  int page = 1;
-
   @override
   void initState() {
     super.initState();
-    loadData(page);
   }
 
   getBody() {
-    if (showLoadingDialog()) {
-      return getProgressDialog();
-    } else {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          color: CupertinoTheme.of(context).brightness == Brightness.light
-              ? CupertinoColors.extraLightBackgroundGray
-              : CupertinoColors.darkBackgroundGray,
-        ),
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          slivers: <Widget>[
-            CupertinoSliverNavigationBar(
-              largeTitle: const Text('资讯'),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: CupertinoTheme.of(context).brightness == Brightness.light
+            ? CupertinoColors.extraLightBackgroundGray
+            : CupertinoColors.darkBackgroundGray,
+      ),
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        slivers: <Widget>[
+          CupertinoSliverNavigationBar(
+            largeTitle: const Text('资讯'),
+          ),
+          CupertinoSliverRefreshControl(),
+          SliverToBoxAdapter(
+              child: Container(
+            child: Column(
+              children: <Widget>[
+                Text("321312321321"),
+                Image.asset("assets/imgs/ic_launcher.png",
+                    width: 200.0, height: 200.0)
+              ],
             ),
-            CupertinoSliverRefreshControl(
-              onRefresh: refreshData,
-            ),
-            SliverToBoxAdapter(
-                child: Container(
-              child: Column(
-                children: <Widget>[
-                  Text("321312321321"),
-                  Image.asset("assets/imgs/ic_launcher.png",
-                      width: 200.0, height: 200.0)
-                ],
-              ),
-            )),
-            SliverSafeArea(
-              top: false,
-              sliver: getListView(),
-            )
-          ],
-        ),
-      );
-      //return getListView();
-    }
+          )),
+          SliverSafeArea(
+            top: false,
+            sliver: _newsListBody(context),
+          )
+        ],
+      ),
+    );
+    //return getListView();
   }
 
   getProgressDialog() {
@@ -162,22 +154,12 @@ class MainPageListState extends State<MainListPage> {
     );
   }
 
-  getListView() {
+  getListView(List<NewsListResponse> response) {
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
-        if (widgets.length - index < 10 && !isLoading) {
-          loadData(++page);
-        }
-        return getRow(index);
-      }, childCount: widgets.length + 1),
+        return getRow(index < response.length ? response[index] : null);
+      }, childCount: response.length + 1),
     );
-  }
-
-  showLoadingDialog() {
-    if (widgets.length == 0) {
-      return true;
-    }
-    return false;
   }
 
   @override
@@ -195,40 +177,41 @@ class MainPageListState extends State<MainListPage> {
     }));
   }
 
-  Widget getRow(int i) {
-    if (i < widgets.length) {
+  Widget getRow(final NewsListResponse? response) {
+    if (response != null) {
       return Container(
           color: CupertinoColors.lightBackgroundGray,
           padding: EdgeInsets.all(4),
           child: GestureDetector(
-              onTap: () => toDetailPage(widgets[i]),
+              onTap: () => toDetailPage(response),
               child: Container(
                 color: CupertinoColors.white,
                 child: Column(
                   children: <Widget>[
-                    Image(
-                      image: NetworkImage(
-                          "https://sunkai.xyz:5001/img/${widgets[i]["img"]}"),
-                      fit: BoxFit.contain,
-                    ),
+                    response.compressImg != null
+                        ? Image(
+                            image: NetworkImage(
+                                "https://sunkai.xyz:5001/img/${response.compressImg}"),
+                            fit: BoxFit.contain,
+                          )
+                        : Text('123'),
                     Container(
                       padding: EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            "${widgets[i]["title"]}",
+                            response.title,
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "${widgets[i]["date"]}",
+                            response.date,
                             style: TextStyle(
                                 color: CupertinoColors.inactiveGray,
                                 fontSize: 14),
                           ),
-                          Text("${widgets[i]["content"]}",
-                              style: TextStyle(fontSize: 16))
+                          Text(response.content, style: TextStyle(fontSize: 16))
                         ],
                       ),
                     )
@@ -239,26 +222,17 @@ class MainPageListState extends State<MainListPage> {
     return CupertinoActivityIndicator();
   }
 
-  Future<void> refreshData() {
-    widgets = [];
-    page = 1;
-    return loadData(page);
-  }
-
-  Future<void> loadData(int page) async {
-    isLoading = true;
-    String url = "https://sunkai.xyz:5001/api/NewsList/" + page.toString();
-    Fluttertoast.showToast(
-        msg: url,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        fontSize: 16.0);
-    print("request url: " + url);
-    http.Response response = await http.get(Uri.parse(url));
-    setState(() {
-      widgets.addAll(json.decode(response.body));
-      isLoading = false;
-    });
+  FutureBuilder<List<NewsListResponse>> _newsListBody(BuildContext context) {
+    Repository repo = Repository.getInstance();
+    return FutureBuilder<List<NewsListResponse>>(
+        future: repo.getNewsList(1),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final List<NewsListResponse> response = snapshot.data ?? [];
+            return getListView(response);
+          } else {
+            return SliverFillRemaining(child: getProgressDialog());
+          }
+        });
   }
 }
