@@ -6,10 +6,12 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 
 class HeritageProjectPage extends StatelessWidget {
+  const HeritageProjectPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
         middle: Text("非遗项目"),
         backgroundColor: CupertinoColors.white,
       ),
@@ -19,12 +21,14 @@ class HeritageProjectPage extends StatelessWidget {
 }
 
 class HeritageBodyWidget extends StatelessWidget {
+  const HeritageBodyWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScroll) {
         return <Widget>[
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: HeritageBodyTopWidget(),
           )
         ];
@@ -35,6 +39,8 @@ class HeritageBodyWidget extends StatelessWidget {
 }
 
 class HeritageBodyTopWidget extends StatefulWidget {
+  const HeritageBodyTopWidget({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return HeritageTopBodyState();
@@ -61,15 +67,13 @@ class HeritageTopBodyState extends State<HeritageBodyTopWidget> {
         child: CupertinoActivityIndicator(),
       );
     }
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Center(
-            child: Text(result?["title"]),
-          ),
-          Text(result?["content"]),
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        Center(
+          child: Text(result?["title"]),
+        ),
+        Text(result?["content"]),
+      ],
     );
   }
 
@@ -83,6 +87,8 @@ class HeritageTopBodyState extends State<HeritageBodyTopWidget> {
 }
 
 class HeritageBodyBottomWidget extends StatefulWidget {
+  const HeritageBodyBottomWidget({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return HeritageBodyBottomWidgetState();
@@ -125,7 +131,7 @@ class HeritageBodyBottomWidgetState extends State<HeritageBodyBottomWidget> {
 
   getRow(int i) {
     if (i == result.length) {
-      return CupertinoActivityIndicator();
+      return const CupertinoActivityIndicator();
     }
     Map rowInfo = result[i];
     return HeritageProjectRow(rowInfo);
@@ -135,7 +141,7 @@ class HeritageBodyBottomWidgetState extends State<HeritageBodyBottomWidget> {
 class HeritageProjectRow extends StatefulWidget {
   Map result;
 
-  HeritageProjectRow(this.result);
+  HeritageProjectRow(this.result, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -159,7 +165,7 @@ class HeritageProjectRowState extends State<HeritageProjectRow> {
     widgets = <Widget>[Text(row["title"] + "(${row["province"]})")];
     if (expended) {
       var rowValues = row.values.toList();
-      print("rowValues"+rowValues.toString());
+      print("rowValues" + rowValues.toString());
       widgets.add(Container(
           height: 200,
           child: CustomScrollView(
@@ -171,7 +177,8 @@ class HeritageProjectRowState extends State<HeritageProjectRow> {
                   crossAxisSpacing: 10.0,
                   childAspectRatio: 4.0,
                 ),
-                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
                   return Container(
                     alignment: Alignment.center,
                     color: Colors.cyan[100 * (index % 5)],

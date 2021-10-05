@@ -4,7 +4,7 @@ import 'package:heritage_online_flutter/network/response/news_list_response.dart
 import 'package:heritage_online_flutter/news_detail_page.dart';
 
 class MainListPage extends StatefulWidget {
-  MainListPage({Key? key}) : super(key: key);
+  const MainListPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
