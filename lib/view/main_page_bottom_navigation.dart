@@ -15,6 +15,8 @@ class MainPageTabScaffold extends StatefulWidget {
 
 class MainPageTabScaffoldState extends State<MainPageTabScaffold> {
   int _tabIndex = 0;
+  Color textColor = const Color(0x00c47f7f);
+  Color iconColor = const Color(0xFFC47F7F);
   MainPageTabScaffoldState();
   final bottomNavigationItems = [
     const MainListPage(),
@@ -25,17 +27,6 @@ class MainPageTabScaffoldState extends State<MainPageTabScaffold> {
         'assets/imgs/nav_1_sel.png', 'assets/imgs/nav_1_no_sel.png', '资讯'),
     BottomNavigationItem(
         'assets/imgs/nav2_sel.png', 'assets/imgs/nav2_no_sel.png', '非遗项目')
-  ];
-  final appBarTitles = ['资讯', '非遗项目'];
-  final _tabImages = [
-    [
-      getTabImage('assets/imgs/nav_1_no_sel.png'),
-      getTabImage('assets/imgs/nav_1_sel.png')
-    ],
-    [
-      getTabImage('assets/imgs/nav2_no_sel.png'),
-      getTabImage('assets/imgs/nav2_sel.png')
-    ],
   ];
 
   @override
@@ -50,7 +41,7 @@ class MainPageTabScaffoldState extends State<MainPageTabScaffold> {
       },
       tabBar: CupertinoTabBar(
         items: getBottomNavigation(),
-        activeColor: const Color(0xFF795548),
+        activeColor: iconColor,
         currentIndex: _tabIndex,
         onTap: (index) {
           setState(() {
@@ -71,17 +62,8 @@ class MainPageTabScaffoldState extends State<MainPageTabScaffold> {
       list.add(BottomNavigationBarItem(
           icon: getTabIcon(i, bottomNavigationItem[i]),
           label: bottomNavigationItem[i].itemText,
-          backgroundColor: Color(0x333333)));
+          backgroundColor: textColor));
     }
     return list;
-  }
-
-// 根据索引值返回页面顶部标题
-  getTabTitle(int curIndex) {
-    appBarTitles[curIndex];
-  }
-
-  static getTabImage(path) {
-    return Image.asset(path, width: 20.0, height: 20.0);
   }
 }

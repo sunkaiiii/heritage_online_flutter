@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:heritage_online_flutter/network/apis.dart';
+import 'package:heritage_online_flutter/network/response/banner_response.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 import 'package:retrofit/retrofit.dart';
 part 'api_client.g.dart';
@@ -12,4 +13,7 @@ abstract class ApiClient {
 
   @GET(Apis.newsListUrl)
   Future<List<NewsListResponse>> getNewsList(@Path("page") int page);
+
+  @GET(Apis.banner)
+  Future<List<BannerResponse>> getBanner();
 }

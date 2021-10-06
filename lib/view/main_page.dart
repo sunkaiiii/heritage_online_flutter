@@ -29,15 +29,14 @@ class MainPageListState extends State<MainListPage> {
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
         slivers: <Widget>[
-          CupertinoSliverNavigationBar(
-            largeTitle: const Text('资讯'),
+          const CupertinoSliverNavigationBar(
+            largeTitle: Text('资讯'),
           ),
-          CupertinoSliverRefreshControl(),
+          const CupertinoSliverRefreshControl(),
           SliverToBoxAdapter(
               child: Container(
             child: Column(
               children: <Widget>[
-                Text("321312321321"),
                 Image.asset("assets/imgs/ic_launcher.png",
                     width: 200.0, height: 200.0)
               ],
@@ -54,7 +53,7 @@ class MainPageListState extends State<MainListPage> {
   }
 
   getProgressDialog() {
-    return Center(
+    return const Center(
       child: CupertinoActivityIndicator(),
     );
   }
