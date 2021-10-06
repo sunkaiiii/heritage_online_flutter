@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:heritage_online_flutter/network/repository.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 import 'package:heritage_online_flutter/news_detail_page.dart';
+import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
 
 class MainListPage extends StatefulWidget {
   const MainListPage({Key? key}) : super(key: key);
@@ -33,15 +34,9 @@ class MainPageListState extends State<MainListPage> {
             largeTitle: Text('资讯'),
           ),
           const CupertinoSliverRefreshControl(),
-          SliverToBoxAdapter(
-              child: Container(
-            child: Column(
-              children: <Widget>[
-                Image.asset("assets/imgs/ic_launcher.png",
-                    width: 200.0, height: 200.0)
-              ],
-            ),
-          )),
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 300, child: MainPageTopPager()),
+          ),
           SliverSafeArea(
             top: false,
             sliver: _newsListBody(context),
