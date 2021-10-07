@@ -35,8 +35,9 @@ class MainPageListState extends State<MainListPage> {
           ),
           const CupertinoSliverRefreshControl(),
           const SliverToBoxAdapter(
-            child: SizedBox(height: 300, child: MainPageTopPager()),
+            child: SizedBox(height: 250, child: MainPageTopPager()),
           ),
+          SliverToBoxAdapter(child: newsListPagerBody(context)),
           SliverSafeArea(
             top: false,
             sliver: _newsListBody(context),
@@ -44,7 +45,6 @@ class MainPageListState extends State<MainListPage> {
         ],
       ),
     );
-    //return getListView();
   }
 
   getProgressDialog() {
@@ -119,6 +119,22 @@ class MainPageListState extends State<MainListPage> {
               )));
     }
     return CupertinoActivityIndicator();
+  }
+
+  Widget newsListPagerBody(BuildContext context) {
+    return Container(
+        color: Color(0xff666666),
+        padding: const EdgeInsets.only(left: 36, right: 36),
+        child: Column(
+          children: [
+            Stack(
+              children: const [
+                Align(alignment: Alignment.centerLeft, child: Text("data")),
+                Align(alignment: Alignment.centerRight, child: Text("ddd"))
+              ],
+            )
+          ],
+        ));
   }
 
   FutureBuilder<List<NewsListResponse>> _newsListBody(BuildContext context) {
