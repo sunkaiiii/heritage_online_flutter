@@ -13,7 +13,8 @@ class NewsListRow extends StatelessWidget {
         child: GestureDetector(
             onTap: () => onItemClick?.call(response),
             child: Container(
-                padding: const EdgeInsets.all(32),
+                padding: const EdgeInsets.only(
+                    left: 32, right: 32, top: 16, bottom: 16),
                 color: CupertinoColors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -23,23 +24,13 @@ class NewsListRow extends StatelessWidget {
 
   List<Widget> _buildNewsListInformation() {
     List<Widget> information = [];
-    if (response.compressImg != null) {
-      information.add(
-        Container(
-            padding: const EdgeInsets.only(left: 22),
-            child: Image.network(
-              "https://sunkai.xyz:5001/img/${response.compressImg}",
-              height: 84,
-              width: 84,
-              fit: BoxFit.contain,
-            )),
-      );
-    }
-    information.add(Column(
+    information.add(Flexible(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           "作者:",
-          style: TextStyle(color: Color(0x888888), fontSize: 14),
+          style: TextStyle(color: Color(0xFF888888), fontSize: 14),
         ),
         Text(
           response.title,
@@ -50,10 +41,23 @@ class NewsListRow extends StatelessWidget {
         ),
         Text(
           response.date,
-          style: const TextStyle(color: Color(0x00bcbcbc), fontSize: 14),
+          style: const TextStyle(color: Color(0xFFbcbcbc), fontSize: 14),
         )
       ],
-    ));
+    )));
+    if (response.compressImg != null) {
+      information.add(
+        Container(
+            padding: const EdgeInsets.only(left: 22),
+            child: Image.network(
+              "https://sunkai.xyz:5001/img/${response.compressImg}",
+              height: 84,
+              width: 84,
+              fit: BoxFit.cover,
+            )),
+      );
+    }
+
     return information;
   }
 }

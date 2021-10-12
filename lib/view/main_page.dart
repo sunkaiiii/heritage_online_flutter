@@ -4,7 +4,7 @@ import 'package:heritage_online_flutter/network/repository.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 import 'package:heritage_online_flutter/news_detail_page.dart';
 import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
-import 'package:heritage_online_flutter/view/news_list.dart';
+import 'package:heritage_online_flutter/view/news_list_raw.dart';
 import 'package:heritage_online_flutter/view/news_list_pager_body.dart';
 
 class MainListPage extends StatefulWidget {
