@@ -16,6 +16,14 @@ class Repository {
     return _apiClient.getNewsList(page);
   }
 
+  Future<List<NewsListResponse>> getForumsList(int page) {
+    return _apiClient.getForumsList(page);
+  }
+
+  Future<List<NewsListResponse>> getSpecialTopicList(int page) {
+    return _apiClient.getSpecialTopicList(page);
+  }
+
   Future<List<BannerResponse>> getBanner() {
     return _apiClient.getBanner();
   }
