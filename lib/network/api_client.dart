@@ -14,6 +14,12 @@ abstract class ApiClient {
   @GET(Apis.newsListUrl)
   Future<List<NewsListResponse>> getNewsList(@Path("page") int page);
 
+  @GET(Apis.forumsList)
+  Future<List<NewsListResponse>> getForumsList(@Path("page") int page);
+
+  @GET(Apis.specialTopic)
+  Future<List<NewsListResponse>> getSpecialTopicList(@Path("page") int page);
+
   @GET(Apis.banner)
   Future<List<BannerResponse>> getBanner();
 }
