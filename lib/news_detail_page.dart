@@ -46,8 +46,8 @@ class NewsDetailState extends State<NewsDetailList> {
   }
 
   loadDetailData() async {
-    http.Response response =
-    await http.get(Uri.parse("https://sunkai.xyz:5001/api/NewsDetail?link=$url"));
+    http.Response response = await http
+        .get(Uri.parse("https://sunkai.xyz:5001/api/NewsDetail?link=$url"));
     setState(() {
       result = json.decode(response.body);
       widgets = result?["content"];
@@ -101,9 +101,8 @@ class NewsDetailState extends State<NewsDetailList> {
   getRow(int i) {
     String type = widgets[i]["type"];
     if (type == "img") {
-      return Image(
-        image: NetworkImage(
-            "https://sunkai.xyz:5001/img/${widgets[i]["content"]}"),
+      return Image.network(
+        "https://sunkai.xyz:5001/img/${widgets[i]["content"]}",
         fit: BoxFit.contain,
       );
     } else {

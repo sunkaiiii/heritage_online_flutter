@@ -56,9 +56,7 @@ class MainPageListState extends State<MainListPage> {
               index = value;
             });
           })),
-          NewsList(newsFutureRequests[index], (value) {
-            toDetailPage(value);
-          })
+          _newsListBody()
         ],
       ),
     );
@@ -77,5 +75,35 @@ class MainPageListState extends State<MainListPage> {
     Navigator.push(context, CupertinoPageRoute(builder: (_) {
       return NewsDetailPage(info);
     }));
+  }
+
+  FutureBuilder<List<NewsListResponse>> _newsListBody() {
+    return FutureBuilder<List<NewsListResponse>>(
+        future: newsFutureRequests[index](1),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final List<NewsListResponse> response = snapshot.data ?? [];
+            return getListView(response);
+          } else {
+            return SliverFillRemaining(child: getProgressDialog());
+          }
+        });
+  }
+
+  getListView(List<NewsListResponse> response) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        if (index < response.length) {
+          return NewsListRow(response[index], toDetailPage);
+        }
+        return getProgressDialog();
+      }, childCount: response.length + 1),
+    );
+  }
+
+  getProgressDialog() {
+    return const Center(
+      child: CupertinoActivityIndicator(),
+    );
   }
 }

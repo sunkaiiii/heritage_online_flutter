@@ -35,10 +35,10 @@ class MainPageTopPager extends StatelessWidget {
   bannerPagerItem(List<BannerResponse> response) {
     List<Widget> item = [];
     for (var element in response) {
-      item.add(Image(
-          fit: BoxFit.fitHeight,
-          image: NetworkImage(
-              "https://sunkai.xyz:5001/img/${element.compressImg}")));
+      item.add(Image.network(
+        "https://sunkai.xyz:5001/img/${element.compressImg}",
+        fit: BoxFit.fitHeight,
+      ));
     }
     return item;
   }
