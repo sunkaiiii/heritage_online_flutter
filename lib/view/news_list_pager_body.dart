@@ -19,7 +19,7 @@ class _NewsListPagerSegmentState extends State<NewsListPagerSegment> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color(0xff666666),
+        color: const Color(0xff666666),
         padding: const EdgeInsets.only(left: 36, right: 36),
         child: Column(
           children: [

@@ -4,6 +4,7 @@ import 'package:heritage_online_flutter/entity/news_type.dart';
 import 'package:heritage_online_flutter/network/repository.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 import 'package:heritage_online_flutter/news_detail_page.dart';
+import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
 import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
 import 'package:heritage_online_flutter/view/news_list_raw.dart';
 import 'package:heritage_online_flutter/view/news_list_pager_body.dart';
@@ -60,12 +61,8 @@ class MainPageListState extends State<MainListPage> {
   }
 
   toDetailPage(final NewsListResponse response) {
-    Map<String, String> info = Map();
-    info["content"] = response.content;
-    info["title"] = response.title;
-    info["link"] = response.link;
     Navigator.push(context, CupertinoPageRoute(builder: (_) {
-      return NewsDetailPage(info);
+      return NewsDetailPage(response.link, NewsType.values[index]);
     }));
   }
 
@@ -77,7 +74,7 @@ class MainPageListState extends State<MainListPage> {
             final List<NewsListResponse> response = snapshot.data ?? [];
             return getListView(response);
           } else {
-            return SliverFillRemaining(child: getProgressDialog());
+            return const SliverFillRemaining(child: GeneralProgressIndicator());
           }
         });
   }
@@ -88,14 +85,8 @@ class MainPageListState extends State<MainListPage> {
         if (index < response.length) {
           return NewsListRow(response[index], toDetailPage);
         }
-        return getProgressDialog();
+        return const GeneralProgressIndicator();
       }, childCount: response.length + 1),
-    );
-  }
-
-  getProgressDialog() {
-    return const Center(
-      child: CupertinoActivityIndicator(),
     );
   }
 }
