@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:heritage_online_flutter/entity/news_type.dart';
 import 'package:heritage_online_flutter/network/repository.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 import 'package:heritage_online_flutter/news_detail_page.dart';
@@ -17,17 +18,8 @@ class MainListPage extends StatefulWidget {
 }
 
 class MainPageListState extends State<MainListPage> {
-  late Repository repo;
-  late List<Function> newsFutureRequests;
   int index = 0;
-  MainPageListState() {
-    repo = Repository.getInstance();
-    newsFutureRequests = [
-      repo.getNewsList,
-      repo.getForumsList,
-      repo.getSpecialTopicList
-    ];
-  }
+
   @override
   void initState() {
     super.initState();
@@ -79,7 +71,7 @@ class MainPageListState extends State<MainListPage> {
 
   FutureBuilder<List<NewsListResponse>> _newsListBody() {
     return FutureBuilder<List<NewsListResponse>>(
-        future: newsFutureRequests[index](1),
+        future: NewsType.values[index].newsListRequest(1),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final List<NewsListResponse> response = snapshot.data ?? [];
