@@ -6,7 +6,7 @@ import 'package:heritage_online_flutter/network/response/news_list_response.dart
 import 'package:retrofit/retrofit.dart';
 part 'api_client.g.dart';
 
-const String baseUrl = "https://sunkai.xyz:5001";
+const String baseUrl = "https://heritage.duckylife.net:8443";
 
 @RestApi(baseUrl: baseUrl)
 abstract class ApiClient {

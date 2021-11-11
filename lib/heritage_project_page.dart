@@ -78,7 +78,8 @@ class HeritageTopBodyState extends State<HeritageBodyTopWidget> {
   }
 
   void loadData() async {
-    String url = "https://sunkai.xyz:5001/api/HeritageProject/GetMainPage";
+    String url =
+        "https://heritage.duckylife.net:8443/api/HeritageProject/GetMainPage";
     var response = await get(Uri.parse(url));
     setState(() {
       result = jsonDecode(response.body);
@@ -109,7 +110,7 @@ class HeritageBodyBottomWidgetState extends State<HeritageBodyBottomWidget> {
   void loadData(int page) async {
     isLoading = true;
     String url =
-        "https://sunkai.xyz:5001/api/HeritageProject/GetHeritageProjectList/$page";
+        "https://heritage.duckylife.net:8443/api/HeritageProject/GetHeritageProjectList/$page";
     var response = await get(Uri.parse(url));
     setState(() {
       result.addAll(jsonDecode(response.body));

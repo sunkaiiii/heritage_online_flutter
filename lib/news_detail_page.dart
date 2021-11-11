@@ -75,7 +75,7 @@ class NewsDetailContentList extends StatelessWidget {
     final Content rowData = newsDetailResponse.content[index];
     if (rowData.type == "img") {
       return Image.network(
-        "https://sunkai.xyz:5001/img/${rowData.compressImg}",
+        "https://heritage.duckylife.net:8443/img/${rowData.compressImg}",
         fit: BoxFit.contain,
       );
     } else {
