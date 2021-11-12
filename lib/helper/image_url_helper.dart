@@ -1,6 +1,6 @@
 extension ImageUrlHelper on String {
   String buildImageRequestUrl() {
-    const String imageHost = "https://heritage.duckylife.net:8443/img/";
+    const String imageHost = "https://www.duckylife.net/img/";
     if (!contains(imageHost)) {
       return imageHost + this;
     } else {
