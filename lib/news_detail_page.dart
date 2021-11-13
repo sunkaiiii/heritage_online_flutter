@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/entity/news_type.dart';
 import 'package:heritage_online_flutter/helper/image_url_helper.dart';
+import 'package:heritage_online_flutter/network/network_repository.dart';
 import 'package:heritage_online_flutter/network/response/news_detail_response.dart';
 import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
+import 'package:provider/provider.dart';
 
 class NewsDetailPage extends StatelessWidget {
   final String link;
@@ -20,14 +22,15 @@ class NewsDetailPage extends StatelessWidget {
           backgroundColor: Color(0xFFD0C6C1),
         ),
         child: Container(
-          child: _detailBody(),
+          child: _detailBody(context),
           color: const Color(0xFFD0C6C1),
         ));
   }
 
-  FutureBuilder<NewsDetailResponse> _detailBody() {
+  FutureBuilder<NewsDetailResponse> _detailBody(BuildContext context) {
+    var repo = Provider.of<NetworkRepository>(context);
     return FutureBuilder(
-        future: newsType.detailRequest(link),
+        future: newsType.getDetailRequest(repo)(link),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final NewsDetailResponse? response = snapshot.data;

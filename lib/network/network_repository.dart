@@ -1,17 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:heritage_online_flutter/data/data_repository.dart';
 import 'package:heritage_online_flutter/network/api_client.dart';
 import 'package:heritage_online_flutter/network/response/banner_response.dart';
 import 'package:heritage_online_flutter/network/response/news_detail_response.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 
-class Repository {
+class NetworkRepository {
   final ApiClient _apiClient = ApiClient(Dio());
-
-  Repository();
-
-  static final Repository _instance = Repository();
-
-  factory Repository.getInstance() => _instance;
+  final DataRepository dataRepository;
+  NetworkRepository(this.dataRepository);
 
   Future<List<NewsListResponse>> getNewsList(int page) {
     return _apiClient.getNewsList(page);

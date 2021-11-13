@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:heritage_online_flutter/network/repository.dart';
+import 'package:heritage_online_flutter/network/network_repository.dart';
 import 'package:heritage_online_flutter/network/response/banner_response.dart';
+import 'package:provider/provider.dart';
 
 class MainPageTopPager extends StatelessWidget {
   const MainPageTopPager({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class MainPageTopPager extends StatelessWidget {
   }
 
   FutureBuilder<List<BannerResponse>> bannerBody(BuildContext context) {
-    Repository repo = Repository.getInstance();
+    NetworkRepository repo = Provider.of<NetworkRepository>(context);
     return FutureBuilder<List<BannerResponse>>(
         future: repo.getBanner(),
         builder: (context, snapshot) {

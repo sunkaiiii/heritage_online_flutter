@@ -1,10 +1,10 @@
-import 'package:heritage_online_flutter/network/repository.dart';
+import 'package:heritage_online_flutter/network/network_repository.dart';
+import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 
 enum NewsType { news, forums, specialTopic }
 
 extension NewsTypeExtension on NewsType {
-  Function get newsListRequest {
-    Repository repo = Repository.getInstance();
+  Function getNewsListRequest(NetworkRepository repo){
     switch (this) {
       case NewsType.news:
         return repo.getNewsList;
@@ -15,8 +15,7 @@ extension NewsTypeExtension on NewsType {
     }
   }
 
-  Function get detailRequest {
-    Repository repo = Repository.getInstance();
+  Function getDetailRequest(NetworkRepository repo){
     switch (this) {
       case NewsType.news:
         return repo.getNewsDetail;

@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/entity/news_type.dart';
-import 'package:heritage_online_flutter/network/repository.dart';
+import 'package:heritage_online_flutter/network/network_repository.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 import 'package:heritage_online_flutter/news_detail_page.dart';
 import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
 import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
 import 'package:heritage_online_flutter/view/news_list_raw.dart';
 import 'package:heritage_online_flutter/view/news_list_pager_body.dart';
+import 'package:provider/provider.dart';
 
 class MainListPage extends StatefulWidget {
   const MainListPage({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class MainPageListState extends State<MainListPage> {
     super.initState();
   }
 
-  getBody() {
+  getBody(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: CupertinoTheme.of(context).brightness == Brightness.light
@@ -49,7 +50,7 @@ class MainPageListState extends State<MainListPage> {
               index = value;
             });
           })),
-          _newsListBody()
+          _newsListBody(context)
         ],
       ),
     );
@@ -57,7 +58,7 @@ class MainPageListState extends State<MainListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(child: getBody());
+    return CupertinoPageScaffold(child: getBody(context));
   }
 
   toDetailPage(final NewsListResponse response) {
@@ -66,9 +67,10 @@ class MainPageListState extends State<MainListPage> {
     }));
   }
 
-  FutureBuilder<List<NewsListResponse>> _newsListBody() {
+  FutureBuilder<List<NewsListResponse>> _newsListBody(BuildContext context) {
+    NetworkRepository repo = Provider.of<NetworkRepository>(context);
     return FutureBuilder<List<NewsListResponse>>(
-        future: NewsType.values[index].newsListRequest(1),
+        future: NewsType.values[index].getNewsListRequest(repo)(1),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final List<NewsListResponse> response = snapshot.data ?? [];
