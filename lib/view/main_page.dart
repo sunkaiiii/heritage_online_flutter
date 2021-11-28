@@ -8,6 +8,7 @@ import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
 import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
 import 'package:heritage_online_flutter/view/news_list_raw.dart';
 import 'package:heritage_online_flutter/view/news_list_pager_body.dart';
+import 'package:loadmore/loadmore.dart';
 import 'package:provider/provider.dart';
 
 class MainListPage extends StatefulWidget {
@@ -21,6 +22,9 @@ class MainListPage extends StatefulWidget {
 
 class MainPageListState extends State<MainListPage> {
   int index = 0;
+  Map<int, int> indexPage = {};
+  Map<int, List<NewsListResponse>> currentNewsListResponse = {};
+  NetworkRepository? repo;
 
   @override
   void initState() {
@@ -28,6 +32,7 @@ class MainPageListState extends State<MainListPage> {
   }
 
   getBody(BuildContext context) {
+    repo = Provider.of<NetworkRepository>(context);
     return DecoratedBox(
       decoration: BoxDecoration(
         color: CupertinoTheme.of(context).brightness == Brightness.light
@@ -47,6 +52,9 @@ class MainPageListState extends State<MainListPage> {
           ),
           SliverToBoxAdapter(child: NewsListPagerSegment((value) {
             setState(() {
+              if (indexPage[value] == null) {
+                indexPage[value] = 1;
+              }
               index = value;
             });
           })),
@@ -67,28 +75,34 @@ class MainPageListState extends State<MainListPage> {
     }));
   }
 
-  FutureBuilder<List<NewsListResponse>> _newsListBody(BuildContext context) {
-    NetworkRepository repo = Provider.of<NetworkRepository>(context);
-    return FutureBuilder<List<NewsListResponse>>(
-        future: NewsType.values[index].getNewsListRequest(repo)(1),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            final List<NewsListResponse> response = snapshot.data ?? [];
-            return getListView(response);
-          } else {
-            return const SliverFillRemaining(child: GeneralProgressIndicator());
+  Widget _newsListBody(BuildContext context) {
+    _loadMore();
+    return NotificationListener(
+        child: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final newsList = currentNewsListResponse[this.index] ?? [];
+            return NewsListRow(newsList[index], toDetailPage);
+          }, childCount: (currentNewsListResponse[index] ?? []).length),
+        ),
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.pixels >=
+              scrollInfo.metrics.maxScrollExtent - 300) {
+            _loadMore();
           }
+          return true;
         });
   }
 
-  getListView(List<NewsListResponse> response) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        if (index < response.length) {
-          return NewsListRow(response[index], toDetailPage);
-        }
-        return const GeneralProgressIndicator();
-      }, childCount: response.length + 1),
-    );
+  Future<bool> _loadMore() async {
+    final page = indexPage[index] ?? 1;
+    final newsListResponse =
+        await NewsType.values[index].getNewsListRequest(repo!)(page);
+    indexPage[index] = page + 1;
+    if (currentNewsListResponse[index] == null) {
+      currentNewsListResponse[index] = [];
+    }
+    currentNewsListResponse[index]!.addAll(newsListResponse);
+    setState(() {});
+    return true;
   }
 }
