@@ -8,7 +8,6 @@ import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
 import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
 import 'package:heritage_online_flutter/view/news_list_raw.dart';
 import 'package:heritage_online_flutter/view/news_list_pager_body.dart';
-import 'package:loadmore/loadmore.dart';
 import 'package:provider/provider.dart';
 
 class MainListPage extends StatefulWidget {
