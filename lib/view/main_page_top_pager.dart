@@ -37,7 +37,7 @@ class MainPageTopPager extends StatelessWidget {
     List<Widget> item = [];
     for (var element in response) {
       item.add(Image.network(
-        "https://www.duckylife.net/img/${element.compressImg}",
+        "https://www.sunkai.xyz:5001/img/${element.compressImg}",
         fit: BoxFit.fitHeight,
       ));
     }

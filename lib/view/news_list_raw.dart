@@ -50,7 +50,7 @@ class NewsListRow extends StatelessWidget {
         Container(
             padding: const EdgeInsets.only(left: 22),
             child: Image.network(
-              "https://www.duckylife.net/img/${response.compressImg}",
+              "https://www.sunkai.xyz:5001/img/${response.compressImg}",
               height: 84,
               width: 84,
               fit: BoxFit.cover,
