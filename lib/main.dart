@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:heritage_online_flutter/data/data_repository.dart';
 import 'package:heritage_online_flutter/network/network_repository.dart';
 import 'package:heritage_online_flutter/view/main_page_bottom_navigation.dart';
@@ -20,7 +19,7 @@ class MainPage extends StatelessWidget {
         Provider(create: (_)=>dataRepository),
         Provider(create: (_)=> NetworkRepository(dataRepository)),
       ],
-      child: const CupertinoApp(title: 'E-heritage', home: MainPageTabScaffold()),
+      child: const MaterialApp(title: 'E-heritage', home: MainPageTabScaffold()),
     );
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class BottomNavigationItem {
+  int index;
   late Image selectedImg;
   late Image unSelectedImg;
   String itemText;
 
-  BottomNavigationItem(
+  BottomNavigationItem(this.index,
       String selectedImgUrl, String unSelectedImgUrl, this.itemText) {
     selectedImg = _getTabImage(selectedImgUrl);
     unSelectedImg = _getTabImage(unSelectedImgUrl);

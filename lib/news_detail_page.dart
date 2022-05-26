@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/entity/news_type.dart';
 import 'package:heritage_online_flutter/helper/image_url_helper.dart';
@@ -15,13 +14,9 @@ class NewsDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(
-          middle: Text("NewsDetail"),
-          previousPageTitle: "首页",
-          backgroundColor: Color(0xFFD0C6C1),
-        ),
-        child: Container(
+    return Scaffold(
+        appBar: AppBar(title: const Text("新闻详情"),centerTitle: true,backgroundColor: const Color(0xFFD0C6C1),),
+        body: Container(
           child: _detailBody(context),
           color: const Color(0xFFD0C6C1),
         ));
@@ -94,7 +89,7 @@ class NewsDetailContentList extends StatelessWidget {
     }
     result.add(Text(newsDetailResponse.title,
         style: const TextStyle(
-            color: CupertinoColors.black,
+            color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.bold)));
     result.add(ClipRRect(
@@ -104,7 +99,7 @@ class NewsDetailContentList extends StatelessWidget {
             const EdgeInsets.only(left: 22, right: 22, top: 15, bottom: 15),
         child: Text(
           newsDetailResponse.subContent,
-          style: const TextStyle(color: CupertinoColors.black, fontSize: 14),
+          style: const TextStyle(color: Colors.black, fontSize: 14),
         ),
         color: const Color(0XFFE4E4E4),
       ),

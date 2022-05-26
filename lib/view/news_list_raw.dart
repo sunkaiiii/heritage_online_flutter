@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
 
 class NewsListRow extends StatelessWidget {
@@ -8,16 +8,16 @@ class NewsListRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: CupertinoColors.lightBackgroundGray,
+        color: Colors.grey[100],
         padding: const EdgeInsets.all(4),
         child: GestureDetector(
             onTap: () => onItemClick?.call(response),
             child: Container(
                 padding: const EdgeInsets.only(
                     left: 32, right: 32, top: 16, bottom: 16),
-                color: CupertinoColors.white,
+                color: Colors.white,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: _buildNewsListInformation(),
                 ))));
   }
@@ -35,7 +35,7 @@ class NewsListRow extends StatelessWidget {
         Text(
           response.title,
           style: const TextStyle(
-              color: CupertinoColors.black,
+              color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold),
         ),

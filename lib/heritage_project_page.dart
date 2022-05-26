@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
 import 'package:http/http.dart';
 
 class HeritageProjectPage extends StatelessWidget {
@@ -10,12 +9,12 @@ class HeritageProjectPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text("非遗项目"),
-        backgroundColor: CupertinoColors.white,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("非遗项目"),
+          centerTitle: true,
       ),
-      child: HeritageBodyWidget(),
+      body: const HeritageBodyWidget(),
     );
   }
 }
@@ -63,9 +62,7 @@ class HeritageTopBodyState extends State<HeritageBodyTopWidget> {
 
   getBody() {
     if (result == null) {
-      return const Center(
-        child: CupertinoActivityIndicator(),
-      );
+      return GeneralProgressIndicator();
     }
     return Column(
       children: <Widget>[
@@ -131,7 +128,7 @@ class HeritageBodyBottomWidgetState extends State<HeritageBodyBottomWidget> {
 
   getRow(int i) {
     if (i == result.length) {
-      return const CupertinoActivityIndicator();
+      return const GeneralProgressIndicator();
     }
     Map rowInfo = result[i];
     return HeritageProjectRow(rowInfo);

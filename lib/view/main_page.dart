@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/entity/news_type.dart';
 import 'package:heritage_online_flutter/network/network_repository.dart';
@@ -7,7 +6,6 @@ import 'package:heritage_online_flutter/news_detail_page.dart';
 import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
 import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
 import 'package:heritage_online_flutter/view/news_list_raw.dart';
-import 'package:heritage_online_flutter/view/news_list_pager_body.dart';
 import 'package:provider/provider.dart';
 
 class MainListPage extends StatefulWidget {
@@ -24,6 +22,7 @@ class MainPageListState extends State<MainListPage> {
   Map<int, int> indexPage = {};
   Map<int, List<NewsListResponse>> currentNewsListResponse = {};
   NetworkRepository? repo;
+  final barText = ['最新', '论坛', '特别报道'];
 
   @override
   void initState() {
@@ -32,64 +31,81 @@ class MainPageListState extends State<MainListPage> {
 
   getBody(BuildContext context) {
     repo = Provider.of<NetworkRepository>(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: CupertinoTheme.of(context).brightness == Brightness.light
-            ? CupertinoColors.extraLightBackgroundGray
-            : CupertinoColors.darkBackgroundGray,
-      ),
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        slivers: <Widget>[
-          const CupertinoSliverNavigationBar(
-            largeTitle: Text('资讯'),
-          ),
-          const CupertinoSliverRefreshControl(),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 250, child: MainPageTopPager()),
-          ),
-          SliverToBoxAdapter(child: NewsListPagerSegment((value) {
-            setState(() {
-              if (indexPage[value] == null) {
-                indexPage[value] = 1;
-              }
-              index = value;
-            });
-          })),
-          _newsListBody(context)
-        ],
-      ),
+    return DefaultTabController(
+      length: barText.length,
+      child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverAppBar(
+                  backgroundColor: const Color(0xff532677),
+                  centerTitle: true,
+                  pinned: true,
+                  title: const Text("资讯"),
+                  forceElevated: innerBoxIsScrolled,
+                  bottom: TabBar(
+                    tabs: barText.map((e) => Tab(text: e)).toList(),
+                  ),
+                ),
+              )
+            ];
+          },
+          body: TabBarView(
+            children: barText
+                .map((name) => SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: Builder(
+                        builder: (context) {
+                          return _newsListBody(context, name);
+                        },
+                      ),
+                    ))
+                .toList(),
+          )),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(child: getBody(context));
+    return getBody(context);
   }
 
   toDetailPage(final NewsListResponse response) {
-    Navigator.push(context, CupertinoPageRoute(builder: (_) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
       return NewsDetailPage(response.link, NewsType.values[index]);
     }));
   }
 
-  Widget _newsListBody(BuildContext context) {
+  Widget _newsListBody(BuildContext context, String title) {
     _loadMore();
-    return NotificationListener(
-        child: SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            final newsList = currentNewsListResponse[this.index] ?? [];
-            return NewsListRow(newsList[index], toDetailPage);
-          }, childCount: (currentNewsListResponse[index] ?? []).length),
-        ),
-        onNotification: (ScrollNotification scrollInfo) {
-          if (scrollInfo.metrics.pixels >=
-              scrollInfo.metrics.maxScrollExtent - 300) {
-            _loadMore();
-          }
-          return true;
-        });
+    if((currentNewsListResponse[index]??[]).isEmpty){
+      return const GeneralProgressIndicator();
+    }else{
+      return CustomScrollView(
+        key: PageStorageKey<String>(title),
+        slivers: [
+          SliverOverlapInjector(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+          SliverPadding(
+              padding: const EdgeInsets.all(8),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    // This builder is called for each child.
+                    // In this example, we just number each list item.
+                    final newsList = currentNewsListResponse[this.index] ?? [];
+                    return NewsListRow(newsList[index], toDetailPage);
+                  },
+                  childCount: (currentNewsListResponse[index] ?? []).length,
+                ),
+              ))
+        ],
+      );
+    }
+
   }
 
   Future<bool> _loadMore() async {
