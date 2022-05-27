@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/entity/news_type.dart';
 import 'package:heritage_online_flutter/network/network_repository.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
-import 'package:heritage_online_flutter/news_detail_page.dart';
+import 'package:heritage_online_flutter/pages/news_detail_page.dart';
 import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
 import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
 import 'package:heritage_online_flutter/view/news_list_raw.dart';
 import 'package:provider/provider.dart';
 
-class MainListPage extends StatefulWidget {
-  const MainListPage({Key? key}) : super(key: key);
+class NewsPage extends StatefulWidget {
+  const NewsPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return MainPageListState();
+    return NewsPageState();
   }
 }
 
-class MainPageListState extends State<MainListPage> {
+class NewsPageState extends State<NewsPage> {
   int index = 0;
   Map<int, int> indexPage = {};
   Map<int, List<NewsListResponse>> currentNewsListResponse = {};

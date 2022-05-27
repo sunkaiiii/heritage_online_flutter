@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:heritage_online_flutter/data/data_repository.dart';
 import 'package:heritage_online_flutter/network/network_repository.dart';
-import 'package:heritage_online_flutter/view/main_page_bottom_navigation.dart';
+import 'package:heritage_online_flutter/pages/main_page.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(const MainPage());
