@@ -2,31 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:heritage_online_flutter/entity/news_type.dart';
 import 'package:heritage_online_flutter/network/network_repository.dart';
 import 'package:heritage_online_flutter/network/response/news_list_response.dart';
-import 'package:heritage_online_flutter/pages/news_detail_page.dart';
-import 'package:heritage_online_flutter/view/general_progress_indicator.dart';
-import 'package:heritage_online_flutter/view/main_page_top_pager.dart';
-import 'package:heritage_online_flutter/view/news_list_raw.dart';
+import 'package:heritage_online_flutter/view/custom_tab_view_indicator.dart';
+import 'package:heritage_online_flutter/view/news_list.dart';
 import 'package:provider/provider.dart';
 
-class NewsPage extends StatefulWidget {
-  const NewsPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return NewsPageState();
-  }
-}
-
-class NewsPageState extends State<NewsPage> {
-  int index = 0;
+class NewsPage extends StatelessWidget {
   Map<int, int> indexPage = {};
   Map<int, List<NewsListResponse>> currentNewsListResponse = {};
   NetworkRepository? repo;
   final barText = ['最新', '论坛', '特别报道'];
+  List<Tab> tabBarItems=[];
+  List<Widget> barViews=[];
 
-  @override
-  void initState() {
-    super.initState();
+  NewsPage({Key? key}) : super(key: key)
+  {
+    for (int i = 0; i < barText.length; i++){
+      tabBarItems.add(Tab(key: PageStorageKey(barText[i]),text: barText[i],));
+      barViews.add(SafeArea(
+        key: PageStorageKey(barText[i]),
+        top: false,
+        bottom: false,
+        child: Builder(
+          builder: (context) {
+            return _newsListBody(context, barText[i],NewsType.values[i]);
+          },
+        ),
+      ));
+    }
   }
 
   getBody(BuildContext context) {
@@ -38,32 +40,34 @@ class NewsPageState extends State<NewsPage> {
             return [
               SliverOverlapAbsorber(
                 handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
-                  backgroundColor: const Color(0xff532677),
+                  backgroundColor: Colors.white,
+                  titleTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
                   centerTitle: true,
                   pinned: true,
+                  floating: true,
                   title: const Text("资讯"),
                   forceElevated: innerBoxIsScrolled,
                   bottom: TabBar(
-                    tabs: barText.map((e) => Tab(text: e)).toList(),
+                    tabs: tabBarItems,
+                    labelPadding: const EdgeInsets.only(left: 20, right: 20),
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.grey,
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicator: CircleTabIndicator(
+                        color: Colors.deepPurpleAccent, radius: 4),
                   ),
                 ),
               )
             ];
           },
           body: TabBarView(
-            children: barText
-                .map((name) => SafeArea(
-                      top: false,
-                      bottom: false,
-                      child: Builder(
-                        builder: (context) {
-                          return _newsListBody(context, name);
-                        },
-                      ),
-                    ))
-                .toList(),
+            children: barViews,
           )),
     );
   }
@@ -73,51 +77,18 @@ class NewsPageState extends State<NewsPage> {
     return getBody(context);
   }
 
-  toDetailPage(final NewsListResponse response) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return NewsDetailPage(response.link, NewsType.values[index]);
-    }));
-  }
 
-  Widget _newsListBody(BuildContext context, String title) {
-    _loadMore();
-    if((currentNewsListResponse[index]??[]).isEmpty){
-      return const GeneralProgressIndicator();
-    }else{
-      return CustomScrollView(
-        key: PageStorageKey<String>(title),
-        slivers: [
-          SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
-          SliverPadding(
-              padding: const EdgeInsets.all(8),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                    // This builder is called for each child.
-                    // In this example, we just number each list item.
-                    final newsList = currentNewsListResponse[this.index] ?? [];
-                    return NewsListRow(newsList[index], toDetailPage);
-                  },
-                  childCount: (currentNewsListResponse[index] ?? []).length,
-                ),
-              ))
-        ],
-      );
-    }
-
-  }
-
-  Future<bool> _loadMore() async {
-    final page = indexPage[index] ?? 1;
-    final newsListResponse =
-        await NewsType.values[index].getNewsListRequest(repo!)(page);
-    indexPage[index] = page + 1;
-    if (currentNewsListResponse[index] == null) {
-      currentNewsListResponse[index] = [];
-    }
-    currentNewsListResponse[index]!.addAll(newsListResponse);
-    setState(() {});
-    return true;
+  Widget _newsListBody(BuildContext context, String title, NewsType newsType) {
+    // _loadMore();
+    return CustomScrollView(
+      key: PageStorageKey<String>(title),
+      slivers: [
+        SliverOverlapInjector(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+        SliverPadding(
+            padding: const EdgeInsets.all(8),
+            sliver: NewsSliverList(networkRepo: repo!,newsListRepo: newsType,key: PageStorageKey(title),))
+      ],
+    );
   }
 }

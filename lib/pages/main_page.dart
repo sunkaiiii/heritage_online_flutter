@@ -18,7 +18,7 @@ class MainPageTabScaffoldState extends State<MainPageTabScaffold> {
   Color textColor = const Color(0x00c47f7f);
   Color iconColor = const Color(0xFFC47F7F);
   final bottomNavigationItems = [
-    const NewsPage(),
+    NewsPage(),
     const PeoplePage(),
     const HeritageProjectPage()
   ];
