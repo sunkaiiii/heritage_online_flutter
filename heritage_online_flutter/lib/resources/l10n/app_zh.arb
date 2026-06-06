@@ -51,6 +51,16 @@
     "description": "通用查看全部按钮"
   },
 
+  "commonConfirm": "确认",
+  "@commonConfirm": {
+    "description": "通用确认按钮"
+  },
+
+  "commonCancel": "取消",
+  "@commonCancel": {
+    "description": "通用取消按钮"
+  },
+
   "settingsTitle": "设置",
   "@settingsTitle": {
     "description": "设置页面标题"
@@ -79,5 +89,315 @@
   "settingsThemeSystem": "跟随系统",
   "@settingsThemeSystem": {
     "description": "系统主题选项"
+  },
+
+  "contentTypeArticle": "文章",
+  "@contentTypeArticle": {
+    "description": "内容类型：文章"
+  },
+
+  "contentTypeDirectory": "名录",
+  "@contentTypeDirectory": {
+    "description": "内容类型：名录"
+  },
+
+  "contentTypeInheritor": "传承人",
+  "@contentTypeInheritor": {
+    "description": "内容类型：传承人"
+  },
+
+  "contentTypeCollection": "合集",
+  "@contentTypeCollection": {
+    "description": "内容类型：合集"
+  },
+
+  "contentTypeTopic": "探索主题",
+  "@contentTypeTopic": {
+    "description": "内容类型：探索主题"
+  },
+
+  "categoryNews": "新闻",
+  "@categoryNews": {
+    "description": "文章分类：新闻"
+  },
+
+  "categoryForum": "论坛",
+  "@categoryForum": {
+    "description": "文章分类：论坛"
+  },
+
+  "categorySpecialTopic": "专题",
+  "@categorySpecialTopic": {
+    "description": "文章分类：专题"
+  },
+
+  "directoryKindNationalProject": "国家级项目",
+  "@directoryKindNationalProject": {
+    "description": "名录种类：国家级项目"
+  },
+
+  "directoryKindCulturalEcoZone": "文化生态区",
+  "@directoryKindCulturalEcoZone": {
+    "description": "名录种类：文化生态区"
+  },
+
+  "directoryKindProductiveProtectionBase": "保护基地",
+  "@directoryKindProductiveProtectionBase": {
+    "description": "名录种类：保护基地"
+  },
+
+  "directoryKindUnescoEntry": "UNESCO",
+  "@directoryKindUnescoEntry": {
+    "description": "名录种类：UNESCO"
+  },
+
+  "directoryKindChinaUnescoEntry": "中国 UNESCO",
+  "@directoryKindChinaUnescoEntry": {
+    "description": "名录种类：中国 UNESCO"
+  },
+
+  "directoryKindContractingState": "缔约国",
+  "@directoryKindContractingState": {
+    "description": "名录种类：缔约国"
+  },
+
+  "readingPathSourceBlendedRecommendation": "综合推荐",
+  "@readingPathSourceBlendedRecommendation": {
+    "description": "阅读路径来源：综合推荐"
+  },
+
+  "readingPathSourceRelated": "相关",
+  "@readingPathSourceRelated": {
+    "description": "阅读路径来源：相关"
+  },
+
+  "readingPathSourceRecommendation": "推荐",
+  "@readingPathSourceRecommendation": {
+    "description": "阅读路径来源：推荐"
+  },
+
+  "readingPathSourceSemanticRecommendation": "语义推荐",
+  "@readingPathSourceSemanticRecommendation": {
+    "description": "阅读路径来源：语义推荐"
+  },
+
+  "readingPathSourceCollection": "合集",
+  "@readingPathSourceCollection": {
+    "description": "阅读路径来源：合集"
+  },
+
+  "readingPathSourceGraph": "关系线索",
+  "@readingPathSourceGraph": {
+    "description": "阅读路径来源：关系线索"
+  },
+
+  "readingPathSourceExploreTopic": "探索主题",
+  "@readingPathSourceExploreTopic": {
+    "description": "阅读路径来源：探索主题"
+  },
+
+  "readingPathSourceList": "列表",
+  "@readingPathSourceList": {
+    "description": "阅读路径来源：列表"
+  },
+
+  "articlesHeaderTitle": "E迹",
+  "@articlesHeaderTitle": {
+    "description": "文章页标题"
+  },
+
+  "articlesHeaderSubtitle": "非遗新闻、论坛与专题",
+  "@articlesHeaderSubtitle": {
+    "description": "文章页副标题"
+  },
+
+  "articlesLatestTitle": "最新文章",
+  "@articlesLatestTitle": {
+    "description": "最新文章分区标题"
+  },
+
+  "articlesSearchLabel": "搜索文章",
+  "@articlesSearchLabel": {
+    "description": "文章搜索框标签"
+  },
+
+  "articlesSearchPlaceholder": "标题或关键词",
+  "@articlesSearchPlaceholder": {
+    "description": "文章搜索框占位文本"
+  },
+
+  "directoryTitle": "非遗名录",
+  "@directoryTitle": {
+    "description": "名录页标题"
+  },
+
+  "directorySubtitle": "项目、生态区、保护基地与 UNESCO 名录",
+  "@directorySubtitle": {
+    "description": "名录页副标题"
+  },
+
+  "directorySearchLabel": "搜索名录",
+  "@directorySearchLabel": {
+    "description": "名录搜索框标签"
+  },
+
+  "directorySearchPlaceholder": "项目名、地区或类别",
+  "@directorySearchPlaceholder": {
+    "description": "名录搜索框占位文本"
+  },
+
+  "inheritorsTitle": "代表性传承人",
+  "@inheritorsTitle": {
+    "description": "传承人页标题"
+  },
+
+  "inheritorsSubtitle": "按项目、类别与地区浏览传承人资料",
+  "@inheritorsSubtitle": {
+    "description": "传承人页副标题"
+  },
+
+  "inheritorsSearchLabel": "搜索传承人",
+  "@inheritorsSearchLabel": {
+    "description": "传承人搜索框标签"
+  },
+
+  "inheritorsSearchPlaceholder": "姓名、项目名、地区或类别",
+  "@inheritorsSearchPlaceholder": {
+    "description": "传承人搜索框占位文本"
+  },
+
+  "discoveryTitle": "发现",
+  "@discoveryTitle": {
+    "description": "发现页标题"
+  },
+
+  "discoverySubtitle": "探索、学习路径与精选合集",
+  "@discoverySubtitle": {
+    "description": "发现页副标题"
+  },
+
+  "discoverySearchPlaceholder": "搜索非遗内容",
+  "@discoverySearchPlaceholder": {
+    "description": "发现页搜索框占位文本"
+  },
+
+  "discoveryExploreTopics": "今日探索",
+  "@discoveryExploreTopics": {
+    "description": "发现页今日探索"
+  },
+
+  "discoveryLearningPaths": "学习路径",
+  "@discoveryLearningPaths": {
+    "description": "发现页学习路径"
+  },
+
+  "discoveryFeaturedCollections": "精选合集",
+  "@discoveryFeaturedCollections": {
+    "description": "发现页精选合集"
+  },
+
+  "discoveryRegionAtlas": "地区图谱",
+  "@discoveryRegionAtlas": {
+    "description": "发现页地区图谱"
+  },
+
+  "discoveryTimeline": "时间线",
+  "@discoveryTimeline": {
+    "description": "发现页时间线"
+  },
+
+  "discoveryTimelineSubtitle": "按年份浏览非遗内容",
+  "@discoveryTimelineSubtitle": {
+    "description": "发现页时间线副标题"
+  },
+
+  "filterButton": "筛选",
+  "@filterButton": {
+    "description": "筛选按钮"
+  },
+
+  "filterClear": "清空筛选",
+  "@filterClear": {
+    "description": "清空筛选按钮"
+  },
+
+  "filterApply": "应用",
+  "@filterApply": {
+    "description": "应用筛选按钮"
+  },
+
+  "filterInvalidYear": "请输入4位年份",
+  "@filterInvalidYear": {
+    "description": "年份格式错误提示"
+  },
+
+  "myTitle": "我的",
+  "@myTitle": {
+    "description": "我的页标题"
+  },
+
+  "favoritesTab": "收藏",
+  "@favoritesTab": {
+    "description": "收藏标签"
+  },
+
+  "recentTab": "最近浏览",
+  "@recentTab": {
+    "description": "最近浏览标签"
+  },
+
+  "readingPathTab": "阅读路径",
+  "@readingPathTab": {
+    "description": "阅读路径标签"
+  },
+
+  "actionFavorite": "收藏",
+  "@actionFavorite": {
+    "description": "收藏操作"
+  },
+
+  "actionUnfavorite": "取消收藏",
+  "@actionUnfavorite": {
+    "description": "取消收藏操作"
+  },
+
+  "actionViewSource": "查看原文",
+  "@actionViewSource": {
+    "description": "查看原文按钮"
+  },
+
+  "actionBack": "返回",
+  "@actionBack": {
+    "description": "返回按钮"
+  },
+
+  "actionRefresh": "刷新",
+  "@actionRefresh": {
+    "description": "刷新按钮"
+  },
+
+  "errorNetworkUnavailable": "网络不可用，请检查连接",
+  "@errorNetworkUnavailable": {
+    "description": "网络不可用错误"
+  },
+
+  "errorTimeout": "请求超时，请稍后重试",
+  "@errorTimeout": {
+    "description": "请求超时错误"
+  },
+
+  "errorServerUnavailable": "服务暂时不可用",
+  "@errorServerUnavailable": {
+    "description": "服务器不可用错误"
+  },
+
+  "contentMayBeStale": "内容可能不是最新",
+  "@contentMayBeStale": {
+    "description": "内容可能过期提示"
+  },
+
+  "brandFallback": "E迹",
+  "@brandFallback": {
+    "description": "品牌占位文本"
   }
 }

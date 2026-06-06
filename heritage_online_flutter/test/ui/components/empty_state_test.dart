@@ -48,7 +48,7 @@ void main() {
         ),
       );
 
-      expect(find.text('重试'), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
     });
 
     testWidgets('should not show retry button when onRetry null', (tester) async {
@@ -89,7 +89,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text('重试'));
+      await tester.tap(find.text('Retry'));
       expect(retried, isTrue);
     });
   });

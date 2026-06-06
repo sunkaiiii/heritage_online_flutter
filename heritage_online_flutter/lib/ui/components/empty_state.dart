@@ -43,7 +43,7 @@ class EmptyState extends StatelessWidget {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: onRetry,
-                child: Text(retryText ?? '重试'),
+                child: Text(retryText ?? 'Retry'),
               ),
             ],
           ],

@@ -11,7 +11,7 @@ class FilterButton extends StatelessWidget {
     super.key,
     this.activeFilterCount = 0,
     required this.onPressed,
-    this.tooltip = '筛选',
+    this.tooltip = 'Filter',
   });
 
   @override

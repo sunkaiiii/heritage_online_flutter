@@ -9,9 +9,9 @@ class ErrorRetryRow extends StatelessWidget {
 
   const ErrorRetryRow({
     super.key,
-    this.message = '加载失败',
+    this.message = 'Failed to load',
     required this.onRetry,
-    this.retryText = '重试',
+    this.retryText = 'Retry',
   });
 
   @override

@@ -59,7 +59,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text('重试'));
+      await tester.tap(find.text('Retry'));
       expect(retried, isTrue);
     });
 

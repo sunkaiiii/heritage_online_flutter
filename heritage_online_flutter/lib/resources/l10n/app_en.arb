@@ -51,6 +51,16 @@
     "description": "Common see all button"
   },
 
+  "commonConfirm": "Confirm",
+  "@commonConfirm": {
+    "description": "Common confirm button"
+  },
+
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Common cancel button"
+  },
+
   "settingsTitle": "Settings",
   "@settingsTitle": {
     "description": "Settings page title"
@@ -79,5 +89,315 @@
   "settingsThemeSystem": "System",
   "@settingsThemeSystem": {
     "description": "System theme option"
+  },
+
+  "contentTypeArticle": "Article",
+  "@contentTypeArticle": {
+    "description": "Content type: article"
+  },
+
+  "contentTypeDirectory": "Directory",
+  "@contentTypeDirectory": {
+    "description": "Content type: directory"
+  },
+
+  "contentTypeInheritor": "Inheritor",
+  "@contentTypeInheritor": {
+    "description": "Content type: inheritor"
+  },
+
+  "contentTypeCollection": "Collection",
+  "@contentTypeCollection": {
+    "description": "Content type: collection"
+  },
+
+  "contentTypeTopic": "Topic",
+  "@contentTypeTopic": {
+    "description": "Content type: explore topic"
+  },
+
+  "categoryNews": "News",
+  "@categoryNews": {
+    "description": "Article category: news"
+  },
+
+  "categoryForum": "Forum",
+  "@categoryForum": {
+    "description": "Article category: forum"
+  },
+
+  "categorySpecialTopic": "Specials",
+  "@categorySpecialTopic": {
+    "description": "Article category: special topic"
+  },
+
+  "directoryKindNationalProject": "National Project",
+  "@directoryKindNationalProject": {
+    "description": "Directory kind: national project"
+  },
+
+  "directoryKindCulturalEcoZone": "Cultural Eco Zone",
+  "@directoryKindCulturalEcoZone": {
+    "description": "Directory kind: cultural eco zone"
+  },
+
+  "directoryKindProductiveProtectionBase": "Protection Base",
+  "@directoryKindProductiveProtectionBase": {
+    "description": "Directory kind: productive protection base"
+  },
+
+  "directoryKindUnescoEntry": "UNESCO",
+  "@directoryKindUnescoEntry": {
+    "description": "Directory kind: UNESCO entry"
+  },
+
+  "directoryKindChinaUnescoEntry": "China UNESCO",
+  "@directoryKindChinaUnescoEntry": {
+    "description": "Directory kind: China UNESCO entry"
+  },
+
+  "directoryKindContractingState": "Contracting State",
+  "@directoryKindContractingState": {
+    "description": "Directory kind: contracting state"
+  },
+
+  "readingPathSourceBlendedRecommendation": "Blended",
+  "@readingPathSourceBlendedRecommendation": {
+    "description": "Reading path source: blended recommendation"
+  },
+
+  "readingPathSourceRelated": "Related",
+  "@readingPathSourceRelated": {
+    "description": "Reading path source: related"
+  },
+
+  "readingPathSourceRecommendation": "Recommendation",
+  "@readingPathSourceRecommendation": {
+    "description": "Reading path source: recommendation"
+  },
+
+  "readingPathSourceSemanticRecommendation": "Semantic",
+  "@readingPathSourceSemanticRecommendation": {
+    "description": "Reading path source: semantic recommendation"
+  },
+
+  "readingPathSourceCollection": "Collection",
+  "@readingPathSourceCollection": {
+    "description": "Reading path source: collection"
+  },
+
+  "readingPathSourceGraph": "Graph",
+  "@readingPathSourceGraph": {
+    "description": "Reading path source: graph"
+  },
+
+  "readingPathSourceExploreTopic": "Topic",
+  "@readingPathSourceExploreTopic": {
+    "description": "Reading path source: explore topic"
+  },
+
+  "readingPathSourceList": "List",
+  "@readingPathSourceList": {
+    "description": "Reading path source: list"
+  },
+
+  "articlesHeaderTitle": "E迹",
+  "@articlesHeaderTitle": {
+    "description": "Articles page header title"
+  },
+
+  "articlesHeaderSubtitle": "Heritage news, forums and specials",
+  "@articlesHeaderSubtitle": {
+    "description": "Articles page header subtitle"
+  },
+
+  "articlesLatestTitle": "Latest Articles",
+  "@articlesLatestTitle": {
+    "description": "Latest articles section title"
+  },
+
+  "articlesSearchLabel": "Search articles",
+  "@articlesSearchLabel": {
+    "description": "Articles search field label"
+  },
+
+  "articlesSearchPlaceholder": "Title or keywords",
+  "@articlesSearchPlaceholder": {
+    "description": "Articles search field placeholder"
+  },
+
+  "directoryTitle": "Heritage Directory",
+  "@directoryTitle": {
+    "description": "Directory page title"
+  },
+
+  "directorySubtitle": "Projects, eco zones, protection bases and UNESCO entries",
+  "@directorySubtitle": {
+    "description": "Directory page subtitle"
+  },
+
+  "directorySearchLabel": "Search directory",
+  "@directorySearchLabel": {
+    "description": "Directory search field label"
+  },
+
+  "directorySearchPlaceholder": "Project name, region or category",
+  "@directorySearchPlaceholder": {
+    "description": "Directory search field placeholder"
+  },
+
+  "inheritorsTitle": "Representative Inheritors",
+  "@inheritorsTitle": {
+    "description": "Inheritors page title"
+  },
+
+  "inheritorsSubtitle": "Browse inheritor profiles by project, category and region",
+  "@inheritorsSubtitle": {
+    "description": "Inheritors page subtitle"
+  },
+
+  "inheritorsSearchLabel": "Search inheritors",
+  "@inheritorsSearchLabel": {
+    "description": "Inheritors search field label"
+  },
+
+  "inheritorsSearchPlaceholder": "Name, project, region or category",
+  "@inheritorsSearchPlaceholder": {
+    "description": "Inheritors search field placeholder"
+  },
+
+  "discoveryTitle": "Discovery",
+  "@discoveryTitle": {
+    "description": "Discovery page title"
+  },
+
+  "discoverySubtitle": "Explore, learning paths and featured collections",
+  "@discoverySubtitle": {
+    "description": "Discovery page subtitle"
+  },
+
+  "discoverySearchPlaceholder": "Search heritage content",
+  "@discoverySearchPlaceholder": {
+    "description": "Discovery search field placeholder"
+  },
+
+  "discoveryExploreTopics": "Today's Explore",
+  "@discoveryExploreTopics": {
+    "description": "Discovery today's explore"
+  },
+
+  "discoveryLearningPaths": "Learning Paths",
+  "@discoveryLearningPaths": {
+    "description": "Discovery learning paths"
+  },
+
+  "discoveryFeaturedCollections": "Featured Collections",
+  "@discoveryFeaturedCollections": {
+    "description": "Discovery featured collections"
+  },
+
+  "discoveryRegionAtlas": "Region Atlas",
+  "@discoveryRegionAtlas": {
+    "description": "Discovery region atlas"
+  },
+
+  "discoveryTimeline": "Timeline",
+  "@discoveryTimeline": {
+    "description": "Discovery timeline"
+  },
+
+  "discoveryTimelineSubtitle": "Browse heritage content by year",
+  "@discoveryTimelineSubtitle": {
+    "description": "Discovery timeline subtitle"
+  },
+
+  "filterButton": "Filter",
+  "@filterButton": {
+    "description": "Filter button"
+  },
+
+  "filterClear": "Clear filters",
+  "@filterClear": {
+    "description": "Clear filters button"
+  },
+
+  "filterApply": "Apply",
+  "@filterApply": {
+    "description": "Apply filters button"
+  },
+
+  "filterInvalidYear": "Please enter a 4-digit year",
+  "@filterInvalidYear": {
+    "description": "Invalid year format message"
+  },
+
+  "myTitle": "My Page",
+  "@myTitle": {
+    "description": "My page title"
+  },
+
+  "favoritesTab": "Favorites",
+  "@favoritesTab": {
+    "description": "Favorites tab"
+  },
+
+  "recentTab": "Recent",
+  "@recentTab": {
+    "description": "Recent tab"
+  },
+
+  "readingPathTab": "Reading Path",
+  "@readingPathTab": {
+    "description": "Reading path tab"
+  },
+
+  "actionFavorite": "Favorite",
+  "@actionFavorite": {
+    "description": "Favorite action"
+  },
+
+  "actionUnfavorite": "Unfavorite",
+  "@actionUnfavorite": {
+    "description": "Unfavorite action"
+  },
+
+  "actionViewSource": "View Source",
+  "@actionViewSource": {
+    "description": "View source button"
+  },
+
+  "actionBack": "Back",
+  "@actionBack": {
+    "description": "Back button"
+  },
+
+  "actionRefresh": "Refresh",
+  "@actionRefresh": {
+    "description": "Refresh button"
+  },
+
+  "errorNetworkUnavailable": "Network unavailable. Please check your connection.",
+  "@errorNetworkUnavailable": {
+    "description": "Network unavailable error"
+  },
+
+  "errorTimeout": "Request timed out. Please try again later.",
+  "@errorTimeout": {
+    "description": "Request timeout error"
+  },
+
+  "errorServerUnavailable": "Service temporarily unavailable.",
+  "@errorServerUnavailable": {
+    "description": "Server unavailable error"
+  },
+
+  "contentMayBeStale": "Content may not be up to date",
+  "@contentMayBeStale": {
+    "description": "Content may be stale hint"
+  },
+
+  "brandFallback": "E迹",
+  "@brandFallback": {
+    "description": "Brand fallback text"
   }
 }

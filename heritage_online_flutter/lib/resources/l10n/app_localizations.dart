@@ -158,6 +158,18 @@ abstract class AppLocalizations {
   /// **'See All'**
   String get commonSeeAll;
 
+  /// Common confirm button
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get commonConfirm;
+
+  /// Common cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
   /// Settings page title
   ///
   /// In en, this message translates to:
@@ -193,6 +205,378 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get settingsThemeSystem;
+
+  /// Content type: article
+  ///
+  /// In en, this message translates to:
+  /// **'Article'**
+  String get contentTypeArticle;
+
+  /// Content type: directory
+  ///
+  /// In en, this message translates to:
+  /// **'Directory'**
+  String get contentTypeDirectory;
+
+  /// Content type: inheritor
+  ///
+  /// In en, this message translates to:
+  /// **'Inheritor'**
+  String get contentTypeInheritor;
+
+  /// Content type: collection
+  ///
+  /// In en, this message translates to:
+  /// **'Collection'**
+  String get contentTypeCollection;
+
+  /// Content type: explore topic
+  ///
+  /// In en, this message translates to:
+  /// **'Topic'**
+  String get contentTypeTopic;
+
+  /// Article category: news
+  ///
+  /// In en, this message translates to:
+  /// **'News'**
+  String get categoryNews;
+
+  /// Article category: forum
+  ///
+  /// In en, this message translates to:
+  /// **'Forum'**
+  String get categoryForum;
+
+  /// Article category: special topic
+  ///
+  /// In en, this message translates to:
+  /// **'Specials'**
+  String get categorySpecialTopic;
+
+  /// Directory kind: national project
+  ///
+  /// In en, this message translates to:
+  /// **'National Project'**
+  String get directoryKindNationalProject;
+
+  /// Directory kind: cultural eco zone
+  ///
+  /// In en, this message translates to:
+  /// **'Cultural Eco Zone'**
+  String get directoryKindCulturalEcoZone;
+
+  /// Directory kind: productive protection base
+  ///
+  /// In en, this message translates to:
+  /// **'Protection Base'**
+  String get directoryKindProductiveProtectionBase;
+
+  /// Directory kind: UNESCO entry
+  ///
+  /// In en, this message translates to:
+  /// **'UNESCO'**
+  String get directoryKindUnescoEntry;
+
+  /// Directory kind: China UNESCO entry
+  ///
+  /// In en, this message translates to:
+  /// **'China UNESCO'**
+  String get directoryKindChinaUnescoEntry;
+
+  /// Directory kind: contracting state
+  ///
+  /// In en, this message translates to:
+  /// **'Contracting State'**
+  String get directoryKindContractingState;
+
+  /// Reading path source: blended recommendation
+  ///
+  /// In en, this message translates to:
+  /// **'Blended'**
+  String get readingPathSourceBlendedRecommendation;
+
+  /// Reading path source: related
+  ///
+  /// In en, this message translates to:
+  /// **'Related'**
+  String get readingPathSourceRelated;
+
+  /// Reading path source: recommendation
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation'**
+  String get readingPathSourceRecommendation;
+
+  /// Reading path source: semantic recommendation
+  ///
+  /// In en, this message translates to:
+  /// **'Semantic'**
+  String get readingPathSourceSemanticRecommendation;
+
+  /// Reading path source: collection
+  ///
+  /// In en, this message translates to:
+  /// **'Collection'**
+  String get readingPathSourceCollection;
+
+  /// Reading path source: graph
+  ///
+  /// In en, this message translates to:
+  /// **'Graph'**
+  String get readingPathSourceGraph;
+
+  /// Reading path source: explore topic
+  ///
+  /// In en, this message translates to:
+  /// **'Topic'**
+  String get readingPathSourceExploreTopic;
+
+  /// Reading path source: list
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get readingPathSourceList;
+
+  /// Articles page header title
+  ///
+  /// In en, this message translates to:
+  /// **'E迹'**
+  String get articlesHeaderTitle;
+
+  /// Articles page header subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Heritage news, forums and specials'**
+  String get articlesHeaderSubtitle;
+
+  /// Latest articles section title
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Articles'**
+  String get articlesLatestTitle;
+
+  /// Articles search field label
+  ///
+  /// In en, this message translates to:
+  /// **'Search articles'**
+  String get articlesSearchLabel;
+
+  /// Articles search field placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Title or keywords'**
+  String get articlesSearchPlaceholder;
+
+  /// Directory page title
+  ///
+  /// In en, this message translates to:
+  /// **'Heritage Directory'**
+  String get directoryTitle;
+
+  /// Directory page subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Projects, eco zones, protection bases and UNESCO entries'**
+  String get directorySubtitle;
+
+  /// Directory search field label
+  ///
+  /// In en, this message translates to:
+  /// **'Search directory'**
+  String get directorySearchLabel;
+
+  /// Directory search field placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Project name, region or category'**
+  String get directorySearchPlaceholder;
+
+  /// Inheritors page title
+  ///
+  /// In en, this message translates to:
+  /// **'Representative Inheritors'**
+  String get inheritorsTitle;
+
+  /// Inheritors page subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Browse inheritor profiles by project, category and region'**
+  String get inheritorsSubtitle;
+
+  /// Inheritors search field label
+  ///
+  /// In en, this message translates to:
+  /// **'Search inheritors'**
+  String get inheritorsSearchLabel;
+
+  /// Inheritors search field placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Name, project, region or category'**
+  String get inheritorsSearchPlaceholder;
+
+  /// Discovery page title
+  ///
+  /// In en, this message translates to:
+  /// **'Discovery'**
+  String get discoveryTitle;
+
+  /// Discovery page subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Explore, learning paths and featured collections'**
+  String get discoverySubtitle;
+
+  /// Discovery search field placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Search heritage content'**
+  String get discoverySearchPlaceholder;
+
+  /// Discovery today's explore
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Explore'**
+  String get discoveryExploreTopics;
+
+  /// Discovery learning paths
+  ///
+  /// In en, this message translates to:
+  /// **'Learning Paths'**
+  String get discoveryLearningPaths;
+
+  /// Discovery featured collections
+  ///
+  /// In en, this message translates to:
+  /// **'Featured Collections'**
+  String get discoveryFeaturedCollections;
+
+  /// Discovery region atlas
+  ///
+  /// In en, this message translates to:
+  /// **'Region Atlas'**
+  String get discoveryRegionAtlas;
+
+  /// Discovery timeline
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get discoveryTimeline;
+
+  /// Discovery timeline subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Browse heritage content by year'**
+  String get discoveryTimelineSubtitle;
+
+  /// Filter button
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filterButton;
+
+  /// Clear filters button
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get filterClear;
+
+  /// Apply filters button
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get filterApply;
+
+  /// Invalid year format message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a 4-digit year'**
+  String get filterInvalidYear;
+
+  /// My page title
+  ///
+  /// In en, this message translates to:
+  /// **'My Page'**
+  String get myTitle;
+
+  /// Favorites tab
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favoritesTab;
+
+  /// Recent tab
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get recentTab;
+
+  /// Reading path tab
+  ///
+  /// In en, this message translates to:
+  /// **'Reading Path'**
+  String get readingPathTab;
+
+  /// Favorite action
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite'**
+  String get actionFavorite;
+
+  /// Unfavorite action
+  ///
+  /// In en, this message translates to:
+  /// **'Unfavorite'**
+  String get actionUnfavorite;
+
+  /// View source button
+  ///
+  /// In en, this message translates to:
+  /// **'View Source'**
+  String get actionViewSource;
+
+  /// Back button
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get actionBack;
+
+  /// Refresh button
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get actionRefresh;
+
+  /// Network unavailable error
+  ///
+  /// In en, this message translates to:
+  /// **'Network unavailable. Please check your connection.'**
+  String get errorNetworkUnavailable;
+
+  /// Request timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out. Please try again later.'**
+  String get errorTimeout;
+
+  /// Server unavailable error
+  ///
+  /// In en, this message translates to:
+  /// **'Service temporarily unavailable.'**
+  String get errorServerUnavailable;
+
+  /// Content may be stale hint
+  ///
+  /// In en, this message translates to:
+  /// **'Content may not be up to date'**
+  String get contentMayBeStale;
+
+  /// Brand fallback text
+  ///
+  /// In en, this message translates to:
+  /// **'E迹'**
+  String get brandFallback;
 }
 
 class _AppLocalizationsDelegate
