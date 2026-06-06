@@ -1,0 +1,83 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Heritage Online",
+  "@appTitle": {
+    "description": "The application title"
+  },
+
+  "tabArticles": "Articles",
+  "@tabArticles": {
+    "description": "Bottom navigation tab for articles"
+  },
+
+  "tabDirectory": "Directory",
+  "@tabDirectory": {
+    "description": "Bottom navigation tab for directory items"
+  },
+
+  "tabInheritors": "Inheritors",
+  "@tabInheritors": {
+    "description": "Bottom navigation tab for inheritors"
+  },
+
+  "tabDiscovery": "Discovery",
+  "@tabDiscovery": {
+    "description": "Bottom navigation tab for discovery"
+  },
+
+  "commonRetry": "Retry",
+  "@commonRetry": {
+    "description": "Common retry button text"
+  },
+
+  "commonLoading": "Loading...",
+  "@commonLoading": {
+    "description": "Common loading text"
+  },
+
+  "commonError": "Something went wrong",
+  "@commonError": {
+    "description": "Common error message"
+  },
+
+  "commonEmpty": "No data available",
+  "@commonEmpty": {
+    "description": "Common empty state message"
+  },
+
+  "commonSeeAll": "See All",
+  "@commonSeeAll": {
+    "description": "Common see all button"
+  },
+
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Settings page title"
+  },
+
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Settings language option"
+  },
+
+  "settingsTheme": "Theme",
+  "@settingsTheme": {
+    "description": "Settings theme option"
+  },
+
+  "settingsThemeLight": "Light",
+  "@settingsThemeLight": {
+    "description": "Light theme option"
+  },
+
+  "settingsThemeDark": "Dark",
+  "@settingsThemeDark": {
+    "description": "Dark theme option"
+  },
+
+  "settingsThemeSystem": "System",
+  "@settingsThemeSystem": {
+    "description": "System theme option"
+  }
+}

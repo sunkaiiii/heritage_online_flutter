@@ -1,0 +1,83 @@
+{
+  "@@locale": "zh",
+
+  "appTitle": "非遗在线",
+  "@appTitle": {
+    "description": "应用标题"
+  },
+
+  "tabArticles": "文章",
+  "@tabArticles": {
+    "description": "底部导航栏-文章标签"
+  },
+
+  "tabDirectory": "名录",
+  "@tabDirectory": {
+    "description": "底部导航栏-名录标签"
+  },
+
+  "tabInheritors": "传承人",
+  "@tabInheritors": {
+    "description": "底部导航栏-传承人标签"
+  },
+
+  "tabDiscovery": "发现",
+  "@tabDiscovery": {
+    "description": "底部导航栏-发现标签"
+  },
+
+  "commonRetry": "重试",
+  "@commonRetry": {
+    "description": "通用重试按钮文本"
+  },
+
+  "commonLoading": "加载中...",
+  "@commonLoading": {
+    "description": "通用加载中文本"
+  },
+
+  "commonError": "出错了",
+  "@commonError": {
+    "description": "通用错误消息"
+  },
+
+  "commonEmpty": "暂无数据",
+  "@commonEmpty": {
+    "description": "通用空状态消息"
+  },
+
+  "commonSeeAll": "查看全部",
+  "@commonSeeAll": {
+    "description": "通用查看全部按钮"
+  },
+
+  "settingsTitle": "设置",
+  "@settingsTitle": {
+    "description": "设置页面标题"
+  },
+
+  "settingsLanguage": "语言",
+  "@settingsLanguage": {
+    "description": "设置语言选项"
+  },
+
+  "settingsTheme": "主题",
+  "@settingsTheme": {
+    "description": "设置主题选项"
+  },
+
+  "settingsThemeLight": "浅色",
+  "@settingsThemeLight": {
+    "description": "浅色主题选项"
+  },
+
+  "settingsThemeDark": "深色",
+  "@settingsThemeDark": {
+    "description": "深色主题选项"
+  },
+
+  "settingsThemeSystem": "跟随系统",
+  "@settingsThemeSystem": {
+    "description": "系统主题选项"
+  }
+}
