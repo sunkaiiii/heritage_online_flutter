@@ -88,7 +88,7 @@ extension ApiClientExtensions on ApiClient {
   /// 获取文章详情 by sourceUrl
   Future<Response> getArticleBySourceUrl(String sourceUrl, {String? category}) {
     final params = <String, dynamic>{};
-    addOptionalParam(params, 'sourceUrl', sourceUrl);
+    addOptionalParam(params, 'url', sourceUrl);
     addOptionalParam(params, 'category', category);
     return get('api/articles/source', queryParameters: params);
   }
