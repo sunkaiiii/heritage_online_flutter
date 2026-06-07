@@ -261,6 +261,11 @@
     "description": "文章搜索框占位文本"
   },
 
+  "articleDetailTitle": "文章详情",
+  "@articleDetailTitle": {
+    "description": "文章详情页标题"
+  },
+
   "directoryTitle": "非遗名录",
   "@directoryTitle": {
     "description": "名录页标题"
@@ -359,6 +364,21 @@
   "filterApply": "应用",
   "@filterApply": {
     "description": "应用筛选按钮"
+  },
+
+  "filterTitle": "筛选",
+  "@filterTitle": {
+    "description": "筛选弹层标题"
+  },
+
+  "filterFieldYear": "年份",
+  "@filterFieldYear": {
+    "description": "年份筛选字段标签"
+  },
+
+  "filterPlaceholderYear": "例如 2024",
+  "@filterPlaceholderYear": {
+    "description": "年份筛选字段占位文案"
   },
 
   "filterInvalidYear": "请输入4位年份",

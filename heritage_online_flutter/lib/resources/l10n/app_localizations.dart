@@ -410,6 +410,12 @@ abstract class AppLocalizations {
   /// **'Title or keywords'**
   String get articlesSearchPlaceholder;
 
+  /// Article detail page title
+  ///
+  /// In en, this message translates to:
+  /// **'Article Detail'**
+  String get articleDetailTitle;
+
   /// Directory page title
   ///
   /// In en, this message translates to:
@@ -529,6 +535,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Apply'**
   String get filterApply;
+
+  /// Filter sheet title
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filterTitle;
+
+  /// Year filter field label
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get filterFieldYear;
+
+  /// Year filter field placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 2024'**
+  String get filterPlaceholderYear;
 
   /// Invalid year format message
   ///

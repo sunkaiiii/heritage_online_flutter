@@ -42,6 +42,7 @@ class DefaultHeritageRepository implements HeritageRepository {
     int? pageSize,
     String? keywords,
     bool? hasImage,
+    int? year,
   }) async {
     final response = await _apiClient.getArticles(
       category: category,
@@ -49,6 +50,7 @@ class DefaultHeritageRepository implements HeritageRepository {
       pageSize: pageSize,
       keywords: keywords,
       hasImage: hasImage,
+      year: year,
     );
     return PagedResult.fromJson(
       _toMap(response.data),

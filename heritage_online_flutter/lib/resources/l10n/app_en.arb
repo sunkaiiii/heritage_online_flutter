@@ -261,6 +261,11 @@
     "description": "Articles search field placeholder"
   },
 
+  "articleDetailTitle": "Article Detail",
+  "@articleDetailTitle": {
+    "description": "Article detail page title"
+  },
+
   "directoryTitle": "Heritage Directory",
   "@directoryTitle": {
     "description": "Directory page title"
@@ -359,6 +364,21 @@
   "filterApply": "Apply",
   "@filterApply": {
     "description": "Apply filters button"
+  },
+
+  "filterTitle": "Filter",
+  "@filterTitle": {
+    "description": "Filter sheet title"
+  },
+
+  "filterFieldYear": "Year",
+  "@filterFieldYear": {
+    "description": "Year filter field label"
+  },
+
+  "filterPlaceholderYear": "e.g. 2024",
+  "@filterPlaceholderYear": {
+    "description": "Year filter field placeholder"
   },
 
   "filterInvalidYear": "Please enter a 4-digit year",

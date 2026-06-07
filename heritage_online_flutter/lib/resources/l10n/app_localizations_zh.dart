@@ -165,6 +165,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get articlesSearchPlaceholder => '标题或关键词';
 
   @override
+  String get articleDetailTitle => '文章详情';
+
+  @override
   String get directoryTitle => '非遗名录';
 
   @override
@@ -223,6 +226,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get filterApply => '应用';
+
+  @override
+  String get filterTitle => '筛选';
+
+  @override
+  String get filterFieldYear => '年份';
+
+  @override
+  String get filterPlaceholderYear => '例如 2024';
 
   @override
   String get filterInvalidYear => '请输入4位年份';

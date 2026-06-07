@@ -63,6 +63,7 @@ extension ApiClientExtensions on ApiClient {
     int? pageSize,
     String? keywords,
     bool? hasImage,
+    int? year,
   }) {
     final params = <String, dynamic>{};
     addOptionalParam(params, 'category', category);
@@ -70,6 +71,7 @@ extension ApiClientExtensions on ApiClient {
     addOptionalParam(params, 'pageSize', pageSize);
     addOptionalParam(params, 'keywords', keywords);
     addOptionalParam(params, 'hasImage', hasImage);
+    addOptionalParam(params, 'year', year);
     return get('api/articles', queryParameters: params);
   }
 

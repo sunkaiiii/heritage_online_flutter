@@ -24,6 +24,7 @@ abstract class HeritageRepository {
     int? pageSize,
     String? keywords,
     bool? hasImage,
+    int? year,
   });
 
   /// 获取文章详情 by id

@@ -62,6 +62,7 @@ class FakeHeritageRepository implements HeritageRepository {
     int? pageSize,
     String? keywords,
     bool? hasImage,
+    int? year,
   }) async {
     _checkError();
     return const PagedResult();

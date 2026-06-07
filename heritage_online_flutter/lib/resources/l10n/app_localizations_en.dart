@@ -165,6 +165,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get articlesSearchPlaceholder => 'Title or keywords';
 
   @override
+  String get articleDetailTitle => 'Article Detail';
+
+  @override
   String get directoryTitle => 'Heritage Directory';
 
   @override
@@ -226,6 +229,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterApply => 'Apply';
+
+  @override
+  String get filterTitle => 'Filter';
+
+  @override
+  String get filterFieldYear => 'Year';
+
+  @override
+  String get filterPlaceholderYear => 'e.g. 2024';
 
   @override
   String get filterInvalidYear => 'Please enter a 4-digit year';
