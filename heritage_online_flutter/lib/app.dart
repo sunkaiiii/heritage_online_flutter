@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:heritage_online_flutter/core/theme/theme.dart';
+import 'package:heritage_online_flutter/core/settings/settings.dart';
+import 'package:heritage_online_flutter/core/theme/heritage_theme.dart';
 import 'package:heritage_online_flutter/features/app_shell.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 
@@ -11,20 +12,22 @@ class HeritageApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeState = ref.watch(themeProvider);
+    final themeModeState = ref.watch(themeModeProvider);
+    final languageModeState = ref.watch(languageModeProvider);
 
     return MaterialApp(
       title: 'Heritage Online',
       debugShowCheckedModeBanner: false,
 
-      // 本地化配置（使用生成的 delegates 和 locales，保证一致性）
+      // 本地化配置
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      locale: languageModeState.currentLocale,
 
       // 主题配置 - 使用 HeritageTheme
-      theme: themeState.lightTheme,
-      darkTheme: themeState.darkTheme,
-      themeMode: themeState.currentThemeMode,
+      theme: HeritageTheme.lightTheme,
+      darkTheme: HeritageTheme.darkTheme,
+      themeMode: themeModeState.currentThemeMode,
 
       // App Shell
       home: const AppShell(),

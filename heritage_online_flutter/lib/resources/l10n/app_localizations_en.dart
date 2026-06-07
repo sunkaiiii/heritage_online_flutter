@@ -63,6 +63,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeSystem => 'System';
 
   @override
+  String get settingsAppearanceTitle => 'Appearance';
+
+  @override
+  String get settingsLanguageTitle => 'Language';
+
+  @override
+  String get settingsThemeModeTitle => 'Theme Mode';
+
+  @override
+  String get settingsLanguageModeTitle => 'App Language';
+
+  @override
+  String get settingsLanguageSystem => 'System';
+
+  @override
+  String get settingsLanguageSimplifiedChinese => '简体中文';
+
+  @override
+  String get settingsLanguageEnglish => 'English';
+
+  @override
   String get contentTypeArticle => 'Article';
 
   @override

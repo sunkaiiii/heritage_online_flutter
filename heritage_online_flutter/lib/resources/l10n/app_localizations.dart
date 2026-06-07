@@ -206,6 +206,48 @@ abstract class AppLocalizations {
   /// **'System'**
   String get settingsThemeSystem;
 
+  /// Settings page appearance section title
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearanceTitle;
+
+  /// Settings page language section title
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguageTitle;
+
+  /// Theme mode selection title
+  ///
+  /// In en, this message translates to:
+  /// **'Theme Mode'**
+  String get settingsThemeModeTitle;
+
+  /// Language mode selection title
+  ///
+  /// In en, this message translates to:
+  /// **'App Language'**
+  String get settingsLanguageModeTitle;
+
+  /// System language option
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get settingsLanguageSystem;
+
+  /// Simplified Chinese language option
+  ///
+  /// In en, this message translates to:
+  /// **'简体中文'**
+  String get settingsLanguageSimplifiedChinese;
+
+  /// English language option
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEnglish;
+
   /// Content type: article
   ///
   /// In en, this message translates to:
