@@ -667,6 +667,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{currentPage} / {totalPages}'**
   String previewPageIndicator(int currentPage, int totalPages);
+
+  /// Detail page author label
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get detailLabelAuthor;
+
+  /// Detail page editor label
+  ///
+  /// In en, this message translates to:
+  /// **'Editor'**
+  String get detailLabelEditor;
+
+  /// Detail page source label
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get detailLabelSource;
+
+  /// Article detail related articles section title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Articles'**
+  String get articleRelatedTitle;
+
+  /// Unable to open URL error message
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open link'**
+  String get errorOpenUrl;
 }
 
 class _AppLocalizationsDelegate

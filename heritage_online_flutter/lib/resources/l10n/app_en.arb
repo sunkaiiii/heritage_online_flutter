@@ -482,5 +482,30 @@
         "type": "int"
       }
     }
+  },
+
+  "detailLabelAuthor": "Author",
+  "@detailLabelAuthor": {
+    "description": "Detail page author label"
+  },
+
+  "detailLabelEditor": "Editor",
+  "@detailLabelEditor": {
+    "description": "Detail page editor label"
+  },
+
+  "detailLabelSource": "Source",
+  "@detailLabelSource": {
+    "description": "Detail page source label"
+  },
+
+  "articleRelatedTitle": "Related Articles",
+  "@articleRelatedTitle": {
+    "description": "Article detail related articles section title"
+  },
+
+  "errorOpenUrl": "Unable to open link",
+  "@errorOpenUrl": {
+    "description": "Unable to open URL error message"
   }
 }

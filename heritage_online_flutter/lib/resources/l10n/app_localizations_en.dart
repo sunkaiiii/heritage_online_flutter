@@ -298,4 +298,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String previewPageIndicator(int currentPage, int totalPages) {
     return '$currentPage / $totalPages';
   }
+
+  @override
+  String get detailLabelAuthor => 'Author';
+
+  @override
+  String get detailLabelEditor => 'Editor';
+
+  @override
+  String get detailLabelSource => 'Source';
+
+  @override
+  String get articleRelatedTitle => 'Related Articles';
+
+  @override
+  String get errorOpenUrl => 'Unable to open link';
 }

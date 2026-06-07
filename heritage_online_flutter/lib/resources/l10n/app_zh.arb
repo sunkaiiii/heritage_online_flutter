@@ -482,5 +482,30 @@
         "type": "int"
       }
     }
+  },
+
+  "detailLabelAuthor": "作者",
+  "@detailLabelAuthor": {
+    "description": "详情页作者标签"
+  },
+
+  "detailLabelEditor": "编辑",
+  "@detailLabelEditor": {
+    "description": "详情页编辑标签"
+  },
+
+  "detailLabelSource": "来源",
+  "@detailLabelSource": {
+    "description": "详情页来源标签"
+  },
+
+  "articleRelatedTitle": "相关文章",
+  "@articleRelatedTitle": {
+    "description": "文章详情页相关文章区块标题"
+  },
+
+  "errorOpenUrl": "无法打开链接",
+  "@errorOpenUrl": {
+    "description": "无法打开链接错误提示"
   }
 }

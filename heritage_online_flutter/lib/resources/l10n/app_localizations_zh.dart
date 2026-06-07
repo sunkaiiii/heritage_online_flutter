@@ -294,4 +294,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String previewPageIndicator(int currentPage, int totalPages) {
     return '第 $currentPage / $totalPages 张';
   }
+
+  @override
+  String get detailLabelAuthor => '作者';
+
+  @override
+  String get detailLabelEditor => '编辑';
+
+  @override
+  String get detailLabelSource => '来源';
+
+  @override
+  String get articleRelatedTitle => '相关文章';
+
+  @override
+  String get errorOpenUrl => '无法打开链接';
 }

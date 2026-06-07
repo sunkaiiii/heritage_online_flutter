@@ -34,6 +34,9 @@ dependencies:
   # 图片加载
   cached_network_image: ^3.3.1
 
+  # URL 打开
+  url_launcher: ^6.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
