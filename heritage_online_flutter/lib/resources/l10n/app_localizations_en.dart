@@ -275,4 +275,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsMyPageDescription => 'Favorites, Recent & Reading Path';
+
+  @override
+  String get previewImage => 'Preview Image';
+
+  @override
+  String get previewClose => 'Close Preview';
+
+  @override
+  String previewPageIndicator(int currentPage, int totalPages) {
+    return '$currentPage / $totalPages';
+  }
 }

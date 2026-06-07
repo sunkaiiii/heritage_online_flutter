@@ -91,20 +91,19 @@ void main() {
       expect(dto.bestUrl, 'display');
     });
 
-    test('bestUrl should fallback to originalUrl', () {
+    test('bestUrl should fallback to thumbnailUrl', () {
       const dto = MediaAssetDto(
         sourceUrl: 'source',
         originalUrl: 'original',
         thumbnailUrl: 'thumb',
       );
 
-      expect(dto.bestUrl, 'original');
+      expect(dto.bestUrl, 'thumb');
     });
 
-    test('bestUrl should fallback to sourceUrl', () {
+    test('bestUrl should fallback to sourceUrl when only sourceUrl set', () {
       const dto = MediaAssetDto(
         sourceUrl: 'source',
-        thumbnailUrl: 'thumb',
       );
 
       expect(dto.bestUrl, 'source');

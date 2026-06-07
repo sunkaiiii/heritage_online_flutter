@@ -439,5 +439,28 @@
   "settingsMyPageDescription": "Favorites, Recent & Reading Path",
   "@settingsMyPageDescription": {
     "description": "Settings my page entry description"
+  },
+
+  "previewImage": "Preview Image",
+  "@previewImage": {
+    "description": "Image preview title"
+  },
+
+  "previewClose": "Close Preview",
+  "@previewClose": {
+    "description": "Close image preview"
+  },
+
+  "previewPageIndicator": "{currentPage} / {totalPages}",
+  "@previewPageIndicator": {
+    "description": "Image preview page indicator",
+    "placeholders": {
+      "currentPage": {
+        "type": "int"
+      },
+      "totalPages": {
+        "type": "int"
+      }
+    }
   }
 }

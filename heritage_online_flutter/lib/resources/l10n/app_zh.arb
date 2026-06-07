@@ -439,5 +439,28 @@
   "settingsMyPageDescription": "收藏、最近浏览与阅读路径",
   "@settingsMyPageDescription": {
     "description": "设置页我的页入口描述"
+  },
+
+  "previewImage": "预览图片",
+  "@previewImage": {
+    "description": "图片预览标题"
+  },
+
+  "previewClose": "关闭预览",
+  "@previewClose": {
+    "description": "关闭图片预览"
+  },
+
+  "previewPageIndicator": "第 {currentPage} / {totalPages} 张",
+  "@previewPageIndicator": {
+    "description": "图片预览页码指示器",
+    "placeholders": {
+      "currentPage": {
+        "type": "int"
+      },
+      "totalPages": {
+        "type": "int"
+      }
+    }
   }
 }

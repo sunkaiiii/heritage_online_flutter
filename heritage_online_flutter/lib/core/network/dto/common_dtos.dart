@@ -51,11 +51,14 @@ class MediaAssetDto {
 
   Map<String, dynamic> toJson() => _$MediaAssetDtoToJson(this);
 
-  /// 获取最佳可用 URL
-  String? get bestUrl => displayUrl ?? originalUrl ?? sourceUrl ?? thumbnailUrl;
+  /// 获取最佳可用 URL（列表优先级：displayUrl -> thumbnailUrl -> originalUrl -> sourceUrl）
+  String? get bestUrl => displayUrl ?? thumbnailUrl ?? originalUrl ?? sourceUrl;
 
   /// 获取缩略图 URL，如果没有则使用主图
   String? get thumbnailOrMainUrl => thumbnailUrl ?? bestUrl;
+
+  /// 获取最佳预览 URL（预览优先级：originalUrl -> displayUrl -> sourceUrl -> thumbnailUrl）
+  String? get bestPreviewUrl => originalUrl ?? displayUrl ?? sourceUrl ?? thumbnailUrl;
 }
 
 /// 问题详情（错误响应）

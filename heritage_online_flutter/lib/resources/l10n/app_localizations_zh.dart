@@ -271,4 +271,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsMyPageDescription => '收藏、最近浏览与阅读路径';
+
+  @override
+  String get previewImage => '预览图片';
+
+  @override
+  String get previewClose => '关闭预览';
+
+  @override
+  String previewPageIndicator(int currentPage, int totalPages) {
+    return '第 $currentPage / $totalPages 张';
+  }
 }

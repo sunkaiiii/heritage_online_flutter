@@ -625,6 +625,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Favorites, Recent & Reading Path'**
   String get settingsMyPageDescription;
+
+  /// Image preview title
+  ///
+  /// In en, this message translates to:
+  /// **'Preview Image'**
+  String get previewImage;
+
+  /// Close image preview
+  ///
+  /// In en, this message translates to:
+  /// **'Close Preview'**
+  String get previewClose;
+
+  /// Image preview page indicator
+  ///
+  /// In en, this message translates to:
+  /// **'{currentPage} / {totalPages}'**
+  String previewPageIndicator(int currentPage, int totalPages);
 }
 
 class _AppLocalizationsDelegate
