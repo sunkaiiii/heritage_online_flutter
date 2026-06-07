@@ -577,6 +577,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'E迹'**
   String get brandFallback;
+
+  /// Settings my page entry description
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites, Recent & Reading Path'**
+  String get settingsMyPageDescription;
 }
 
 class _AppLocalizationsDelegate

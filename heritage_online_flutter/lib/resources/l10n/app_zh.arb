@@ -399,5 +399,10 @@
   "brandFallback": "E迹",
   "@brandFallback": {
     "description": "品牌占位文本"
+  },
+
+  "settingsMyPageDescription": "收藏、最近浏览与阅读路径",
+  "@settingsMyPageDescription": {
+    "description": "设置页我的页入口描述"
   }
 }

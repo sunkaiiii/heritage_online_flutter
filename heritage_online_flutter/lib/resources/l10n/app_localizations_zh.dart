@@ -247,4 +247,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get brandFallback => 'E迹';
+
+  @override
+  String get settingsMyPageDescription => '收藏、最近浏览与阅读路径';
 }

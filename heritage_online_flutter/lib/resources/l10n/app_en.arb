@@ -399,5 +399,10 @@
   "brandFallback": "E迹",
   "@brandFallback": {
     "description": "Brand fallback text"
+  },
+
+  "settingsMyPageDescription": "Favorites, Recent & Reading Path",
+  "@settingsMyPageDescription": {
+    "description": "Settings my page entry description"
   }
 }

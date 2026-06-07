@@ -251,4 +251,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get brandFallback => 'E迹';
+
+  @override
+  String get settingsMyPageDescription => 'Favorites, Recent & Reading Path';
 }
