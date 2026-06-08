@@ -156,6 +156,7 @@ class DirectoryItemSummaryDto {
   final int? publishedYear;
   final String? listType;
   final MediaAssetDto? coverImage;
+  final String? sourceId;
   final String? sourceUrl;
 
   const DirectoryItemSummaryDto({
@@ -170,6 +171,7 @@ class DirectoryItemSummaryDto {
     this.publishedYear,
     this.listType,
     this.coverImage,
+    this.sourceId,
     this.sourceUrl,
   });
 

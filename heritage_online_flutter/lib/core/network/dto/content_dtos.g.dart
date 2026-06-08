@@ -162,6 +162,7 @@ DirectoryItemSummaryDto _$DirectoryItemSummaryDtoFromJson(
   coverImage: json['coverImage'] == null
       ? null
       : MediaAssetDto.fromJson(json['coverImage'] as Map<String, dynamic>),
+  sourceId: json['sourceId'] as String?,
   sourceUrl: json['sourceUrl'] as String?,
 );
 
@@ -179,6 +180,7 @@ Map<String, dynamic> _$DirectoryItemSummaryDtoToJson(
   'publishedYear': instance.publishedYear,
   'listType': instance.listType,
   'coverImage': instance.coverImage,
+  'sourceId': instance.sourceId,
   'sourceUrl': instance.sourceUrl,
 };
 

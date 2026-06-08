@@ -261,6 +261,26 @@
     "description": "文章搜索框占位文本"
   },
 
+  "directoryTabList": "名录",
+  "@directoryTabList": {
+    "description": "名录页名录 Tab"
+  },
+
+  "directoryTabStatistics": "统计",
+  "@directoryTabStatistics": {
+    "description": "名录页统计 Tab"
+  },
+
+  "directoryDetailTitle": "名录详情",
+  "@directoryDetailTitle": {
+    "description": "名录详情页标题"
+  },
+
+  "inheritorDetailTitle": "传承人详情",
+  "@inheritorDetailTitle": {
+    "description": "传承人详情页标题"
+  },
+
   "articleDetailTitle": "文章详情",
   "@articleDetailTitle": {
     "description": "文章详情页标题"
@@ -507,5 +527,150 @@
   "errorOpenUrl": "无法打开链接",
   "@errorOpenUrl": {
     "description": "无法打开链接错误提示"
+  },
+
+  "directoryStatisticsOverviewFormat": "{kind} 总览",
+  "@directoryStatisticsOverviewFormat": {
+    "description": "统计总览标题，{kind} 为名录种类",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+
+  "directoryStatisticsYearBreakdown": "年份分布",
+  "@directoryStatisticsYearBreakdown": {
+    "description": "统计年份分布标题"
+  },
+
+  "directoryStatisticsCategoryBreakdown": "类别分布",
+  "@directoryStatisticsCategoryBreakdown": {
+    "description": "统计类别分布标题"
+  },
+
+  "directoryStatisticsRegionBreakdown": "地区排行",
+  "@directoryStatisticsRegionBreakdown": {
+    "description": "统计地区排行标题"
+  },
+
+  "directoryStatisticsTotalItems": "共 {total} 个项目",
+  "@directoryStatisticsTotalItems": {
+    "description": "统计项目总数",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+
+  "directoryStatisticsGeneratedAt": "统计生成于 {date}",
+  "@directoryStatisticsGeneratedAt": {
+    "description": "统计生成日期",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "directoryStatisticsDimensions": "{count} 个统计维度",
+  "@directoryStatisticsDimensions": {
+    "description": "统计维度数量",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "filterFieldRegion": "地区",
+  "@filterFieldRegion": {
+    "description": "地区筛选字段标签"
+  },
+
+  "filterFieldCategory": "类别",
+  "@filterFieldCategory": {
+    "description": "类别筛选字段标签"
+  },
+
+  "filterFieldYear": "年份",
+  "@filterFieldYear": {
+    "description": "年份筛选字段标签"
+  },
+
+  "filterFieldListType": "入选类型",
+  "@filterFieldListType": {
+    "description": "入选类型筛选字段标签"
+  },
+
+  "filterPlaceholderRegion": "例如 北京",
+  "@filterPlaceholderRegion": {
+    "description": "地区筛选占位文案"
+  },
+
+  "filterPlaceholderListType": "例如 representative",
+  "@filterPlaceholderListType": {
+    "description": "入选类型筛选占位文案"
+  },
+
+  "directoryDetailGallery": "图库",
+  "@directoryDetailGallery": {
+    "description": "名录详情图库区块标题"
+  },
+
+  "directoryDetailRelatedProjects": "相关项目",
+  "@directoryDetailRelatedProjects": {
+    "description": "名录详情相关项目标题"
+  },
+
+  "directoryDetailRelatedInheritors": "相关传承人",
+  "@directoryDetailRelatedInheritors": {
+    "description": "名录详情相关传承人标题"
+  },
+
+  "directoryDetailRelatedDocuments": "相关文献",
+  "@directoryDetailRelatedDocuments": {
+    "description": "名录详情相关文献标题"
+  },
+
+  "factLabelCategory": "类别",
+  "@factLabelCategory": {
+    "description": "FactCard 类别标签"
+  },
+
+  "factLabelRegion": "地区",
+  "@factLabelRegion": {
+    "description": "FactCard 地区标签"
+  },
+
+  "factLabelProjectCode": "项目编号",
+  "@factLabelProjectCode": {
+    "description": "FactCard 项目编号标签"
+  },
+
+  "factLabelBatch": "批次",
+  "@factLabelBatch": {
+    "description": "FactCard 批次标签"
+  },
+
+  "factLabelYear": "年份",
+  "@factLabelYear": {
+    "description": "FactCard 年份标签"
+  },
+
+  "factLabelListType": "入选类型",
+  "@factLabelListType": {
+    "description": "FactCard 入选类型标签"
+  },
+
+  "factLabelNominationType": "申报类型",
+  "@factLabelNominationType": {
+    "description": "FactCard 申报类型标签"
+  },
+
+  "factLabelProtectionUnit": "保护单位",
+  "@factLabelProtectionUnit": {
+    "description": "FactCard 保护单位标签"
   }
 }

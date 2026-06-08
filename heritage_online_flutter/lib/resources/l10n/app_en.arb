@@ -261,6 +261,26 @@
     "description": "Articles search field placeholder"
   },
 
+  "directoryTabList": "Directory",
+  "@directoryTabList": {
+    "description": "Directory page list tab"
+  },
+
+  "directoryTabStatistics": "Statistics",
+  "@directoryTabStatistics": {
+    "description": "Directory page statistics tab"
+  },
+
+  "directoryDetailTitle": "Directory Detail",
+  "@directoryDetailTitle": {
+    "description": "Directory detail page title"
+  },
+
+  "inheritorDetailTitle": "Inheritor Detail",
+  "@inheritorDetailTitle": {
+    "description": "Inheritor detail page title"
+  },
+
   "articleDetailTitle": "Article Detail",
   "@articleDetailTitle": {
     "description": "Article detail page title"
@@ -507,5 +527,150 @@
   "errorOpenUrl": "Unable to open link",
   "@errorOpenUrl": {
     "description": "Unable to open URL error message"
+  },
+
+  "directoryStatisticsOverviewFormat": "{kind} Overview",
+  "@directoryStatisticsOverviewFormat": {
+    "description": "Statistics overview title with kind",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+
+  "directoryStatisticsYearBreakdown": "By Year",
+  "@directoryStatisticsYearBreakdown": {
+    "description": "Year breakdown section title"
+  },
+
+  "directoryStatisticsCategoryBreakdown": "By Category",
+  "@directoryStatisticsCategoryBreakdown": {
+    "description": "Category breakdown section title"
+  },
+
+  "directoryStatisticsRegionBreakdown": "By Region",
+  "@directoryStatisticsRegionBreakdown": {
+    "description": "Region breakdown section title"
+  },
+
+  "directoryStatisticsTotalItems": "{total} items in total",
+  "@directoryStatisticsTotalItems": {
+    "description": "Total item count",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+
+  "directoryStatisticsGeneratedAt": "Generated at {date}",
+  "@directoryStatisticsGeneratedAt": {
+    "description": "Statistics generation date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "directoryStatisticsDimensions": "{count} dimensions",
+  "@directoryStatisticsDimensions": {
+    "description": "Number of statistic dimensions",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "filterFieldRegion": "Region",
+  "@filterFieldRegion": {
+    "description": "Region filter field label"
+  },
+
+  "filterFieldCategory": "Category",
+  "@filterFieldCategory": {
+    "description": "Category filter field label"
+  },
+
+  "filterFieldYear": "Year",
+  "@filterFieldYear": {
+    "description": "Year filter field label"
+  },
+
+  "filterFieldListType": "List type",
+  "@filterFieldListType": {
+    "description": "List type filter field label"
+  },
+
+  "filterPlaceholderRegion": "e.g. Beijing",
+  "@filterPlaceholderRegion": {
+    "description": "Region filter placeholder"
+  },
+
+  "filterPlaceholderListType": "e.g. representative",
+  "@filterPlaceholderListType": {
+    "description": "List type filter placeholder"
+  },
+
+  "directoryDetailGallery": "Gallery",
+  "@directoryDetailGallery": {
+    "description": "Directory detail gallery section title"
+  },
+
+  "directoryDetailRelatedProjects": "Related Projects",
+  "@directoryDetailRelatedProjects": {
+    "description": "Directory detail related projects title"
+  },
+
+  "directoryDetailRelatedInheritors": "Related Inheritors",
+  "@directoryDetailRelatedInheritors": {
+    "description": "Directory detail related inheritors title"
+  },
+
+  "directoryDetailRelatedDocuments": "Related Documents",
+  "@directoryDetailRelatedDocuments": {
+    "description": "Directory detail related documents title"
+  },
+
+  "factLabelCategory": "Category",
+  "@factLabelCategory": {
+    "description": "FactCard category label"
+  },
+
+  "factLabelRegion": "Region",
+  "@factLabelRegion": {
+    "description": "FactCard region label"
+  },
+
+  "factLabelProjectCode": "Project No.",
+  "@factLabelProjectCode": {
+    "description": "FactCard project code label"
+  },
+
+  "factLabelBatch": "Batch",
+  "@factLabelBatch": {
+    "description": "FactCard batch label"
+  },
+
+  "factLabelYear": "Year",
+  "@factLabelYear": {
+    "description": "FactCard year label"
+  },
+
+  "factLabelListType": "List Type",
+  "@factLabelListType": {
+    "description": "FactCard list type label"
+  },
+
+  "factLabelNominationType": "Nomination",
+  "@factLabelNominationType": {
+    "description": "FactCard nomination type label"
+  },
+
+  "factLabelProtectionUnit": "Protection Unit",
+  "@factLabelProtectionUnit": {
+    "description": "FactCard protection unit label"
   }
 }

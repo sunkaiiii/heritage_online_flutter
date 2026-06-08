@@ -72,8 +72,10 @@ class HttpClient {
     CancelToken? cancelToken,
   }) async {
     try {
+      // 确保 path 以 / 开头，避免 URL 拼接错误
+      final normalizedPath = path.startsWith('/') ? path : '/$path';
       return await _dio.get<T>(
-        path,
+        normalizedPath,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
       );

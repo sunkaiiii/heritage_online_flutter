@@ -165,6 +165,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get articlesSearchPlaceholder => 'Title or keywords';
 
   @override
+  String get directoryTabList => 'Directory';
+
+  @override
+  String get directoryTabStatistics => 'Statistics';
+
+  @override
+  String get directoryDetailTitle => 'Directory Detail';
+
+  @override
+  String get inheritorDetailTitle => 'Inheritor Detail';
+
+  @override
   String get articleDetailTitle => 'Article Detail';
 
   @override
@@ -313,4 +325,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorOpenUrl => 'Unable to open link';
+
+  @override
+  String directoryStatisticsOverviewFormat(String kind) {
+    return '$kind Overview';
+  }
+
+  @override
+  String get directoryStatisticsYearBreakdown => 'By Year';
+
+  @override
+  String get directoryStatisticsCategoryBreakdown => 'By Category';
+
+  @override
+  String get directoryStatisticsRegionBreakdown => 'By Region';
+
+  @override
+  String directoryStatisticsTotalItems(int total) {
+    return '$total items in total';
+  }
+
+  @override
+  String directoryStatisticsGeneratedAt(String date) {
+    return 'Generated at $date';
+  }
+
+  @override
+  String directoryStatisticsDimensions(int count) {
+    return '$count dimensions';
+  }
+
+  @override
+  String get filterFieldRegion => 'Region';
+
+  @override
+  String get filterFieldCategory => 'Category';
+
+  @override
+  String get filterFieldListType => 'List type';
+
+  @override
+  String get filterPlaceholderRegion => 'e.g. Beijing';
+
+  @override
+  String get filterPlaceholderListType => 'e.g. representative';
+
+  @override
+  String get directoryDetailGallery => 'Gallery';
+
+  @override
+  String get directoryDetailRelatedProjects => 'Related Projects';
+
+  @override
+  String get directoryDetailRelatedInheritors => 'Related Inheritors';
+
+  @override
+  String get directoryDetailRelatedDocuments => 'Related Documents';
+
+  @override
+  String get factLabelCategory => 'Category';
+
+  @override
+  String get factLabelRegion => 'Region';
+
+  @override
+  String get factLabelProjectCode => 'Project No.';
+
+  @override
+  String get factLabelBatch => 'Batch';
+
+  @override
+  String get factLabelYear => 'Year';
+
+  @override
+  String get factLabelListType => 'List Type';
+
+  @override
+  String get factLabelNominationType => 'Nomination';
+
+  @override
+  String get factLabelProtectionUnit => 'Protection Unit';
 }

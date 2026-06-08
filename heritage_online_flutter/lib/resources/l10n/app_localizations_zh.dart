@@ -165,6 +165,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get articlesSearchPlaceholder => '标题或关键词';
 
   @override
+  String get directoryTabList => '名录';
+
+  @override
+  String get directoryTabStatistics => '统计';
+
+  @override
+  String get directoryDetailTitle => '名录详情';
+
+  @override
+  String get inheritorDetailTitle => '传承人详情';
+
+  @override
   String get articleDetailTitle => '文章详情';
 
   @override
@@ -309,4 +321,84 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get errorOpenUrl => '无法打开链接';
+
+  @override
+  String directoryStatisticsOverviewFormat(String kind) {
+    return '$kind 总览';
+  }
+
+  @override
+  String get directoryStatisticsYearBreakdown => '年份分布';
+
+  @override
+  String get directoryStatisticsCategoryBreakdown => '类别分布';
+
+  @override
+  String get directoryStatisticsRegionBreakdown => '地区排行';
+
+  @override
+  String directoryStatisticsTotalItems(int total) {
+    return '共 $total 个项目';
+  }
+
+  @override
+  String directoryStatisticsGeneratedAt(String date) {
+    return '统计生成于 $date';
+  }
+
+  @override
+  String directoryStatisticsDimensions(int count) {
+    return '$count 个统计维度';
+  }
+
+  @override
+  String get filterFieldRegion => '地区';
+
+  @override
+  String get filterFieldCategory => '类别';
+
+  @override
+  String get filterFieldListType => '入选类型';
+
+  @override
+  String get filterPlaceholderRegion => '例如 北京';
+
+  @override
+  String get filterPlaceholderListType => '例如 representative';
+
+  @override
+  String get directoryDetailGallery => '图库';
+
+  @override
+  String get directoryDetailRelatedProjects => '相关项目';
+
+  @override
+  String get directoryDetailRelatedInheritors => '相关传承人';
+
+  @override
+  String get directoryDetailRelatedDocuments => '相关文献';
+
+  @override
+  String get factLabelCategory => '类别';
+
+  @override
+  String get factLabelRegion => '地区';
+
+  @override
+  String get factLabelProjectCode => '项目编号';
+
+  @override
+  String get factLabelBatch => '批次';
+
+  @override
+  String get factLabelYear => '年份';
+
+  @override
+  String get factLabelListType => '入选类型';
+
+  @override
+  String get factLabelNominationType => '申报类型';
+
+  @override
+  String get factLabelProtectionUnit => '保护单位';
 }

@@ -410,6 +410,30 @@ abstract class AppLocalizations {
   /// **'Title or keywords'**
   String get articlesSearchPlaceholder;
 
+  /// Directory page list tab
+  ///
+  /// In en, this message translates to:
+  /// **'Directory'**
+  String get directoryTabList;
+
+  /// Directory page statistics tab
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get directoryTabStatistics;
+
+  /// Directory detail page title
+  ///
+  /// In en, this message translates to:
+  /// **'Directory Detail'**
+  String get directoryDetailTitle;
+
+  /// Inheritor detail page title
+  ///
+  /// In en, this message translates to:
+  /// **'Inheritor Detail'**
+  String get inheritorDetailTitle;
+
   /// Article detail page title
   ///
   /// In en, this message translates to:
@@ -697,6 +721,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to open link'**
   String get errorOpenUrl;
+
+  /// Statistics overview title with kind
+  ///
+  /// In en, this message translates to:
+  /// **'{kind} Overview'**
+  String directoryStatisticsOverviewFormat(String kind);
+
+  /// Year breakdown section title
+  ///
+  /// In en, this message translates to:
+  /// **'By Year'**
+  String get directoryStatisticsYearBreakdown;
+
+  /// Category breakdown section title
+  ///
+  /// In en, this message translates to:
+  /// **'By Category'**
+  String get directoryStatisticsCategoryBreakdown;
+
+  /// Region breakdown section title
+  ///
+  /// In en, this message translates to:
+  /// **'By Region'**
+  String get directoryStatisticsRegionBreakdown;
+
+  /// Total item count
+  ///
+  /// In en, this message translates to:
+  /// **'{total} items in total'**
+  String directoryStatisticsTotalItems(int total);
+
+  /// Statistics generation date
+  ///
+  /// In en, this message translates to:
+  /// **'Generated at {date}'**
+  String directoryStatisticsGeneratedAt(String date);
+
+  /// Number of statistic dimensions
+  ///
+  /// In en, this message translates to:
+  /// **'{count} dimensions'**
+  String directoryStatisticsDimensions(int count);
+
+  /// Region filter field label
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get filterFieldRegion;
+
+  /// Category filter field label
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get filterFieldCategory;
+
+  /// List type filter field label
+  ///
+  /// In en, this message translates to:
+  /// **'List type'**
+  String get filterFieldListType;
+
+  /// Region filter placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Beijing'**
+  String get filterPlaceholderRegion;
+
+  /// List type filter placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. representative'**
+  String get filterPlaceholderListType;
+
+  /// Directory detail gallery section title
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get directoryDetailGallery;
+
+  /// Directory detail related projects title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Projects'**
+  String get directoryDetailRelatedProjects;
+
+  /// Directory detail related inheritors title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Inheritors'**
+  String get directoryDetailRelatedInheritors;
+
+  /// Directory detail related documents title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Documents'**
+  String get directoryDetailRelatedDocuments;
+
+  /// FactCard category label
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get factLabelCategory;
+
+  /// FactCard region label
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get factLabelRegion;
+
+  /// FactCard project code label
+  ///
+  /// In en, this message translates to:
+  /// **'Project No.'**
+  String get factLabelProjectCode;
+
+  /// FactCard batch label
+  ///
+  /// In en, this message translates to:
+  /// **'Batch'**
+  String get factLabelBatch;
+
+  /// FactCard year label
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get factLabelYear;
+
+  /// FactCard list type label
+  ///
+  /// In en, this message translates to:
+  /// **'List Type'**
+  String get factLabelListType;
+
+  /// FactCard nomination type label
+  ///
+  /// In en, this message translates to:
+  /// **'Nomination'**
+  String get factLabelNominationType;
+
+  /// FactCard protection unit label
+  ///
+  /// In en, this message translates to:
+  /// **'Protection Unit'**
+  String get factLabelProtectionUnit;
 }
 
 class _AppLocalizationsDelegate
