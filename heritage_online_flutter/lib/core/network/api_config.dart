@@ -4,6 +4,11 @@ import 'package:flutter/foundation.dart';
 
 /// API 配置
 class ApiConfig {
+  static const _apiBaseUrlOverride = String.fromEnvironment('API_BASE_URL');
+  static const _trustSelfSignedOverride = bool.fromEnvironment(
+    'TRUST_SELF_SIGNED',
+  );
+
   /// API 基础 URL
   final String baseUrl;
 
@@ -23,9 +28,21 @@ class ApiConfig {
     this.lenientJson = true,
   });
 
-  /// 创建默认配置（根据 debug/release 和平台自动选择 baseUrl）
+  /// 创建默认配置（根据构建模式和平台自动选择 baseUrl）
   factory ApiConfig.defaultConfig() {
-    if (kDebugMode) {
+    final overrideBaseUrl = _apiBaseUrlOverride.trim();
+    if (overrideBaseUrl.isNotEmpty) {
+      return ApiConfig(
+        baseUrl: overrideBaseUrl,
+        trustSelfSigned:
+            _trustSelfSignedOverride ||
+            (!kReleaseMode && _isLocalBaseUrl(overrideBaseUrl)),
+        timeoutSeconds: 30,
+        lenientJson: true,
+      );
+    }
+
+    if (!kReleaseMode) {
       final baseUrl = Platform.isAndroid
           ? 'https://10.0.2.2:5078'
           : 'https://localhost:5078';
@@ -77,5 +94,15 @@ class ApiConfig {
       timeoutSeconds: timeoutSeconds ?? this.timeoutSeconds,
       lenientJson: lenientJson ?? this.lenientJson,
     );
+  }
+
+  static bool _isLocalBaseUrl(String baseUrl) {
+    final uri = Uri.tryParse(baseUrl);
+    final host = uri?.host.toLowerCase();
+    return host == 'localhost' ||
+        host == '127.0.0.1' ||
+        host == '::1' ||
+        host == '0.0.0.0' ||
+        host == '10.0.2.2';
   }
 }

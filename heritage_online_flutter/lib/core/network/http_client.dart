@@ -31,13 +31,19 @@ class HttpClient {
       ),
     );
 
-    // 配置自签名证书支持（仅 debug 模式）
+    // Debug local backends often use a self-signed HTTPS certificate.
+    // Only trust those certificates for local hosts; never make this global.
     if (config.trustSelfSigned) {
-      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
-        final client = io.HttpClient();
-        client.badCertificateCallback = (cert, host, port) => true;
-        return client;
-      };
+      final adapter = dio.httpClientAdapter;
+      if (adapter is IOHttpClientAdapter) {
+        adapter.createHttpClient = () {
+          final client = io.HttpClient();
+          client.badCertificateCallback = (cert, host, port) {
+            return _isLocalDevelopmentHost(host);
+          };
+          return client;
+        };
+      }
     }
 
     // 添加拦截器
@@ -85,7 +91,10 @@ class HttpClient {
         return ApiError.timeout('Request timed out', error);
 
       case DioExceptionType.connectionError:
-        return ApiError.network('Network unavailable', error);
+        return ApiError.network(
+          'Network unavailable: ${_dioErrorMessage(error, "no connection")}',
+          error,
+        );
 
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
@@ -94,14 +103,43 @@ class HttpClient {
         }
         return ApiError.server('Server error', null, error);
 
+      case DioExceptionType.badCertificate:
+        return ApiError.network(
+          'Certificate validation failed. Check local HTTPS certificate settings.',
+          error,
+        );
+
       case DioExceptionType.cancel:
         return ApiError.unknown('Request cancelled', error);
 
       case DioExceptionType.unknown:
-        return ApiError.unknown('An unknown error occurred', error);
-
-      default:
-        return ApiError.unknown('An unknown error occurred', error);
+        return ApiError.unknown(
+          _dioErrorMessage(error, 'An unknown error occurred'),
+          error,
+        );
     }
+  }
+
+  String _dioErrorMessage(DioException error, String fallback) {
+    final message = error.message;
+    if (message != null && message.trim().isNotEmpty) {
+      return message;
+    }
+
+    final originalError = error.error;
+    if (originalError != null) {
+      return originalError.toString();
+    }
+
+    return fallback;
+  }
+
+  bool _isLocalDevelopmentHost(String host) {
+    final normalizedHost = host.toLowerCase();
+    return normalizedHost == 'localhost' ||
+        normalizedHost == '127.0.0.1' ||
+        normalizedHost == '::1' ||
+        normalizedHost == '0.0.0.0' ||
+        normalizedHost == '10.0.2.2';
   }
 }
