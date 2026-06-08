@@ -281,6 +281,26 @@
     "description": "传承人详情页标题"
   },
 
+  "inheritorsEmptyMessage": "后端暂时没有返回传承人内容。",
+  "@inheritorsEmptyMessage": {
+    "description": "传承人列表空状态消息"
+  },
+
+  "unnamedInheritor": "未命名传承人",
+  "@unnamedInheritor": {
+    "description": "未命名传承人"
+  },
+
+  "filterGenderMale": "男",
+  "@filterGenderMale": {
+    "description": "性别筛选：男"
+  },
+
+  "filterGenderFemale": "女",
+  "@filterGenderFemale": {
+    "description": "性别筛选：女"
+  },
+
   "articleDetailTitle": "文章详情",
   "@articleDetailTitle": {
     "description": "文章详情页标题"

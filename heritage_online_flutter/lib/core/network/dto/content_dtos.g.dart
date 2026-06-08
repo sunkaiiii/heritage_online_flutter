@@ -343,6 +343,7 @@ InheritorSummaryDto _$InheritorSummaryDtoFromJson(Map<String, dynamic> json) =>
       coverImage: json['coverImage'] == null
           ? null
           : MediaAssetDto.fromJson(json['coverImage'] as Map<String, dynamic>),
+      sourceId: json['sourceId'] as String?,
       sourceUrl: json['sourceUrl'] as String?,
     );
 
@@ -361,6 +362,7 @@ Map<String, dynamic> _$InheritorSummaryDtoToJson(
   'batch': instance.batch,
   'description': instance.description,
   'coverImage': instance.coverImage,
+  'sourceId': instance.sourceId,
   'sourceUrl': instance.sourceUrl,
 };
 

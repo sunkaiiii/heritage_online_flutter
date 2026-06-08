@@ -177,6 +177,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get inheritorDetailTitle => '传承人详情';
 
   @override
+  String get inheritorsEmptyMessage => '后端暂时没有返回传承人内容。';
+
+  @override
+  String get unnamedInheritor => '未命名传承人';
+
+  @override
+  String get filterGenderMale => '男';
+
+  @override
+  String get filterGenderFemale => '女';
+
+  @override
   String get articleDetailTitle => '文章详情';
 
   @override

@@ -305,6 +305,7 @@ class InheritorSummaryDto {
   final String? batch;
   final String? description;
   final MediaAssetDto? coverImage;
+  final String? sourceId;
   final String? sourceUrl;
 
   const InheritorSummaryDto({
@@ -320,6 +321,7 @@ class InheritorSummaryDto {
     this.batch,
     this.description,
     this.coverImage,
+    this.sourceId,
     this.sourceUrl,
   });
 

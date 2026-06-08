@@ -177,6 +177,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inheritorDetailTitle => 'Inheritor Detail';
 
   @override
+  String get inheritorsEmptyMessage => 'No inheritors available at the moment.';
+
+  @override
+  String get unnamedInheritor => 'Unnamed Inheritor';
+
+  @override
+  String get filterGenderMale => 'Male';
+
+  @override
+  String get filterGenderFemale => 'Female';
+
+  @override
   String get articleDetailTitle => 'Article Detail';
 
   @override

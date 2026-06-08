@@ -281,6 +281,26 @@
     "description": "Inheritor detail page title"
   },
 
+  "inheritorsEmptyMessage": "No inheritors available at the moment.",
+  "@inheritorsEmptyMessage": {
+    "description": "Inheritors list empty state message"
+  },
+
+  "unnamedInheritor": "Unnamed Inheritor",
+  "@unnamedInheritor": {
+    "description": "Unnamed inheritor"
+  },
+
+  "filterGenderMale": "Male",
+  "@filterGenderMale": {
+    "description": "Gender filter: male"
+  },
+
+  "filterGenderFemale": "Female",
+  "@filterGenderFemale": {
+    "description": "Gender filter: female"
+  },
+
   "articleDetailTitle": "Article Detail",
   "@articleDetailTitle": {
     "description": "Article detail page title"

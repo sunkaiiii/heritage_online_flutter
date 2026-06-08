@@ -434,6 +434,30 @@ abstract class AppLocalizations {
   /// **'Inheritor Detail'**
   String get inheritorDetailTitle;
 
+  /// Inheritors list empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'No inheritors available at the moment.'**
+  String get inheritorsEmptyMessage;
+
+  /// Unnamed inheritor
+  ///
+  /// In en, this message translates to:
+  /// **'Unnamed Inheritor'**
+  String get unnamedInheritor;
+
+  /// Gender filter: male
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get filterGenderMale;
+
+  /// Gender filter: female
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get filterGenderFemale;
+
   /// Article detail page title
   ///
   /// In en, this message translates to:
