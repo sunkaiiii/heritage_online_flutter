@@ -8,16 +8,15 @@ import 'inheritor_detail_ui_state.dart';
 
 /// 传承人详情 ViewModel
 class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
-  final HeritageRepository _repository;
+  final HeritageRepository repository;
   final String? inheritorId;
   final String? sourceId;
 
   InheritorDetailViewModel({
-    required HeritageRepository repository,
+    required this.repository,
     this.inheritorId,
     this.sourceId,
-  })  : _repository = repository,
-        super(const InheritorDetailUiState()) {
+  }) : super(const InheritorDetailUiState()) {
     loadItem();
   }
 
@@ -31,7 +30,7 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
         sourceId: sourceId,
       );
 
-      final item = await _repository.inheritorDetail(lookup);
+      final item = await repository.inheritorDetail(lookup);
       state = state.copyWith(
         isLoading: false,
         item: item,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
+import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
 import 'package:heritage_online_flutter/features/articles/articles_view_model.dart';
 import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
@@ -480,12 +481,7 @@ class _YearFilterSheetState extends State<_YearFilterSheet> {
     setState(() {}); // 触发 UI 刷新以更新校验状态
   }
 
-  bool get _isValidYear {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return true; // 空年份允许，表示不限
-    if (text.length != 4) return false;
-    return int.tryParse(text) != null;
-  }
+  bool get _isValidYear => YearFilterParser.isValid(_controller.text);
 
   @override
   Widget build(BuildContext context) {
@@ -495,20 +491,26 @@ class _YearFilterSheetState extends State<_YearFilterSheet> {
         color: Theme.of(context).colorScheme.scrim.withValues(alpha: 0.54),
         child: GestureDetector(
           onTap: () {}, // 阻止点击穿透
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+          child: SafeArea(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.85,
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                   Text(
                     widget.l10n.filterTitle,
                     style: Theme.of(context).textTheme.titleLarge,
@@ -545,8 +547,11 @@ class _YearFilterSheetState extends State<_YearFilterSheet> {
                       ),
                     ],
                   ),
-                ],
+                    ],
+                  ),
+                ),
               ),
+            ),
             ),
           ),
         ),

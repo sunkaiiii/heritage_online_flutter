@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
@@ -11,6 +10,7 @@ import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/preview/image_preview_overlay.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
+import 'package:heritage_online_flutter/ui/utils/safe_url_launcher.dart';
 
 /// 传承人详情页
 class InheritorDetailPage extends ConsumerWidget {
@@ -60,7 +60,7 @@ class InheritorDetailPage extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.open_in_browser),
               tooltip: l10n.actionViewSource,
-              onPressed: () => _launchUrl(context, state.item!.sourceUrl!),
+              onPressed: () => SafeUrlLauncher.launch(context, state.item!.sourceUrl!),
             ),
         ],
       ),
@@ -354,19 +354,5 @@ class InheritorDetailPage extends ConsumerWidget {
         },
       ),
     );
-  }
-
-  Future<void> _launchUrl(BuildContext context, String url) async {
-    final l10n = AppLocalizations.of(context)!;
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.errorOpenUrl)),
-        );
-      }
-    }
   }
 }

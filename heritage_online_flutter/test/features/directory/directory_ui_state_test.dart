@@ -59,9 +59,13 @@ void main() {
         yearFilter: '2024',
       );
       final chips = state.activeFilterChips;
-      expect(chips, contains('test'));
-      expect(chips, contains('地区: 北京'));
-      expect(chips, contains('年份: 2024'));
+      expect(chips.length, 3);
+      expect(chips[0].field, DirectoryFilterField.search);
+      expect(chips[0].value, 'test');
+      expect(chips[1].field, DirectoryFilterField.region);
+      expect(chips[1].value, '北京');
+      expect(chips[2].field, DirectoryFilterField.year);
+      expect(chips[2].value, '2024');
     });
 
     test('copyWith should work correctly', () {

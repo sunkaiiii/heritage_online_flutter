@@ -1,5 +1,22 @@
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 
+/// 筛选字段类型
+enum InheritorFilterField {
+  search,
+  region,
+  category,
+  year,
+  gender,
+}
+
+/// 筛选 chip 数据
+class InheritorFilterChipData {
+  final InheritorFilterField field;
+  final String value;
+
+  const InheritorFilterChipData({required this.field, required this.value});
+}
+
 /// 传承人列表 UI 状态
 class InheritorsUiState {
   final String searchKeywords;
@@ -60,24 +77,36 @@ class InheritorsUiState {
     );
   }
 
-  /// 活跃筛选数量
+  /// 活跃筛选数量（包含搜索词）
   int get activeFilterCount {
-    return [regionFilter, categoryFilter, yearFilter, genderFilter]
+    int count = searchKeywords.isNotEmpty ? 1 : 0;
+    count += [regionFilter, categoryFilter, yearFilter, genderFilter]
         .where((f) => f.isNotEmpty)
         .length;
+    return count;
   }
 
   /// 是否有活跃筛选
   bool get hasActiveFilters => activeFilterCount > 0 || searchKeywords.isNotEmpty;
 
-  /// 获取筛选 chips 列表
-  List<String> get activeFilterChips {
-    final chips = <String>[];
-    if (searchKeywords.isNotEmpty) chips.add(searchKeywords);
-    if (regionFilter.isNotEmpty) chips.add('地区: $regionFilter');
-    if (categoryFilter.isNotEmpty) chips.add('类别: $categoryFilter');
-    if (yearFilter.isNotEmpty) chips.add('年份: $yearFilter');
-    if (genderFilter.isNotEmpty) chips.add('性别: $genderFilter');
+  /// 获取筛选 chips 列表（typed）
+  List<InheritorFilterChipData> get activeFilterChips {
+    final chips = <InheritorFilterChipData>[];
+    if (searchKeywords.isNotEmpty) {
+      chips.add(InheritorFilterChipData(field: InheritorFilterField.search, value: searchKeywords));
+    }
+    if (regionFilter.isNotEmpty) {
+      chips.add(InheritorFilterChipData(field: InheritorFilterField.region, value: regionFilter));
+    }
+    if (categoryFilter.isNotEmpty) {
+      chips.add(InheritorFilterChipData(field: InheritorFilterField.category, value: categoryFilter));
+    }
+    if (yearFilter.isNotEmpty) {
+      chips.add(InheritorFilterChipData(field: InheritorFilterField.year, value: yearFilter));
+    }
+    if (genderFilter.isNotEmpty) {
+      chips.add(InheritorFilterChipData(field: InheritorFilterField.gender, value: genderFilter));
+    }
     return chips;
   }
 }

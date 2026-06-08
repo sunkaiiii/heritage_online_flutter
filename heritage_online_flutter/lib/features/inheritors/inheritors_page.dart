@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
 import 'package:heritage_online_flutter/features/inheritors/inheritors_ui_state.dart';
 import 'package:heritage_online_flutter/features/inheritors/inheritors_view_model.dart';
@@ -172,18 +173,18 @@ class _InheritorsPageState extends ConsumerState<InheritorsPage> {
           children: [
             FilterChip(
               label: Text(l10n.filterGenderMale),
-              selected: state.genderFilter == 'male',
+              selected: state.genderFilter == '男',
               onSelected: (_) {
-                final newGender = state.genderFilter == 'male' ? '' : 'male';
+                final newGender = state.genderFilter == '男' ? '' : '男';
                 ref.read(inheritorsViewModelProvider.notifier)
                     .applyFilters(gender: newGender);
               },
             ),
             FilterChip(
               label: Text(l10n.filterGenderFemale),
-              selected: state.genderFilter == 'female',
+              selected: state.genderFilter == '女',
               onSelected: (_) {
-                final newGender = state.genderFilter == 'female' ? '' : 'female';
+                final newGender = state.genderFilter == '女' ? '' : '女';
                 ref.read(inheritorsViewModelProvider.notifier)
                     .applyFilters(gender: newGender);
               },
@@ -202,28 +203,43 @@ class _InheritorsPageState extends ConsumerState<InheritorsPage> {
     InheritorsUiState state,
     AppLocalizations l10n,
   ) {
-    final chips = <String>[];
-    if (state.searchKeywords.isNotEmpty) chips.add(state.searchKeywords);
-    if (state.regionFilter.isNotEmpty) chips.add('${l10n.filterFieldRegion}: ${state.regionFilter}');
-    if (state.categoryFilter.isNotEmpty) chips.add('${l10n.filterFieldCategory}: ${state.categoryFilter}');
-    if (state.yearFilter.isNotEmpty) chips.add('${l10n.filterFieldYear}: ${state.yearFilter}');
-    if (state.genderFilter.isNotEmpty) {
-      final genderLabel = state.genderFilter == 'male' ? l10n.filterGenderMale : l10n.filterGenderFemale;
-      chips.add(genderLabel);
-    }
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Wrap(
           spacing: 8,
-          children: chips.map((chip) => Chip(
-                label: Text(chip),
-                onDeleted: () =>
-                    ref.read(inheritorsViewModelProvider.notifier).clearFilters(),
-              )).toList(),
+          children: state.activeFilterChips.map((chip) {
+            final label = _getFilterChipLabel(l10n, chip);
+            return Chip(
+              label: Text(label),
+              onDeleted: () {
+                if (chip.field == InheritorFilterField.search) {
+                  ref.read(inheritorsViewModelProvider.notifier).updateSearchKeywords('');
+                } else {
+                  ref.read(inheritorsViewModelProvider.notifier)
+                      .clearFilterField(chip.field.name);
+                }
+              },
+            );
+          }).toList(),
         ),
       ),
     );
+  }
+
+  String _getFilterChipLabel(AppLocalizations l10n, InheritorFilterChipData chip) {
+    switch (chip.field) {
+      case InheritorFilterField.search:
+        return chip.value;
+      case InheritorFilterField.region:
+        return '${l10n.filterFieldRegion}: ${chip.value}';
+      case InheritorFilterField.category:
+        return '${l10n.filterFieldCategory}: ${chip.value}';
+      case InheritorFilterField.year:
+        return '${l10n.filterFieldYear}: ${chip.value}';
+      case InheritorFilterField.gender:
+        return chip.value == '男' ? l10n.filterGenderMale : l10n.filterGenderFemale;
+    }
   }
 
   // ==================== 传承人列表 ====================
@@ -411,12 +427,7 @@ class _InheritorFilterSheetState extends State<_InheritorFilterSheet> {
 
   void _onChanged() => setState(() {});
 
-  bool get _isValidYear {
-    final text = _yearController.text.trim();
-    if (text.isEmpty) return true;
-    if (text.length != 4) return false;
-    return int.tryParse(text) != null;
-  }
+  bool get _isValidYear => YearFilterParser.isValid(_yearController.text);
 
   @override
   Widget build(BuildContext context) {
@@ -426,20 +437,26 @@ class _InheritorFilterSheetState extends State<_InheritorFilterSheet> {
         color: Theme.of(context).colorScheme.scrim.withValues(alpha: 0.54),
         child: GestureDetector(
           onTap: () {},
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+          child: SafeArea(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.85,
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                   Text(
                     widget.l10n.filterTitle,
                     style: Theme.of(context).textTheme.titleLarge,
@@ -493,8 +510,11 @@ class _InheritorFilterSheetState extends State<_InheritorFilterSheet> {
                       ),
                     ],
                   ),
-                ],
+                    ],
+                  ),
+                ),
               ),
+            ),
             ),
           ),
         ),

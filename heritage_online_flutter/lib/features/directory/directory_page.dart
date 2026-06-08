@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
+import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
 import 'package:heritage_online_flutter/features/directory/directory_ui_state.dart';
 import 'package:heritage_online_flutter/features/directory/directory_view_model.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
@@ -235,7 +236,7 @@ class _DirectoryPageState extends ConsumerState<DirectoryPage> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: _buildActiveFilters(context, ref, state),
+                child: _buildActiveFilters(context, ref, state, l10n),
               ),
             ),
 
@@ -269,14 +270,40 @@ class _DirectoryPageState extends ConsumerState<DirectoryPage> {
     BuildContext context,
     WidgetRef ref,
     DirectoryUiState state,
+    AppLocalizations l10n,
   ) {
     return Wrap(
       spacing: 8,
-      children: state.activeFilterChips.map((chip) => Chip(
-            label: Text(chip),
-            onDeleted: () => ref.read(directoryViewModelProvider.notifier).clearFilters(),
-          )).toList(),
+      children: state.activeFilterChips.map((chip) {
+        final label = _getFilterChipLabel(l10n, chip);
+        return Chip(
+          label: Text(label),
+          onDeleted: () {
+            if (chip.field == DirectoryFilterField.search) {
+              ref.read(directoryViewModelProvider.notifier).updateSearchKeywords('');
+            } else {
+              ref.read(directoryViewModelProvider.notifier)
+                  .clearFilterField(chip.field.name);
+            }
+          },
+        );
+      }).toList(),
     );
+  }
+
+  String _getFilterChipLabel(AppLocalizations l10n, FilterChipData chip) {
+    switch (chip.field) {
+      case DirectoryFilterField.search:
+        return chip.value;
+      case DirectoryFilterField.region:
+        return '${l10n.filterFieldRegion}: ${chip.value}';
+      case DirectoryFilterField.category:
+        return '${l10n.filterFieldCategory}: ${chip.value}';
+      case DirectoryFilterField.year:
+        return '${l10n.filterFieldYear}: ${chip.value}';
+      case DirectoryFilterField.listType:
+        return '${l10n.filterFieldListType}: ${chip.value}';
+    }
   }
 
   Widget _buildItemList(
@@ -605,12 +632,7 @@ class _DirectoryFilterSheetState extends State<_DirectoryFilterSheet> {
     setState(() {}); // 触发 UI 刷新以更新年份校验状态
   }
 
-  bool get _isValidYear {
-    final text = _yearController.text.trim();
-    if (text.isEmpty) return true;
-    if (text.length != 4) return false;
-    return int.tryParse(text) != null;
-  }
+  bool get _isValidYear => YearFilterParser.isValid(_yearController.text);
 
   @override
   Widget build(BuildContext context) {
@@ -620,20 +642,26 @@ class _DirectoryFilterSheetState extends State<_DirectoryFilterSheet> {
         color: Theme.of(context).colorScheme.scrim.withValues(alpha: 0.54),
         child: GestureDetector(
           onTap: () {}, // 阻止点击穿透
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+          child: SafeArea(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.85,
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                   Text(
                     widget.l10n.filterTitle,
                     style: Theme.of(context).textTheme.titleLarge,
@@ -699,8 +727,11 @@ class _DirectoryFilterSheetState extends State<_DirectoryFilterSheet> {
                       ),
                     ],
                   ),
-                ],
+                    ],
+                  ),
+                ),
               ),
+            ),
             ),
           ),
         ),

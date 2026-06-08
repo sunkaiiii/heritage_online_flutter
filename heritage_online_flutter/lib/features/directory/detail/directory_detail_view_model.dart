@@ -9,18 +9,17 @@ import 'directory_detail_ui_state.dart';
 
 /// 名录详情 ViewModel
 class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
-  final HeritageRepository _repository;
+  final HeritageRepository repository;
   final String? itemId;
   final String? sourceId;
   final DirectoryItemKind kind;
 
   DirectoryDetailViewModel({
-    required HeritageRepository repository,
+    required this.repository,
     this.itemId,
     this.sourceId,
     this.kind = DirectoryItemKind.nationalProject,
-  })  : _repository = repository,
-        super(const DirectoryDetailUiState()) {
+  }) : super(const DirectoryDetailUiState()) {
     loadItem();
   }
 
@@ -35,7 +34,7 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
         kind: kind,
       );
 
-      final item = await _repository.directoryItemDetail(lookup);
+      final item = await repository.directoryItemDetail(lookup);
       state = state.copyWith(
         isLoading: false,
         item: item,

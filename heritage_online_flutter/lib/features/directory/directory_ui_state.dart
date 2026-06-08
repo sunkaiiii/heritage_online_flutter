@@ -7,9 +7,27 @@ enum DirectoryTab {
   statistics,
 }
 
+/// 筛选字段类型
+enum DirectoryFilterField {
+  search,
+  region,
+  category,
+  year,
+  listType,
+}
+
+/// 筛选 chip 数据
+class FilterChipData {
+  final DirectoryFilterField field;
+  final String value;
+
+  const FilterChipData({required this.field, required this.value});
+}
+
 /// 名录统计状态
 class DirectoryStatisticsState {
   final bool isLoading;
+  final DirectoryItemKind? loadedKind;
   final DirectoryStatisticsOverviewDto? overview;
   final DirectoryStatisticDimensionDto? yearBreakdown;
   final DirectoryStatisticDimensionDto? categoryBreakdown;
@@ -18,6 +36,7 @@ class DirectoryStatisticsState {
 
   const DirectoryStatisticsState({
     this.isLoading = false,
+    this.loadedKind,
     this.overview,
     this.yearBreakdown,
     this.categoryBreakdown,
@@ -27,6 +46,7 @@ class DirectoryStatisticsState {
 
   DirectoryStatisticsState copyWith({
     bool? isLoading,
+    DirectoryItemKind? loadedKind,
     DirectoryStatisticsOverviewDto? overview,
     DirectoryStatisticDimensionDto? yearBreakdown,
     DirectoryStatisticDimensionDto? categoryBreakdown,
@@ -35,6 +55,7 @@ class DirectoryStatisticsState {
   }) {
     return DirectoryStatisticsState(
       isLoading: isLoading ?? this.isLoading,
+      loadedKind: loadedKind ?? this.loadedKind,
       overview: overview ?? this.overview,
       yearBreakdown: yearBreakdown ?? this.yearBreakdown,
       categoryBreakdown: categoryBreakdown ?? this.categoryBreakdown,
@@ -116,24 +137,36 @@ class DirectoryUiState {
     );
   }
 
-  /// 活跃筛选数量
+  /// 活跃筛选数量（包含搜索词）
   int get activeFilterCount {
-    return [regionFilter, categoryFilter, yearFilter, listTypeFilter]
+    int count = searchKeywords.isNotEmpty ? 1 : 0;
+    count += [regionFilter, categoryFilter, yearFilter, listTypeFilter]
         .where((f) => f.isNotEmpty)
         .length;
+    return count;
   }
 
   /// 是否有活跃筛选
   bool get hasActiveFilters => activeFilterCount > 0 || searchKeywords.isNotEmpty;
 
-  /// 获取筛选 chips 列表
-  List<String> get activeFilterChips {
-    final chips = <String>[];
-    if (searchKeywords.isNotEmpty) chips.add(searchKeywords);
-    if (regionFilter.isNotEmpty) chips.add('地区: $regionFilter');
-    if (categoryFilter.isNotEmpty) chips.add('类别: $categoryFilter');
-    if (yearFilter.isNotEmpty) chips.add('年份: $yearFilter');
-    if (listTypeFilter.isNotEmpty) chips.add('类型: $listTypeFilter');
+  /// 获取筛选 chips 列表（typed）
+  List<FilterChipData> get activeFilterChips {
+    final chips = <FilterChipData>[];
+    if (searchKeywords.isNotEmpty) {
+      chips.add(FilterChipData(field: DirectoryFilterField.search, value: searchKeywords));
+    }
+    if (regionFilter.isNotEmpty) {
+      chips.add(FilterChipData(field: DirectoryFilterField.region, value: regionFilter));
+    }
+    if (categoryFilter.isNotEmpty) {
+      chips.add(FilterChipData(field: DirectoryFilterField.category, value: categoryFilter));
+    }
+    if (yearFilter.isNotEmpty) {
+      chips.add(FilterChipData(field: DirectoryFilterField.year, value: yearFilter));
+    }
+    if (listTypeFilter.isNotEmpty) {
+      chips.add(FilterChipData(field: DirectoryFilterField.listType, value: listTypeFilter));
+    }
     return chips;
   }
 }

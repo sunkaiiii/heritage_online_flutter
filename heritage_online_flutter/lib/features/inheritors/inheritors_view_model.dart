@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
 
 import 'inheritors_ui_state.dart';
 
@@ -66,6 +67,7 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
   Future<void> loadMore() async {
     if (!state.hasMore || state.isLoadingMore) return;
 
+    final requestVersion = _requestVersion;
     state = state.copyWith(isLoadingMore: true, appendError: null);
 
     try {
@@ -80,6 +82,9 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
         gender: state.genderFilter.isNotEmpty ? state.genderFilter : null,
       );
 
+      // 丢弃过期请求（筛选条件已变化）
+      if (requestVersion != _requestVersion) return;
+
       state = state.copyWith(
         inheritors: [...state.inheritors, ...result.items],
         hasMore: result.hasMore,
@@ -87,6 +92,8 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
         isLoadingMore: false,
       );
     } catch (e) {
+      if (requestVersion != _requestVersion) return;
+
       state = state.copyWith(
         isLoadingMore: false,
         appendError: e.toString(),
@@ -168,10 +175,7 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
   }
 
   /// 将字符串年份转换为 int
-  int? _parseYear(String year) {
-    if (year.isEmpty) return null;
-    return int.tryParse(year);
-  }
+  int? _parseYear(String year) => YearFilterParser.parse(year);
 }
 
 /// 传承人列表 ViewModel Provider

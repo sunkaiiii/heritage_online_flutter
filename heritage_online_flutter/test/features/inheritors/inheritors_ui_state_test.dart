@@ -53,12 +53,16 @@ void main() {
       const state = InheritorsUiState(
         searchKeywords: 'test',
         regionFilter: '北京',
-        genderFilter: 'male',
+        genderFilter: '男',
       );
       final chips = state.activeFilterChips;
-      expect(chips, contains('test'));
-      expect(chips, contains('地区: 北京'));
-      expect(chips, contains('性别: male'));
+      expect(chips.length, 3);
+      expect(chips[0].field, InheritorFilterField.search);
+      expect(chips[0].value, 'test');
+      expect(chips[1].field, InheritorFilterField.region);
+      expect(chips[1].value, '北京');
+      expect(chips[2].field, InheritorFilterField.gender);
+      expect(chips[2].value, '男');
     });
 
     test('copyWith should work correctly', () {

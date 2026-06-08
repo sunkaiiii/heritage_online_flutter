@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
 
 import 'articles_ui_state.dart';
 
@@ -167,10 +168,7 @@ class ArticlesViewModel extends StateNotifier<ArticlesUiState> {
   }
 
   /// 将字符串年份转换为 int
-  int? _parseYear(String year) {
-    if (year.isEmpty) return null;
-    return int.tryParse(year);
-  }
+  int? _parseYear(String year) => YearFilterParser.parse(year);
 }
 
 /// 文章列表 ViewModel Provider

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
@@ -13,6 +12,7 @@ import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/preview/image_preview_overlay.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
+import 'package:heritage_online_flutter/ui/utils/safe_url_launcher.dart';
 
 /// 名录详情页
 class DirectoryDetailPage extends ConsumerWidget {
@@ -65,7 +65,7 @@ class DirectoryDetailPage extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.open_in_browser),
               tooltip: l10n.actionViewSource,
-              onPressed: () => _launchUrl(context, state.item!.sourceUrl!),
+              onPressed: () => SafeUrlLauncher.launch(context, state.item!.sourceUrl!),
             ),
         ],
       ),
@@ -273,6 +273,9 @@ class DirectoryDetailPage extends ConsumerWidget {
     List<MediaAssetDto> gallery,
     AppLocalizations l10n,
   ) {
+    // 预先计算有效图片列表，避免 index 越界
+    final previewUrls = ImageUrlSelector.getPreviewUrls(gallery);
+
     return SizedBox(
       height: 120,
       child: ListView.builder(
@@ -281,20 +284,25 @@ class DirectoryDetailPage extends ConsumerWidget {
         itemBuilder: (context, index) {
           final image = gallery[index];
           final imageUrl = ImageUrlSelector.getListUrl(image);
+          final previewUrl = ImageUrlSelector.getPreviewUrl(image);
+          final hasPreview = previewUrl != null && previewUrl.isNotEmpty;
 
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: GestureDetector(
-              onTap: () {
-                final previewUrls = ImageUrlSelector.getPreviewUrls(gallery);
-                if (previewUrls.isNotEmpty) {
-                  showImagePreview(
-                    context: context,
-                    imageUrls: previewUrls,
-                    initialIndex: index,
-                  );
-                }
-              },
+              onTap: hasPreview
+                  ? () {
+                      // 计算该图片在有效列表中的 index
+                      final validIndex = previewUrls.indexOf(previewUrl);
+                      if (validIndex >= 0) {
+                        showImagePreview(
+                          context: context,
+                          imageUrls: previewUrls,
+                          initialIndex: validIndex,
+                        );
+                      }
+                    }
+                  : null,
               child: SizedBox(
                 width: 120,
                 child: imageUrl != null
@@ -379,27 +387,32 @@ class DirectoryDetailPage extends ConsumerWidget {
     DirectoryReferenceDto ref,
     AppLocalizations l10n,
   ) {
+    final hasSourceId = ref.sourceId != null && ref.sourceId!.isNotEmpty;
+    final hasDetailUrl = ref.detailUrl != null && ref.detailUrl!.isNotEmpty;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: ReferenceCard(
         title: ref.title ?? '',
         meta: [ref.category, ref.region].where((s) => s != null && s.isNotEmpty).join(' · '),
-        onTap: () {
-          if (ref.sourceId != null && ref.sourceId!.isNotEmpty) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DirectoryDetailPage(
-                  sourceId: ref.sourceId,
-                  kind: DirectoryItemKind.values.firstWhere(
-                    (k) => k.wireName == (ref.kind ?? 'nationalProject'),
-                    orElse: () => DirectoryItemKind.nationalProject,
+        onTap: hasSourceId
+            ? () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => DirectoryDetailPage(
+                      sourceId: ref.sourceId,
+                      kind: DirectoryItemKind.values.firstWhere(
+                        (k) => k.wireName == (ref.kind ?? 'nationalProject'),
+                        orElse: () => DirectoryItemKind.nationalProject,
+                      ),
+                      onBack: () => Navigator.of(context).pop(),
+                    ),
                   ),
-                  onBack: () => Navigator.of(context).pop(),
-                ),
-              ),
-            );
-          }
-        },
+                );
+              }
+            : hasDetailUrl
+                ? () => SafeUrlLauncher.launch(context, ref.detailUrl!)
+                : null,
       ),
     );
   }
@@ -443,24 +456,10 @@ class DirectoryDetailPage extends ConsumerWidget {
         meta: ref.publishedYear != null ? '${ref.publishedYear}' : null,
         onTap: () {
           if (ref.detailUrl != null && ref.detailUrl!.isNotEmpty) {
-            _launchUrl(context, ref.detailUrl!);
+            SafeUrlLauncher.launch(context, ref.detailUrl!);
           }
         },
       ),
     );
-  }
-
-  Future<void> _launchUrl(BuildContext context, String url) async {
-    final l10n = AppLocalizations.of(context)!;
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.errorOpenUrl)),
-        );
-      }
-    }
   }
 }

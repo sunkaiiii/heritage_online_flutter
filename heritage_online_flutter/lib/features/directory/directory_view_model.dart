@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
 
 import 'directory_ui_state.dart';
 
@@ -18,6 +19,9 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
 
   /// 请求版本号，用于防止旧请求覆盖新请求
   int _itemsRequestVersion = 0;
+
+  /// 统计请求版本号
+  int _statisticsRequestVersion = 0;
 
   DirectoryViewModel(this._repository) : super(const DirectoryUiState()) {
     loadItems();
@@ -68,6 +72,7 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
   Future<void> loadMore() async {
     if (!state.hasMore || state.isLoadingMore) return;
 
+    final requestVersion = _itemsRequestVersion;
     state = state.copyWith(isLoadingMore: true, itemsAppendError: null);
 
     try {
@@ -83,6 +88,9 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
         listType: state.listTypeFilter.isNotEmpty ? state.listTypeFilter : null,
       );
 
+      // 丢弃过期请求（筛选条件已变化）
+      if (requestVersion != _itemsRequestVersion) return;
+
       state = state.copyWith(
         items: [...state.items, ...result.items],
         hasMore: result.hasMore,
@@ -90,6 +98,8 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
         isLoadingMore: false,
       );
     } catch (e) {
+      if (requestVersion != _itemsRequestVersion) return;
+
       state = state.copyWith(
         isLoadingMore: false,
         itemsAppendError: e.toString(),
@@ -106,7 +116,11 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
   /// 选择名录种类
   void selectKind(DirectoryItemKind kind) {
     if (state.selectedKind == kind) return;
-    state = state.copyWith(selectedKind: kind);
+    // 切换 kind 时清空统计，避免显示旧 kind 的数据
+    state = state.copyWith(
+      selectedKind: kind,
+      statisticsState: const DirectoryStatisticsState(),
+    );
     loadItems();
     if (state.selectedTab == DirectoryTab.statistics) {
       loadStatistics();
@@ -116,7 +130,10 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
   /// 选择 Tab
   void selectTab(DirectoryTab tab) {
     state = state.copyWith(selectedTab: tab);
-    if (tab == DirectoryTab.statistics && state.statisticsState.overview == null) {
+    // 切到统计 tab 时，如果数据为空或 kind 不匹配，重新加载
+    if (tab == DirectoryTab.statistics &&
+        (state.statisticsState.overview == null ||
+         state.statisticsState.loadedKind != state.selectedKind)) {
       loadStatistics();
     }
   }
@@ -190,13 +207,14 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
 
   /// 加载统计数据
   Future<void> loadStatistics() async {
+    final requestVersion = ++_statisticsRequestVersion;
+    final kind = state.selectedKind;
+
     state = state.copyWith(
       statisticsState: state.statisticsState.copyWith(isLoading: true, error: null),
     );
 
     try {
-      final kind = state.selectedKind;
-
       // 并行加载统计数据
       final overviewFuture = _repository.directoryStatisticsOverview(kind: kind);
       final yearFuture = _repository.directoryStatisticsBreakdown(
@@ -220,9 +238,14 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
       final category = await categoryFuture;
       final region = await regionFuture;
 
+      // 丢弃过期请求或 kind 已变化的结果
+      if (requestVersion != _statisticsRequestVersion) return;
+      if (state.selectedKind != kind) return;
+
       state = state.copyWith(
         statisticsState: DirectoryStatisticsState(
           isLoading: false,
+          loadedKind: kind,
           overview: overview,
           yearBreakdown: year,
           categoryBreakdown: category,
@@ -230,6 +253,8 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
         ),
       );
     } catch (e) {
+      if (requestVersion != _statisticsRequestVersion) return;
+
       state = state.copyWith(
         statisticsState: state.statisticsState.copyWith(
           isLoading: false,
@@ -245,10 +270,7 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
   }
 
   /// 将字符串年份转换为 int
-  int? _parseYear(String year) {
-    if (year.isEmpty) return null;
-    return int.tryParse(year);
-  }
+  int? _parseYear(String year) => YearFilterParser.parse(year);
 }
 
 /// 名录列表 ViewModel Provider
