@@ -52,7 +52,7 @@ class ArticleDetailPage extends ConsumerWidget {
           IconButton(
             icon: Icon(
               state.isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: state.isFavorite ? Colors.red : null,
+              color: state.isFavorite ? Theme.of(context).colorScheme.error : null,
             ),
             tooltip: state.isFavorite ? l10n.actionUnfavorite : l10n.actionFavorite,
             onPressed: () => ref
@@ -318,11 +318,34 @@ class ArticleDetailPage extends ConsumerWidget {
       child: ReferenceCard(
         title: ref.title ?? '',
         meta: _safeSubstring(ref.publishedAt, 0, 10),
-        onTap: () {
-          if (ref.detailUrl != null) {
-            // TODO: 导航到相关文章
-          }
-        },
+        onTap: () => _navigateToRelatedArticle(context, ref),
+      ),
+    );
+  }
+
+  /// 导航到相关文章
+  /// 优先级：sourceId > detailUrl（作为 sourceUrl）> 外部链接
+  void _navigateToRelatedArticle(BuildContext context, ArticleReferenceDto ref) {
+    final hasSourceId = ref.sourceId != null && ref.sourceId!.isNotEmpty;
+    final hasDetailUrl = ref.detailUrl != null && ref.detailUrl!.isNotEmpty;
+
+    if (!hasSourceId && !hasDetailUrl) return;
+
+    // 构建详情参数
+    final params = ArticleDetailParams(
+      sourceId: hasSourceId ? ref.sourceId : null,
+      sourceUrl: !hasSourceId && hasDetailUrl ? ref.detailUrl : null,
+      category: ArticleCategory.news,
+    );
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ArticleDetailPage(
+          sourceId: params.sourceId,
+          sourceUrl: params.sourceUrl,
+          category: params.category,
+          onBack: () => Navigator.of(context).pop(),
+        ),
       ),
     );
   }

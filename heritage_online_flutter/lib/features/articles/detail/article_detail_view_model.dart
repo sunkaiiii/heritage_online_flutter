@@ -9,20 +9,19 @@ import 'article_detail_ui_state.dart';
 
 /// 文章详情 ViewModel
 class ArticleDetailViewModel extends StateNotifier<ArticleDetailUiState> {
-  final HeritageRepository _repository;
+  final HeritageRepository repository;
   final String? articleId;
   final String? sourceId;
   final String? sourceUrl;
   final ArticleCategory category;
 
   ArticleDetailViewModel({
-    required HeritageRepository repository,
+    required this.repository,
     this.articleId,
     this.sourceId,
     this.sourceUrl,
     this.category = ArticleCategory.news,
-  })  : _repository = repository,
-        super(const ArticleDetailUiState()) {
+  }) : super(const ArticleDetailUiState()) {
     loadArticle();
   }
 
@@ -38,7 +37,7 @@ class ArticleDetailViewModel extends StateNotifier<ArticleDetailUiState> {
         category: category,
       );
 
-      final article = await _repository.articleDetail(lookup);
+      final article = await repository.articleDetail(lookup);
       state = state.copyWith(
         isLoading: false,
         article: article,

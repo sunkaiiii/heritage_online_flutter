@@ -35,11 +35,12 @@ class ApiClient {
   }
 
   /// 添加可选参数
-  /// 如果值不为 null，则添加到 queryParameters
+  /// 过滤 null、空字符串、空列表
   void addOptionalParam(Map<String, dynamic> params, String key, dynamic value) {
-    if (value != null) {
-      params[key] = value;
-    }
+    if (value == null) return;
+    if (value is String && value.trim().isEmpty) return;
+    if (value is List && value.isEmpty) return;
+    params[key] = value;
   }
 }
 

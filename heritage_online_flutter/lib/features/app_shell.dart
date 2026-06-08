@@ -111,14 +111,20 @@ class AppShellNotifier extends StateNotifier<AppShellState> {
     state = state.copyWith(showSettings: false);
   }
 
-  /// 显示我的页
+  /// 显示我的页（从设置页进入）
   void showMyPage() {
-    state = state.copyWith(showMyPage: true);
+    state = state.copyWith(
+      showMyPage: true,
+      showSettings: false, // 同时隐藏设置页
+    );
   }
 
-  /// 隐藏我的页
+  /// 隐藏我的页（返回设置页）
   void hideMyPage() {
-    state = state.copyWith(showMyPage: false);
+    state = state.copyWith(
+      showMyPage: false,
+      showSettings: true, // 返回设置页
+    );
   }
 
   /// 设置是否在详情页

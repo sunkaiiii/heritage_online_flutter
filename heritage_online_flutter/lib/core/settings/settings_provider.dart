@@ -7,13 +7,14 @@ import 'app_theme_mode.dart';
 import 'settings_repository.dart';
 
 /// SharedPreferences Provider
-final sharedPreferencesProvider = FutureProvider<SharedPreferences>((ref) {
-  return SharedPreferences.getInstance();
+/// 在 main() 中预加载并注入，避免首帧闪默认值
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError('SharedPreferences must be overridden in ProviderScope');
 });
 
 /// 设置 Repository Provider
-final settingsRepositoryProvider = FutureProvider<SettingsRepository>((ref) async {
-  final prefs = await ref.watch(sharedPreferencesProvider.future);
+final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
+  final prefs = ref.watch(sharedPreferencesProvider);
   return SettingsRepository(prefs: prefs);
 });
 
@@ -57,8 +58,7 @@ class ThemeModeNotifier extends StateNotifier<ThemeModeState> {
 
 /// 主题模式 Provider
 final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeModeState>((ref) {
-  final repositoryAsync = ref.watch(settingsRepositoryProvider);
-  final repository = repositoryAsync.valueOrNull;
+  final repository = ref.watch(settingsRepositoryProvider);
   return ThemeModeNotifier(repository);
 });
 
@@ -102,7 +102,6 @@ class LanguageModeNotifier extends StateNotifier<LanguageModeState> {
 
 /// 语言模式 Provider
 final languageModeProvider = StateNotifierProvider<LanguageModeNotifier, LanguageModeState>((ref) {
-  final repositoryAsync = ref.watch(settingsRepositoryProvider);
-  final repository = repositoryAsync.valueOrNull;
+  final repository = ref.watch(settingsRepositoryProvider);
   return LanguageModeNotifier(repository);
 });

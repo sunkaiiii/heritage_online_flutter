@@ -56,6 +56,7 @@ class ArticleSummaryDto {
   final String? summary;
   final String? publishedAt;
   final MediaAssetDto? coverImage;
+  final String? sourceId;
   final String? sourceUrl;
 
   const ArticleSummaryDto({
@@ -65,6 +66,7 @@ class ArticleSummaryDto {
     this.summary,
     this.publishedAt,
     this.coverImage,
+    this.sourceId,
     this.sourceUrl,
   });
 

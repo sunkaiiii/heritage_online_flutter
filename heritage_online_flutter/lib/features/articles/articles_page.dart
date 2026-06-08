@@ -30,6 +30,34 @@ class _ArticlesPageState extends ConsumerState<ArticlesPage> {
   /// 是否显示年份筛选 sheet
   bool _showFilterSheet = false;
 
+  /// 滚动控制器，用于检测分页触发
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  /// 检测滚动位置，触发加载更多
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      // 距离底部 200px 时触发加载更多
+      final state = ref.read(articlesViewModelProvider);
+      if (state.hasMore && !state.isLoadingMore && state.articlesAppendError == null) {
+        ref.read(articlesViewModelProvider.notifier).loadMore();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -76,6 +104,7 @@ class _ArticlesPageState extends ConsumerState<ArticlesPage> {
               onRefresh: () =>
                   ref.read(articlesViewModelProvider.notifier).refresh(),
               child: CustomScrollView(
+                controller: _scrollController,
                 slivers: [
                   // Banner 区
                   _buildBannerSection(context, ref, state, l10n),
@@ -342,14 +371,14 @@ class _ArticlesPageState extends ConsumerState<ArticlesPage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ArticleDetailPage(
-                      articleId: article.id ?? '',
-                      onBack: () {
-                        Navigator.of(context).pop();
-                        widget.onDetailChanged?.call(false);
-                      },
+                      articleId: article.id?.isNotEmpty == true ? article.id : null,
+                      sourceId: article.sourceId?.isNotEmpty == true ? article.sourceId : null,
+                      sourceUrl: article.sourceUrl?.isNotEmpty == true ? article.sourceUrl : null,
+                      category: article.category,
+                      onBack: () => Navigator.of(context).pop(),
                     ),
                   ),
-                );
+                ).whenComplete(() => widget.onDetailChanged?.call(false));
               },
               image: SizedBox(
                 width: 80,
@@ -437,12 +466,18 @@ class _YearFilterSheetState extends State<_YearFilterSheet> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialYear);
+    _controller.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_onTextChanged);
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onTextChanged() {
+    setState(() {}); // 触发 UI 刷新以更新校验状态
   }
 
   bool get _isValidYear {
@@ -457,7 +492,7 @@ class _YearFilterSheetState extends State<_YearFilterSheet> {
     return GestureDetector(
       onTap: widget.onDismiss,
       child: Container(
-        color: Colors.black54,
+        color: Theme.of(context).colorScheme.scrim.withValues(alpha: 0.54),
         child: GestureDetector(
           onTap: () {}, // 阻止点击穿透
           child: Align(

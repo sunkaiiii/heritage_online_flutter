@@ -30,13 +30,19 @@ class ImagePlaceholder extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.82),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Center(
+          child: Text(
+            text,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.82),
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            softWrap: true,
           ),
-          textAlign: TextAlign.center,
         ),
       ),
     );

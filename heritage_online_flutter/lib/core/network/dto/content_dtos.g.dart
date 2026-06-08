@@ -55,6 +55,7 @@ ArticleSummaryDto _$ArticleSummaryDtoFromJson(Map<String, dynamic> json) =>
       coverImage: json['coverImage'] == null
           ? null
           : MediaAssetDto.fromJson(json['coverImage'] as Map<String, dynamic>),
+      sourceId: json['sourceId'] as String?,
       sourceUrl: json['sourceUrl'] as String?,
     );
 
@@ -66,6 +67,7 @@ Map<String, dynamic> _$ArticleSummaryDtoToJson(ArticleSummaryDto instance) =>
       'summary': instance.summary,
       'publishedAt': instance.publishedAt,
       'coverImage': instance.coverImage,
+      'sourceId': instance.sourceId,
       'sourceUrl': instance.sourceUrl,
     };
 

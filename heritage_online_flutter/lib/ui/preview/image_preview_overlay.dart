@@ -27,7 +27,12 @@ class _ImagePreviewOverlayState extends State<ImagePreviewOverlay> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex.clamp(0, widget.imageUrls.length - 1);
+    // 防御空列表：空列表时 currentIndex 为 0，不创建非法 initialPage
+    if (widget.imageUrls.isEmpty) {
+      _currentIndex = 0;
+    } else {
+      _currentIndex = widget.initialIndex.clamp(0, widget.imageUrls.length - 1);
+    }
     _pageController = PageController(initialPage: _currentIndex);
   }
 

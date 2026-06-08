@@ -1,4 +1,7 @@
+import 'dart:io' as io;
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 
 import 'api_config.dart';
 import 'api_error.dart';
@@ -27,6 +30,15 @@ class HttpClient {
         },
       ),
     );
+
+    // 配置自签名证书支持（仅 debug 模式）
+    if (config.trustSelfSigned) {
+      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+        final client = io.HttpClient();
+        client.badCertificateCallback = (cert, host, port) => true;
+        return client;
+      };
+    }
 
     // 添加拦截器
     dio.interceptors.add(

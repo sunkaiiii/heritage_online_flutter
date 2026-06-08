@@ -16,6 +16,9 @@ class ArticlesViewModel extends StateNotifier<ArticlesUiState> {
   Timer? _searchDebounceTimer;
   static const _searchDebounceMs = 350;
 
+  /// 请求版本号，用于防止旧请求覆盖新请求
+  int _articlesRequestVersion = 0;
+
   ArticlesViewModel(this._repository) : super(const ArticlesUiState()) {
     loadBanners();
     loadArticles();
@@ -47,6 +50,7 @@ class ArticlesViewModel extends StateNotifier<ArticlesUiState> {
 
   /// 加载文章列表（首页或重新搜索）
   Future<void> loadArticles() async {
+    final requestVersion = ++_articlesRequestVersion;
     state = state.copyWith(isLoadingArticles: true, articlesError: null);
 
     try {
@@ -58,6 +62,9 @@ class ArticlesViewModel extends StateNotifier<ArticlesUiState> {
         year: _parseYear(state.yearFilter),
       );
 
+      // 丢弃过期请求的结果
+      if (requestVersion != _articlesRequestVersion) return;
+
       state = state.copyWith(
         isLoadingArticles: false,
         articles: result.items,
@@ -65,6 +72,9 @@ class ArticlesViewModel extends StateNotifier<ArticlesUiState> {
         currentPage: 1,
       );
     } catch (e) {
+      // 丢弃过期请求的错误
+      if (requestVersion != _articlesRequestVersion) return;
+
       state = state.copyWith(
         isLoadingArticles: false,
         articlesError: e.toString(),
