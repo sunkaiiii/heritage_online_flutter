@@ -301,6 +301,16 @@
     "description": "Gender filter: female"
   },
 
+  "inheritorRelatedProjectsTitle": "Related Projects",
+  "@inheritorRelatedProjectsTitle": {
+    "description": "Inheritor detail related projects title"
+  },
+
+  "inheritorRelatedInheritorsTitle": "Related Inheritors",
+  "@inheritorRelatedInheritorsTitle": {
+    "description": "Inheritor detail related inheritors title"
+  },
+
   "articleDetailTitle": "Article Detail",
   "@articleDetailTitle": {
     "description": "Article detail page title"
@@ -692,5 +702,25 @@
   "factLabelProtectionUnit": "Protection Unit",
   "@factLabelProtectionUnit": {
     "description": "FactCard protection unit label"
+  },
+
+  "factLabelGender": "Gender",
+  "@factLabelGender": {
+    "description": "FactCard gender label"
+  },
+
+  "factLabelBirthDate": "Birth Date",
+  "@factLabelBirthDate": {
+    "description": "FactCard birth date label"
+  },
+
+  "factLabelEthnicity": "Ethnicity",
+  "@factLabelEthnicity": {
+    "description": "FactCard ethnicity label"
+  },
+
+  "factLabelRepresentativeProject": "Representative Project",
+  "@factLabelRepresentativeProject": {
+    "description": "FactCard representative project label"
   }
 }

@@ -1,3 +1,6 @@
+import 'dart:io' as io;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
@@ -27,7 +30,6 @@ class _ImagePreviewOverlayState extends State<ImagePreviewOverlay> {
   @override
   void initState() {
     super.initState();
-    // 防御空列表：空列表时 currentIndex 为 0，不创建非法 initialPage
     if (widget.imageUrls.isEmpty) {
       _currentIndex = 0;
     } else {
@@ -68,31 +70,7 @@ class _ImagePreviewOverlayState extends State<ImagePreviewOverlay> {
                 minScale: 0.5,
                 maxScale: 4.0,
                 child: Center(
-                  child: Image.network(
-                    widget.imageUrls[index],
-                    fit: BoxFit.contain,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                          color: Colors.white,
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Center(
-                        child: Icon(
-                          Icons.broken_image,
-                          color: Colors.white54,
-                          size: 64,
-                        ),
-                      );
-                    },
-                  ),
+                  child: _PreviewImage(url: widget.imageUrls[index]),
                 ),
               );
             },
@@ -142,6 +120,110 @@ class _ImagePreviewOverlayState extends State<ImagePreviewOverlay> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// 支持自签名证书的预览图片组件
+class _PreviewImage extends StatefulWidget {
+  final String url;
+
+  const _PreviewImage({required this.url});
+
+  @override
+  State<_PreviewImage> createState() => _PreviewImageState();
+}
+
+class _PreviewImageState extends State<_PreviewImage> {
+  ImageProvider? _imageProvider;
+  bool _hasError = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  @override
+  void didUpdateWidget(_PreviewImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _loadImage();
+    }
+  }
+
+  Future<void> _loadImage() async {
+    setState(() {
+      _hasError = false;
+      _isLoading = true;
+    });
+
+    try {
+      final client = io.HttpClient();
+      if (kDebugMode) {
+        client.badCertificateCallback = (cert, host, port) {
+          return host == 'localhost' || host == '10.0.2.2';
+        };
+      }
+
+      final request = await client.getUrl(Uri.parse(widget.url));
+      final response = await request.close();
+      final bytes = await consolidateHttpClientResponseBytes(response);
+
+      if (mounted) {
+        setState(() {
+          _imageProvider = MemoryImage(bytes);
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Preview image load error: ${widget.url} - $e');
+      }
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      );
+    }
+
+    if (_hasError) {
+      return const Center(
+        child: Icon(
+          Icons.broken_image,
+          color: Colors.white54,
+          size: 64,
+        ),
+      );
+    }
+
+    if (_imageProvider == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Image(
+      image: _imageProvider!,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) {
+        return const Center(
+          child: Icon(
+            Icons.broken_image,
+            color: Colors.white54,
+            size: 64,
+          ),
+        );
+      },
     );
   }
 }

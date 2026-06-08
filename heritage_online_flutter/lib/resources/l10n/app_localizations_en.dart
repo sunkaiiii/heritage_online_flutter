@@ -189,6 +189,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterGenderFemale => 'Female';
 
   @override
+  String get inheritorRelatedProjectsTitle => 'Related Projects';
+
+  @override
+  String get inheritorRelatedInheritorsTitle => 'Related Inheritors';
+
+  @override
   String get articleDetailTitle => 'Article Detail';
 
   @override
@@ -417,4 +423,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get factLabelProtectionUnit => 'Protection Unit';
+
+  @override
+  String get factLabelGender => 'Gender';
+
+  @override
+  String get factLabelBirthDate => 'Birth Date';
+
+  @override
+  String get factLabelEthnicity => 'Ethnicity';
+
+  @override
+  String get factLabelRepresentativeProject => 'Representative Project';
 }

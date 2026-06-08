@@ -458,6 +458,18 @@ abstract class AppLocalizations {
   /// **'Female'**
   String get filterGenderFemale;
 
+  /// Inheritor detail related projects title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Projects'**
+  String get inheritorRelatedProjectsTitle;
+
+  /// Inheritor detail related inheritors title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Inheritors'**
+  String get inheritorRelatedInheritorsTitle;
+
   /// Article detail page title
   ///
   /// In en, this message translates to:
@@ -889,6 +901,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Protection Unit'**
   String get factLabelProtectionUnit;
+
+  /// FactCard gender label
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get factLabelGender;
+
+  /// FactCard birth date label
+  ///
+  /// In en, this message translates to:
+  /// **'Birth Date'**
+  String get factLabelBirthDate;
+
+  /// FactCard ethnicity label
+  ///
+  /// In en, this message translates to:
+  /// **'Ethnicity'**
+  String get factLabelEthnicity;
+
+  /// FactCard representative project label
+  ///
+  /// In en, this message translates to:
+  /// **'Representative Project'**
+  String get factLabelRepresentativeProject;
 }
 
 class _AppLocalizationsDelegate

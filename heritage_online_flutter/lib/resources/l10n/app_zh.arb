@@ -301,6 +301,16 @@
     "description": "性别筛选：女"
   },
 
+  "inheritorRelatedProjectsTitle": "相关项目",
+  "@inheritorRelatedProjectsTitle": {
+    "description": "传承人详情相关项目标题"
+  },
+
+  "inheritorRelatedInheritorsTitle": "相关传承人",
+  "@inheritorRelatedInheritorsTitle": {
+    "description": "传承人详情相关传承人标题"
+  },
+
   "articleDetailTitle": "文章详情",
   "@articleDetailTitle": {
     "description": "文章详情页标题"
@@ -692,5 +702,25 @@
   "factLabelProtectionUnit": "保护单位",
   "@factLabelProtectionUnit": {
     "description": "FactCard 保护单位标签"
+  },
+
+  "factLabelGender": "性别",
+  "@factLabelGender": {
+    "description": "FactCard 性别标签"
+  },
+
+  "factLabelBirthDate": "出生日期",
+  "@factLabelBirthDate": {
+    "description": "FactCard 出生日期标签"
+  },
+
+  "factLabelEthnicity": "民族",
+  "@factLabelEthnicity": {
+    "description": "FactCard 民族标签"
+  },
+
+  "factLabelRepresentativeProject": "代表性项目",
+  "@factLabelRepresentativeProject": {
+    "description": "FactCard 代表性项目标签"
   }
 }

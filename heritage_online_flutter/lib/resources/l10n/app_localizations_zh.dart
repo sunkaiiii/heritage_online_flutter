@@ -189,6 +189,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get filterGenderFemale => '女';
 
   @override
+  String get inheritorRelatedProjectsTitle => '相关项目';
+
+  @override
+  String get inheritorRelatedInheritorsTitle => '相关传承人';
+
+  @override
   String get articleDetailTitle => '文章详情';
 
   @override
@@ -413,4 +419,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get factLabelProtectionUnit => '保护单位';
+
+  @override
+  String get factLabelGender => '性别';
+
+  @override
+  String get factLabelBirthDate => '出生日期';
+
+  @override
+  String get factLabelEthnicity => '民族';
+
+  @override
+  String get factLabelRepresentativeProject => '代表性项目';
 }
