@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/features/discovery/region_atlas/region_atlas_page.dart';
 import 'package:heritage_online_flutter/features/discovery/timeline/timeline_page.dart';
 import 'package:heritage_online_flutter/features/explore/explore_topic_page.dart';
 import 'package:heritage_online_flutter/features/learning/learning_path_page.dart';
@@ -261,18 +262,14 @@ class FeaturedCollectionsPage extends StatelessWidget {
   }
 }
 
-/// 地区图谱页占位
+/// 地区图谱页 — 使用新的 RegionAtlasListPage 实现
 class RegionAtlasPage extends StatelessWidget {
   const RegionAtlasPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.discoveryRegionAtlas)),
-      body: PageBackground(
-        child: Center(child: Text(l10n.commonEmpty)),
-      ),
+    return RegionAtlasListPage(
+      onBack: () => Navigator.of(context).pop(),
     );
   }
 }

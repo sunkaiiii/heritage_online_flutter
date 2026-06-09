@@ -3,6 +3,7 @@ import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 /// Fake Heritage Repository 用于测试
@@ -296,10 +297,24 @@ class FakeHeritageRepository implements HeritageRepository {
     return [];
   }
 
+  /// 模拟地区图谱响应
+  RegionAtlasDto? mockRegionAtlas;
+
+  /// 模拟地区详情响应
+  RegionAtlasDetailDto? mockRegionDetail;
+
   @override
-  Future<dynamic> regionAtlas() async {
+  Future<RegionAtlasDto> regionAtlas() async {
     _checkError();
-    return null;
+    if (mockRegionAtlas != null) return mockRegionAtlas!;
+    return const RegionAtlasDto();
+  }
+
+  @override
+  Future<RegionAtlasDetailDto> regionAtlasDetail(String region, {int limit = 6}) async {
+    _checkError();
+    if (mockRegionDetail != null) return mockRegionDetail!;
+    return const RegionAtlasDetailDto();
   }
 
   @override

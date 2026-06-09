@@ -1140,6 +1140,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No content for this year'**
   String get timelineNoItems;
+
+  /// Region atlas total region count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} regions'**
+  String regionAtlasTotalRegions(int count);
+
+  /// Region detail total label
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get regionAtlasTotal;
+
+  /// Region atlas directory item count label
+  ///
+  /// In en, this message translates to:
+  /// **'Directory Items'**
+  String get regionAtlasDirectoryItems;
+
+  /// Region atlas inheritor count label
+  ///
+  /// In en, this message translates to:
+  /// **'Inheritors'**
+  String get regionAtlasInheritors;
+
+  /// Region detail category breakdown title
+  ///
+  /// In en, this message translates to:
+  /// **'By Category'**
+  String get regionAtlasCategoryBreakdown;
+
+  /// Region detail kind breakdown title
+  ///
+  /// In en, this message translates to:
+  /// **'By Kind'**
+  String get regionAtlasKindBreakdown;
+
+  /// Region detail featured directory items title
+  ///
+  /// In en, this message translates to:
+  /// **'Featured Directory'**
+  String get regionAtlasFeaturedDirectory;
+
+  /// Region detail featured inheritors title
+  ///
+  /// In en, this message translates to:
+  /// **'Featured Inheritors'**
+  String get regionAtlasFeaturedInheritors;
+
+  /// Region detail related articles title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Articles'**
+  String get regionAtlasRelatedArticles;
+
+  /// Region detail related regions title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Regions'**
+  String get regionAtlasRelatedRegions;
 }
 
 class _AppLocalizationsDelegate

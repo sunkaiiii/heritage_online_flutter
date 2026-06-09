@@ -550,4 +550,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timelineNoItems => 'No content for this year';
+
+  @override
+  String regionAtlasTotalRegions(int count) {
+    return '$count regions';
+  }
+
+  @override
+  String get regionAtlasTotal => 'Total';
+
+  @override
+  String get regionAtlasDirectoryItems => 'Directory Items';
+
+  @override
+  String get regionAtlasInheritors => 'Inheritors';
+
+  @override
+  String get regionAtlasCategoryBreakdown => 'By Category';
+
+  @override
+  String get regionAtlasKindBreakdown => 'By Kind';
+
+  @override
+  String get regionAtlasFeaturedDirectory => 'Featured Directory';
+
+  @override
+  String get regionAtlasFeaturedInheritors => 'Featured Inheritors';
+
+  @override
+  String get regionAtlasRelatedArticles => 'Related Articles';
+
+  @override
+  String get regionAtlasRelatedRegions => 'Related Regions';
 }

@@ -4,6 +4,7 @@ import 'package:heritage_online_flutter/core/network/api_client.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 /// 默认 Heritage Repository 实现
@@ -340,9 +341,15 @@ class DefaultHeritageRepository implements HeritageRepository {
   }
 
   @override
-  Future<dynamic> regionAtlas() async {
+  Future<RegionAtlasDto> regionAtlas() async {
     final response = await _apiClient.getRegionAtlas();
-    return response.data;
+    return RegionAtlasDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<RegionAtlasDetailDto> regionAtlasDetail(String region, {int limit = 6}) async {
+    final response = await _apiClient.getRegionAtlasDetail(region, limit: limit);
+    return RegionAtlasDetailDto.fromJson(_toMap(response.data));
   }
 
   // ==================== 发现增强 ====================

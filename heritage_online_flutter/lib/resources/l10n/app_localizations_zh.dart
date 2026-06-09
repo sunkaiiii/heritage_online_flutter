@@ -545,4 +545,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get timelineNoItems => '该年份暂无内容';
+
+  @override
+  String regionAtlasTotalRegions(int count) {
+    return '共 $count 个地区';
+  }
+
+  @override
+  String get regionAtlasTotal => '总计';
+
+  @override
+  String get regionAtlasDirectoryItems => '名录';
+
+  @override
+  String get regionAtlasInheritors => '传承人';
+
+  @override
+  String get regionAtlasCategoryBreakdown => '类别分布';
+
+  @override
+  String get regionAtlasKindBreakdown => '种类分布';
+
+  @override
+  String get regionAtlasFeaturedDirectory => '精选名录';
+
+  @override
+  String get regionAtlasFeaturedInheritors => '精选传承人';
+
+  @override
+  String get regionAtlasRelatedArticles => '相关文章';
+
+  @override
+  String get regionAtlasRelatedRegions => '相关地区';
 }

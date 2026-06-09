@@ -913,5 +913,58 @@
   "timelineNoItems": "该年份暂无内容",
   "@timelineNoItems": {
     "description": "时间线无条目消息"
+  },
+
+  "regionAtlasTotalRegions": "共 {count} 个地区",
+  "@regionAtlasTotalRegions": {
+    "description": "地区图谱地区总数",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "regionAtlasTotal": "总计",
+  "@regionAtlasTotal": {
+    "description": "地区详情总计标签"
+  },
+
+  "regionAtlasDirectoryItems": "名录",
+  "@regionAtlasDirectoryItems": {
+    "description": "地区图谱名录数量标签"
+  },
+
+  "regionAtlasInheritors": "传承人",
+  "@regionAtlasInheritors": {
+    "description": "地区图谱传承人数量标签"
+  },
+
+  "regionAtlasCategoryBreakdown": "类别分布",
+  "@regionAtlasCategoryBreakdown": {
+    "description": "地区详情类别分布标题"
+  },
+
+  "regionAtlasKindBreakdown": "种类分布",
+  "@regionAtlasKindBreakdown": {
+    "description": "地区详情种类分布标题"
+  },
+
+  "regionAtlasFeaturedDirectory": "精选名录",
+  "@regionAtlasFeaturedDirectory": {
+    "description": "地区详情精选名录标题"
+  },
+
+  "regionAtlasFeaturedInheritors": "精选传承人",
+  "@regionAtlasFeaturedInheritors": {
+    "description": "地区详情精选传承人标题"
+  },
+
+  "regionAtlasRelatedArticles": "相关文章",
+  "@regionAtlasRelatedArticles": {
+    "description": "地区详情相关文章标题"
+  },
+
+  "regionAtlasRelatedRegions": "相关地区",
+  "@regionAtlasRelatedRegions": {
+    "description": "地区详情相关地区标题"
   }
 }

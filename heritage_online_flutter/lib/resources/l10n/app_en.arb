@@ -913,5 +913,58 @@
   "timelineNoItems": "No content for this year",
   "@timelineNoItems": {
     "description": "Timeline empty items message"
+  },
+
+  "regionAtlasTotalRegions": "{count} regions",
+  "@regionAtlasTotalRegions": {
+    "description": "Region atlas total region count",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "regionAtlasTotal": "Total",
+  "@regionAtlasTotal": {
+    "description": "Region detail total label"
+  },
+
+  "regionAtlasDirectoryItems": "Directory Items",
+  "@regionAtlasDirectoryItems": {
+    "description": "Region atlas directory item count label"
+  },
+
+  "regionAtlasInheritors": "Inheritors",
+  "@regionAtlasInheritors": {
+    "description": "Region atlas inheritor count label"
+  },
+
+  "regionAtlasCategoryBreakdown": "By Category",
+  "@regionAtlasCategoryBreakdown": {
+    "description": "Region detail category breakdown title"
+  },
+
+  "regionAtlasKindBreakdown": "By Kind",
+  "@regionAtlasKindBreakdown": {
+    "description": "Region detail kind breakdown title"
+  },
+
+  "regionAtlasFeaturedDirectory": "Featured Directory",
+  "@regionAtlasFeaturedDirectory": {
+    "description": "Region detail featured directory items title"
+  },
+
+  "regionAtlasFeaturedInheritors": "Featured Inheritors",
+  "@regionAtlasFeaturedInheritors": {
+    "description": "Region detail featured inheritors title"
+  },
+
+  "regionAtlasRelatedArticles": "Related Articles",
+  "@regionAtlasRelatedArticles": {
+    "description": "Region detail related articles title"
+  },
+
+  "regionAtlasRelatedRegions": "Related Regions",
+  "@regionAtlasRelatedRegions": {
+    "description": "Region detail related regions title"
   }
 }

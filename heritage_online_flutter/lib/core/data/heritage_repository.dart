@@ -1,6 +1,7 @@
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 import 'models/detail_lookup.dart';
@@ -148,7 +149,10 @@ abstract class HeritageRepository {
   Future<List<dynamic>> featuredCollections();
 
   /// 获取地区图谱
-  Future<dynamic> regionAtlas();
+  Future<RegionAtlasDto> regionAtlas();
+
+  /// 获取地区图谱详情
+  Future<RegionAtlasDetailDto> regionAtlasDetail(String region, {int limit = 6});
 
   // ==================== 发现增强 ====================
 
