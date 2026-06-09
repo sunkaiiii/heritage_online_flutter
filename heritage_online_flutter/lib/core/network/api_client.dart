@@ -393,4 +393,87 @@ extension ApiClientExtensions on ApiClient {
       queryParameters: params,
     );
   }
+
+  // ==================== 数据故事 ====================
+
+  /// 获取地区故事
+  Future<Response> getRegionStory(String region) {
+    return get('api/stories/regions/${pathSegment(region)}');
+  }
+
+  /// 获取分类故事
+  Future<Response> getCategoryStory(String category) {
+    return get('api/stories/categories/${pathSegment(category)}');
+  }
+
+  /// 获取年份故事
+  Future<Response> getYearStory(int year) {
+    return get('api/stories/years/$year');
+  }
+
+  // ==================== 主题库 ====================
+
+  /// 获取分类索引
+  Future<Response> getTaxonomyCategories({int? limit}) {
+    final params = <String, dynamic>{};
+    addOptionalParam(params, 'limit', limit);
+    return get('api/taxonomy/categories', queryParameters: params);
+  }
+
+  /// 获取地区索引
+  Future<Response> getTaxonomyRegions({int? limit}) {
+    final params = <String, dynamic>{};
+    addOptionalParam(params, 'limit', limit);
+    return get('api/taxonomy/regions', queryParameters: params);
+  }
+
+  /// 获取 kind 索引
+  Future<Response> getTaxonomyKinds() {
+    return get('api/taxonomy/kinds');
+  }
+
+  /// 获取分类详情
+  Future<Response> getTaxonomyCategoryDetail(String category, {int? limit}) {
+    final params = <String, dynamic>{};
+    addOptionalParam(params, 'limit', limit);
+    return get('api/taxonomy/category/${pathSegment(category)}',
+        queryParameters: params);
+  }
+
+  /// 获取地区详情
+  Future<Response> getTaxonomyRegionDetail(String region, {int? limit}) {
+    final params = <String, dynamic>{};
+    addOptionalParam(params, 'limit', limit);
+    return get('api/taxonomy/region/${pathSegment(region)}',
+        queryParameters: params);
+  }
+
+  // ==================== 对比 ====================
+
+  /// 地区对比
+  Future<Response> compareRegions(String left, String right, {int? limit}) {
+    final params = <String, dynamic>{};
+    params['left'] = left;
+    params['right'] = right;
+    addOptionalParam(params, 'limit', limit);
+    return get('api/compare/regions', queryParameters: params);
+  }
+
+  /// 分类对比
+  Future<Response> compareCategories(String left, String right, {int? limit}) {
+    final params = <String, dynamic>{};
+    params['left'] = left;
+    params['right'] = right;
+    addOptionalParam(params, 'limit', limit);
+    return get('api/compare/categories', queryParameters: params);
+  }
+
+  /// kind 对比
+  Future<Response> compareKinds(String left, String right, {int? limit}) {
+    final params = <String, dynamic>{};
+    params['left'] = left;
+    params['right'] = right;
+    addOptionalParam(params, 'limit', limit);
+    return get('api/compare/kinds', queryParameters: params);
+  }
 }

@@ -1284,6 +1284,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Relationships'**
   String get contextGraphTitle;
+
+  /// Stories index by region section
+  ///
+  /// In en, this message translates to:
+  /// **'By Region'**
+  String get storiesByRegion;
+
+  /// Stories index by category section
+  ///
+  /// In en, this message translates to:
+  /// **'By Category'**
+  String get storiesByCategory;
+
+  /// Stories index by year section
+  ///
+  /// In en, this message translates to:
+  /// **'By Year'**
+  String get storiesByYear;
+
+  /// Story reading time
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min read'**
+  String storiesReadingTime(int minutes);
+
+  /// Taxonomy page categories tab
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get taxonomyTabCategories;
+
+  /// Taxonomy page regions tab
+  ///
+  /// In en, this message translates to:
+  /// **'Regions'**
+  String get taxonomyTabRegions;
+
+  /// Taxonomy page kinds tab
+  ///
+  /// In en, this message translates to:
+  /// **'Kinds'**
+  String get taxonomyTabKinds;
+
+  /// Taxonomy directory item count
+  ///
+  /// In en, this message translates to:
+  /// **'Directory Items'**
+  String get taxonomyDirectoryItems;
+
+  /// Taxonomy inheritor count
+  ///
+  /// In en, this message translates to:
+  /// **'Inheritors'**
+  String get taxonomyInheritors;
+
+  /// Taxonomy article count
+  ///
+  /// In en, this message translates to:
+  /// **'Articles'**
+  String get taxonomyArticles;
+
+  /// Compare page title
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get compareTitle;
+
+  /// Compare type: region
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get compareTypeRegion;
+
+  /// Compare type: category
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get compareTypeCategory;
+
+  /// Compare type: kind
+  ///
+  /// In en, this message translates to:
+  /// **'Kind'**
+  String get compareTypeKind;
+
+  /// Compare left side label
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get compareLeftLabel;
+
+  /// Compare right side label
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get compareRightLabel;
+
+  /// Compare start button
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get compareStartButton;
+
+  /// Compare shared categories section
+  ///
+  /// In en, this message translates to:
+  /// **'Shared Categories'**
+  String get compareSharedCategories;
+
+  /// Compare left unique items
+  ///
+  /// In en, this message translates to:
+  /// **'Unique to Left'**
+  String get compareUniqueLeft;
+
+  /// Compare right unique items
+  ///
+  /// In en, this message translates to:
+  /// **'Unique to Right'**
+  String get compareUniqueRight;
+
+  /// Compare validation: empty input
+  ///
+  /// In en, this message translates to:
+  /// **'Both sides must be filled'**
+  String get compareValidationEmpty;
+
+  /// Compare validation: same input
+  ///
+  /// In en, this message translates to:
+  /// **'Both sides cannot be the same'**
+  String get compareValidationSame;
+
+  /// Compare stat: total count
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get compareStatTotal;
 }
 
 class _AppLocalizationsDelegate

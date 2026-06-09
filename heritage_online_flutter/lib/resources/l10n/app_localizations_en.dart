@@ -628,4 +628,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contextGraphTitle => 'Relationships';
+
+  @override
+  String get storiesByRegion => 'By Region';
+
+  @override
+  String get storiesByCategory => 'By Category';
+
+  @override
+  String get storiesByYear => 'By Year';
+
+  @override
+  String storiesReadingTime(int minutes) {
+    return '$minutes min read';
+  }
+
+  @override
+  String get taxonomyTabCategories => 'Categories';
+
+  @override
+  String get taxonomyTabRegions => 'Regions';
+
+  @override
+  String get taxonomyTabKinds => 'Kinds';
+
+  @override
+  String get taxonomyDirectoryItems => 'Directory Items';
+
+  @override
+  String get taxonomyInheritors => 'Inheritors';
+
+  @override
+  String get taxonomyArticles => 'Articles';
+
+  @override
+  String get compareTitle => 'Compare';
+
+  @override
+  String get compareTypeRegion => 'Region';
+
+  @override
+  String get compareTypeCategory => 'Category';
+
+  @override
+  String get compareTypeKind => 'Kind';
+
+  @override
+  String get compareLeftLabel => 'Left';
+
+  @override
+  String get compareRightLabel => 'Right';
+
+  @override
+  String get compareStartButton => 'Compare';
+
+  @override
+  String get compareSharedCategories => 'Shared Categories';
+
+  @override
+  String get compareUniqueLeft => 'Unique to Left';
+
+  @override
+  String get compareUniqueRight => 'Unique to Right';
+
+  @override
+  String get compareValidationEmpty => 'Both sides must be filled';
+
+  @override
+  String get compareValidationSame => 'Both sides cannot be the same';
+
+  @override
+  String get compareStatTotal => 'Total';
 }

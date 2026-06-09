@@ -1042,5 +1042,123 @@
   "contextGraphTitle": "关系线索",
   "@contextGraphTitle": {
     "description": "Context 关系线索区块标题"
+  },
+
+  "storiesByRegion": "按地区",
+  "@storiesByRegion": {
+    "description": "数据故事首页按地区区块"
+  },
+
+  "storiesByCategory": "按分类",
+  "@storiesByCategory": {
+    "description": "数据故事首页按分类区块"
+  },
+
+  "storiesByYear": "按年份",
+  "@storiesByYear": {
+    "description": "数据故事首页按年份区块"
+  },
+
+  "storiesReadingTime": "约 {minutes} 分钟阅读",
+  "@storiesReadingTime": {
+    "description": "故事阅读时间",
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+
+  "taxonomyTabCategories": "分类",
+  "@taxonomyTabCategories": {
+    "description": "主题库页分类标签"
+  },
+
+  "taxonomyTabRegions": "地区",
+  "@taxonomyTabRegions": {
+    "description": "主题库页地区标签"
+  },
+
+  "taxonomyTabKinds": "种类",
+  "@taxonomyTabKinds": {
+    "description": "主题库页种类标签"
+  },
+
+  "taxonomyDirectoryItems": "名录",
+  "@taxonomyDirectoryItems": {
+    "description": "主题库名录数量"
+  },
+
+  "taxonomyInheritors": "传承人",
+  "@taxonomyInheritors": {
+    "description": "主题库传承人数量"
+  },
+
+  "taxonomyArticles": "文章",
+  "@taxonomyArticles": {
+    "description": "主题库文章数量"
+  },
+
+  "compareTitle": "主题对比",
+  "@compareTitle": {
+    "description": "对比页标题"
+  },
+
+  "compareTypeRegion": "地区",
+  "@compareTypeRegion": {
+    "description": "对比类型：地区"
+  },
+
+  "compareTypeCategory": "分类",
+  "@compareTypeCategory": {
+    "description": "对比类型：分类"
+  },
+
+  "compareTypeKind": "种类",
+  "@compareTypeKind": {
+    "description": "对比类型：种类"
+  },
+
+  "compareLeftLabel": "左侧",
+  "@compareLeftLabel": {
+    "description": "对比左侧标签"
+  },
+
+  "compareRightLabel": "右侧",
+  "@compareRightLabel": {
+    "description": "对比右侧标签"
+  },
+
+  "compareStartButton": "开始对比",
+  "@compareStartButton": {
+    "description": "对比开始按钮"
+  },
+
+  "compareSharedCategories": "共同分类",
+  "@compareSharedCategories": {
+    "description": "对比共同分类区块"
+  },
+
+  "compareUniqueLeft": "左侧独有",
+  "@compareUniqueLeft": {
+    "description": "对比左侧独有项"
+  },
+
+  "compareUniqueRight": "右侧独有",
+  "@compareUniqueRight": {
+    "description": "对比右侧独有项"
+  },
+
+  "compareValidationEmpty": "两侧不能为空",
+  "@compareValidationEmpty": {
+    "description": "对比校验：输入为空"
+  },
+
+  "compareValidationSame": "两侧不能相同",
+  "@compareValidationSame": {
+    "description": "对比校验：输入相同"
+  },
+
+  "compareStatTotal": "总计",
+  "@compareStatTotal": {
+    "description": "对比统计：总计"
   }
 }

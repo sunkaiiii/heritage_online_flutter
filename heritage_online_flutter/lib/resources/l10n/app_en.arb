@@ -1042,5 +1042,123 @@
   "contextGraphTitle": "Relationships",
   "@contextGraphTitle": {
     "description": "Context graph relationships section title"
+  },
+
+  "storiesByRegion": "By Region",
+  "@storiesByRegion": {
+    "description": "Stories index by region section"
+  },
+
+  "storiesByCategory": "By Category",
+  "@storiesByCategory": {
+    "description": "Stories index by category section"
+  },
+
+  "storiesByYear": "By Year",
+  "@storiesByYear": {
+    "description": "Stories index by year section"
+  },
+
+  "storiesReadingTime": "{minutes} min read",
+  "@storiesReadingTime": {
+    "description": "Story reading time",
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+
+  "taxonomyTabCategories": "Categories",
+  "@taxonomyTabCategories": {
+    "description": "Taxonomy page categories tab"
+  },
+
+  "taxonomyTabRegions": "Regions",
+  "@taxonomyTabRegions": {
+    "description": "Taxonomy page regions tab"
+  },
+
+  "taxonomyTabKinds": "Kinds",
+  "@taxonomyTabKinds": {
+    "description": "Taxonomy page kinds tab"
+  },
+
+  "taxonomyDirectoryItems": "Directory Items",
+  "@taxonomyDirectoryItems": {
+    "description": "Taxonomy directory item count"
+  },
+
+  "taxonomyInheritors": "Inheritors",
+  "@taxonomyInheritors": {
+    "description": "Taxonomy inheritor count"
+  },
+
+  "taxonomyArticles": "Articles",
+  "@taxonomyArticles": {
+    "description": "Taxonomy article count"
+  },
+
+  "compareTitle": "Compare",
+  "@compareTitle": {
+    "description": "Compare page title"
+  },
+
+  "compareTypeRegion": "Region",
+  "@compareTypeRegion": {
+    "description": "Compare type: region"
+  },
+
+  "compareTypeCategory": "Category",
+  "@compareTypeCategory": {
+    "description": "Compare type: category"
+  },
+
+  "compareTypeKind": "Kind",
+  "@compareTypeKind": {
+    "description": "Compare type: kind"
+  },
+
+  "compareLeftLabel": "Left",
+  "@compareLeftLabel": {
+    "description": "Compare left side label"
+  },
+
+  "compareRightLabel": "Right",
+  "@compareRightLabel": {
+    "description": "Compare right side label"
+  },
+
+  "compareStartButton": "Compare",
+  "@compareStartButton": {
+    "description": "Compare start button"
+  },
+
+  "compareSharedCategories": "Shared Categories",
+  "@compareSharedCategories": {
+    "description": "Compare shared categories section"
+  },
+
+  "compareUniqueLeft": "Unique to Left",
+  "@compareUniqueLeft": {
+    "description": "Compare left unique items"
+  },
+
+  "compareUniqueRight": "Unique to Right",
+  "@compareUniqueRight": {
+    "description": "Compare right unique items"
+  },
+
+  "compareValidationEmpty": "Both sides must be filled",
+  "@compareValidationEmpty": {
+    "description": "Compare validation: empty input"
+  },
+
+  "compareValidationSame": "Both sides cannot be the same",
+  "@compareValidationSame": {
+    "description": "Compare validation: same input"
+  },
+
+  "compareStatTotal": "Total",
+  "@compareStatTotal": {
+    "description": "Compare stat: total count"
   }
 }

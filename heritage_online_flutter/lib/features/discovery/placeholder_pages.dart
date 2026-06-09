@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
 import 'package:heritage_online_flutter/features/discovery/collection/featured_collections_page.dart';
+import 'package:heritage_online_flutter/features/discovery/compare/compare_page.dart';
 import 'package:heritage_online_flutter/features/discovery/region_atlas/region_atlas_page.dart';
+import 'package:heritage_online_flutter/features/discovery/stories/stories_page.dart';
+import 'package:heritage_online_flutter/features/discovery/taxonomy/taxonomy_page.dart';
 import 'package:heritage_online_flutter/features/discovery/timeline/timeline_page.dart';
 import 'package:heritage_online_flutter/features/explore/explore_topic_page.dart';
 import 'package:heritage_online_flutter/features/learning/learning_path_page.dart';
@@ -283,34 +286,38 @@ class TimelinePage extends StatelessWidget {
   }
 }
 
-/// 主题库页占位
+/// 主题库页 — 使用新的 TaxonomyIndexPage 实现
 class TaxonomyPage extends StatelessWidget {
   const TaxonomyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.discoveryTaxonomy)),
-      body: PageBackground(
-        child: Center(child: Text(l10n.commonEmpty)),
-      ),
+    return TaxonomyIndexPage(
+      onBack: () => Navigator.of(context).pop(),
     );
   }
 }
 
-/// 数据故事页占位
+/// 数据故事页 — 使用新的 StoriesIndexPage 实现
 class StoriesPage extends StatelessWidget {
   const StoriesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.discoveryStories)),
-      body: PageBackground(
-        child: Center(child: Text(l10n.commonEmpty)),
-      ),
+    return StoriesIndexPage(
+      onBack: () => Navigator.of(context).pop(),
+    );
+  }
+}
+
+/// 主题对比页 — 使用新的 ComparePage 实现
+class ComparePlaceholderPage extends StatelessWidget {
+  const ComparePlaceholderPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ComparePage(
+      onBack: () => Navigator.of(context).pop(),
     );
   }
 }

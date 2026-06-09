@@ -623,4 +623,75 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get contextGraphTitle => '关系线索';
+
+  @override
+  String get storiesByRegion => '按地区';
+
+  @override
+  String get storiesByCategory => '按分类';
+
+  @override
+  String get storiesByYear => '按年份';
+
+  @override
+  String storiesReadingTime(int minutes) {
+    return '约 $minutes 分钟阅读';
+  }
+
+  @override
+  String get taxonomyTabCategories => '分类';
+
+  @override
+  String get taxonomyTabRegions => '地区';
+
+  @override
+  String get taxonomyTabKinds => '种类';
+
+  @override
+  String get taxonomyDirectoryItems => '名录';
+
+  @override
+  String get taxonomyInheritors => '传承人';
+
+  @override
+  String get taxonomyArticles => '文章';
+
+  @override
+  String get compareTitle => '主题对比';
+
+  @override
+  String get compareTypeRegion => '地区';
+
+  @override
+  String get compareTypeCategory => '分类';
+
+  @override
+  String get compareTypeKind => '种类';
+
+  @override
+  String get compareLeftLabel => '左侧';
+
+  @override
+  String get compareRightLabel => '右侧';
+
+  @override
+  String get compareStartButton => '开始对比';
+
+  @override
+  String get compareSharedCategories => '共同分类';
+
+  @override
+  String get compareUniqueLeft => '左侧独有';
+
+  @override
+  String get compareUniqueRight => '右侧独有';
+
+  @override
+  String get compareValidationEmpty => '两侧不能为空';
+
+  @override
+  String get compareValidationSame => '两侧不能相同';
+
+  @override
+  String get compareStatTotal => '总计';
 }

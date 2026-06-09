@@ -188,6 +188,16 @@ class DiscoveryPage extends ConsumerWidget {
             onTap: () => _navigateTo(context, const StoriesPage()),
             l10n: l10n,
           ),
+          const SizedBox(height: 16),
+
+          // 主题对比
+          _buildNavigationSection(
+            context,
+            title: l10n.compareTitle,
+            icon: Icons.compare_arrows,
+            onTap: () => _navigateTo(context, const ComparePlaceholderPage()),
+            l10n: l10n,
+          ),
           const SizedBox(height: 32),
         ],
       ),

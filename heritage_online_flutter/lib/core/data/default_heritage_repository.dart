@@ -3,12 +3,15 @@ import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/network/api_client.dart';
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/compare_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/story_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/taxonomy_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 /// 默认 Heritage Repository 实现
@@ -421,6 +424,87 @@ class DefaultHeritageRepository implements HeritageRepository {
   Future<RegionAtlasDetailDto> regionAtlasDetail(String region, {int limit = 6}) async {
     final response = await _apiClient.getRegionAtlasDetail(region, limit: limit);
     return RegionAtlasDetailDto.fromJson(_toMap(response.data));
+  }
+
+  // ==================== 数据故事 ====================
+
+  @override
+  Future<DataStoryDto> regionStory(String region) async {
+    final response = await _apiClient.getRegionStory(region);
+    return DataStoryDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<DataStoryDto> categoryStory(String category) async {
+    final response = await _apiClient.getCategoryStory(category);
+    return DataStoryDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<DataStoryDto> yearStory(int year) async {
+    final response = await _apiClient.getYearStory(year);
+    return DataStoryDto.fromJson(_toMap(response.data));
+  }
+
+  // ==================== 主题库 ====================
+
+  @override
+  Future<TaxonomyIndexDto<TaxonomyTopicDto>> taxonomyCategories({int limit = 50}) async {
+    final response = await _apiClient.getTaxonomyCategories(limit: limit);
+    return TaxonomyIndexDto.fromJson(
+      _toMap(response.data),
+      (json) => TaxonomyTopicDto.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<TaxonomyIndexDto<TaxonomyTopicDto>> taxonomyRegions({int limit = 50}) async {
+    final response = await _apiClient.getTaxonomyRegions(limit: limit);
+    return TaxonomyIndexDto.fromJson(
+      _toMap(response.data),
+      (json) => TaxonomyTopicDto.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<TaxonomyIndexDto<TaxonomyKindDto>> taxonomyKinds() async {
+    final response = await _apiClient.getTaxonomyKinds();
+    return TaxonomyIndexDto.fromJson(
+      _toMap(response.data),
+      (json) => TaxonomyKindDto.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<TaxonomyCategoryDetailDto> taxonomyCategoryDetail(String category, {int limit = 6}) async {
+    final response = await _apiClient.getTaxonomyCategoryDetail(category, limit: limit);
+    return TaxonomyCategoryDetailDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<TaxonomyRegionDetailDto> taxonomyRegionDetail(String region, {int limit = 6}) async {
+    final response = await _apiClient.getTaxonomyRegionDetail(region, limit: limit);
+    return TaxonomyRegionDetailDto.fromJson(_toMap(response.data));
+  }
+
+  // ==================== 对比 ====================
+
+  @override
+  Future<CompareResultDto> compareRegions(String left, String right, {int limit = 6}) async {
+    final response = await _apiClient.compareRegions(left, right, limit: limit);
+    return CompareResultDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<CompareResultDto> compareCategories(String left, String right, {int limit = 6}) async {
+    final response = await _apiClient.compareCategories(left, right, limit: limit);
+    return CompareResultDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<CompareResultDto> compareKinds(String left, String right, {int limit = 6}) async {
+    final response = await _apiClient.compareKinds(left, right, limit: limit);
+    return CompareResultDto.fromJson(_toMap(response.data));
   }
 
   // ==================== 发现增强 ====================

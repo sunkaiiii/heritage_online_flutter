@@ -1,11 +1,14 @@
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/compare_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
-import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/story_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/taxonomy_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 import 'models/detail_lookup.dart';
@@ -190,6 +193,45 @@ abstract class HeritageRepository {
 
   /// 获取地区图谱详情
   Future<RegionAtlasDetailDto> regionAtlasDetail(String region, {int limit = 6});
+
+  // ==================== 数据故事 ====================
+
+  /// 获取地区故事
+  Future<DataStoryDto> regionStory(String region);
+
+  /// 获取分类故事
+  Future<DataStoryDto> categoryStory(String category);
+
+  /// 获取年份故事
+  Future<DataStoryDto> yearStory(int year);
+
+  // ==================== 主题库 ====================
+
+  /// 获取分类索引
+  Future<TaxonomyIndexDto<TaxonomyTopicDto>> taxonomyCategories({int limit = 50});
+
+  /// 获取地区索引
+  Future<TaxonomyIndexDto<TaxonomyTopicDto>> taxonomyRegions({int limit = 50});
+
+  /// 获取 kind 索引
+  Future<TaxonomyIndexDto<TaxonomyKindDto>> taxonomyKinds();
+
+  /// 获取分类详情
+  Future<TaxonomyCategoryDetailDto> taxonomyCategoryDetail(String category, {int limit = 6});
+
+  /// 获取地区详情
+  Future<TaxonomyRegionDetailDto> taxonomyRegionDetail(String region, {int limit = 6});
+
+  // ==================== 对比 ====================
+
+  /// 地区对比
+  Future<CompareResultDto> compareRegions(String left, String right, {int limit = 6});
+
+  /// 分类对比
+  Future<CompareResultDto> compareCategories(String left, String right, {int limit = 6});
+
+  /// kind 对比
+  Future<CompareResultDto> compareKinds(String left, String right, {int limit = 6});
 
   // ==================== 发现增强 ====================
 

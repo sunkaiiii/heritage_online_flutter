@@ -2,12 +2,15 @@ import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/compare_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/story_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/taxonomy_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 /// Fake Heritage Repository 用于测试
@@ -463,5 +466,109 @@ class FakeHeritageRepository implements HeritageRepository {
     _checkError();
     if (mockBlendedRecommendations != null) return mockBlendedRecommendations!;
     return const BlendedRecommendationResponseDto();
+  }
+
+  // ==================== 数据故事 ====================
+
+  /// 模拟故事响应
+  DataStoryDto? mockStory;
+
+  @override
+  Future<DataStoryDto> regionStory(String region) async {
+    _checkError();
+    if (mockStory != null) return mockStory!;
+    return const DataStoryDto();
+  }
+
+  @override
+  Future<DataStoryDto> categoryStory(String category) async {
+    _checkError();
+    if (mockStory != null) return mockStory!;
+    return const DataStoryDto();
+  }
+
+  @override
+  Future<DataStoryDto> yearStory(int year) async {
+    _checkError();
+    if (mockStory != null) return mockStory!;
+    return const DataStoryDto();
+  }
+
+  // ==================== 主题库 ====================
+
+  /// 模拟主题库分类索引
+  TaxonomyIndexDto<TaxonomyTopicDto>? mockTaxonomyCategories;
+
+  /// 模拟主题库地区索引
+  TaxonomyIndexDto<TaxonomyTopicDto>? mockTaxonomyRegions;
+
+  /// 模拟主题库 kind 索引
+  TaxonomyIndexDto<TaxonomyKindDto>? mockTaxonomyKinds;
+
+  /// 模拟分类详情
+  TaxonomyCategoryDetailDto? mockTaxonomyCategoryDetail;
+
+  /// 模拟地区详情
+  TaxonomyRegionDetailDto? mockTaxonomyRegionDetail;
+
+  @override
+  Future<TaxonomyIndexDto<TaxonomyTopicDto>> taxonomyCategories({int limit = 50}) async {
+    _checkError();
+    if (mockTaxonomyCategories != null) return mockTaxonomyCategories!;
+    return const TaxonomyIndexDto<TaxonomyTopicDto>();
+  }
+
+  @override
+  Future<TaxonomyIndexDto<TaxonomyTopicDto>> taxonomyRegions({int limit = 50}) async {
+    _checkError();
+    if (mockTaxonomyRegions != null) return mockTaxonomyRegions!;
+    return const TaxonomyIndexDto<TaxonomyTopicDto>();
+  }
+
+  @override
+  Future<TaxonomyIndexDto<TaxonomyKindDto>> taxonomyKinds() async {
+    _checkError();
+    if (mockTaxonomyKinds != null) return mockTaxonomyKinds!;
+    return const TaxonomyIndexDto<TaxonomyKindDto>();
+  }
+
+  @override
+  Future<TaxonomyCategoryDetailDto> taxonomyCategoryDetail(String category, {int limit = 6}) async {
+    _checkError();
+    if (mockTaxonomyCategoryDetail != null) return mockTaxonomyCategoryDetail!;
+    return const TaxonomyCategoryDetailDto();
+  }
+
+  @override
+  Future<TaxonomyRegionDetailDto> taxonomyRegionDetail(String region, {int limit = 6}) async {
+    _checkError();
+    if (mockTaxonomyRegionDetail != null) return mockTaxonomyRegionDetail!;
+    return const TaxonomyRegionDetailDto();
+  }
+
+  // ==================== 对比 ====================
+
+  /// 模拟对比结果
+  CompareResultDto? mockCompareResult;
+
+  @override
+  Future<CompareResultDto> compareRegions(String left, String right, {int limit = 6}) async {
+    _checkError();
+    if (mockCompareResult != null) return mockCompareResult!;
+    return const CompareResultDto();
+  }
+
+  @override
+  Future<CompareResultDto> compareCategories(String left, String right, {int limit = 6}) async {
+    _checkError();
+    if (mockCompareResult != null) return mockCompareResult!;
+    return const CompareResultDto();
+  }
+
+  @override
+  Future<CompareResultDto> compareKinds(String left, String right, {int limit = 6}) async {
+    _checkError();
+    if (mockCompareResult != null) return mockCompareResult!;
+    return const CompareResultDto();
   }
 }

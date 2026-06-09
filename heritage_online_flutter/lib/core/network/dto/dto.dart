@@ -1,5 +1,6 @@
 export 'collection_dtos.dart';
 export 'common_dtos.dart';
+export 'compare_dtos.dart';
 export 'content_dtos.dart';
 export 'context_dtos.dart';
 export 'digest_dtos.dart';
@@ -8,4 +9,6 @@ export 'explore_dtos.dart';
 export 'learning_path_dtos.dart';
 export 'recommendation_dtos.dart';
 export 'region_dtos.dart';
+export 'story_dtos.dart';
+export 'taxonomy_dtos.dart';
 export 'timeline_dtos.dart';
