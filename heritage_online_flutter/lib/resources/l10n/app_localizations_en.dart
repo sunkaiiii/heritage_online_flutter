@@ -195,6 +195,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inheritorRelatedInheritorsTitle => 'Related Inheritors';
 
   @override
+  String get favoritesEmptyMessage => 'No favorites yet.';
+
+  @override
+  String get recentEmptyMessage => 'No browsing history yet.';
+
+  @override
+  String get actionClearRecent => 'Clear Recent';
+
+  @override
+  String get errorOpenUrl => 'Unable to open link';
+
+  @override
+  String get readingPathEmpty =>
+      'Your exploration path will appear here after browsing details';
+
+  @override
+  String get readingPathClear => 'Clear Reading Path';
+
+  @override
   String get articleDetailTitle => 'Article Detail';
 
   @override
@@ -340,9 +359,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get articleRelatedTitle => 'Related Articles';
-
-  @override
-  String get errorOpenUrl => 'Unable to open link';
 
   @override
   String directoryStatisticsOverviewFormat(String kind) {

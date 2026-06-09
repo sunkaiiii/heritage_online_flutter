@@ -311,6 +311,36 @@
     "description": "Inheritor detail related inheritors title"
   },
 
+  "favoritesEmptyMessage": "No favorites yet.",
+  "@favoritesEmptyMessage": {
+    "description": "Favorites list empty state message"
+  },
+
+  "recentEmptyMessage": "No browsing history yet.",
+  "@recentEmptyMessage": {
+    "description": "Recently viewed list empty state message"
+  },
+
+  "actionClearRecent": "Clear Recent",
+  "@actionClearRecent": {
+    "description": "Clear recently viewed button"
+  },
+
+  "errorOpenUrl": "Cannot open link",
+  "@errorOpenUrl": {
+    "description": "Open link failed error message"
+  },
+
+  "readingPathEmpty": "Your exploration path will appear here after browsing details",
+  "@readingPathEmpty": {
+    "description": "Reading path empty state message"
+  },
+
+  "readingPathClear": "Clear Reading Path",
+  "@readingPathClear": {
+    "description": "Clear reading path button"
+  },
+
   "articleDetailTitle": "Article Detail",
   "@articleDetailTitle": {
     "description": "Article detail page title"

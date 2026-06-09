@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/reading_path/reading_path.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_view_model.dart';
@@ -169,7 +170,7 @@ class DirectoryDetailPage extends ConsumerWidget {
                     SectionHeader(title: l10n.directoryDetailRelatedProjects),
                     const SizedBox(height: 12),
                     ...item.relatedProjects.map(
-                      (ref) => _buildRelatedDirectory(context, ref, l10n),
+                      (target) => _buildRelatedDirectory(context, ref, target, l10n),
                     ),
                   ],
 
@@ -179,7 +180,7 @@ class DirectoryDetailPage extends ConsumerWidget {
                     SectionHeader(title: l10n.directoryDetailRelatedInheritors),
                     const SizedBox(height: 12),
                     ...item.relatedInheritors.map(
-                      (ref) => _buildRelatedInheritor(context, ref, l10n),
+                      (target) => _buildRelatedInheritor(context, ref, target, l10n),
                     ),
                   ],
 
@@ -384,25 +385,26 @@ class DirectoryDetailPage extends ConsumerWidget {
 
   Widget _buildRelatedDirectory(
     BuildContext context,
-    DirectoryReferenceDto ref,
+    WidgetRef widgetRef,
+    DirectoryReferenceDto target,
     AppLocalizations l10n,
   ) {
-    final hasSourceId = ref.sourceId != null && ref.sourceId!.isNotEmpty;
-    final hasDetailUrl = ref.detailUrl != null && ref.detailUrl!.isNotEmpty;
+    final hasSourceId = target.sourceId != null && target.sourceId!.isNotEmpty;
+    final hasDetailUrl = target.detailUrl != null && target.detailUrl!.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: ReferenceCard(
-        title: ref.title ?? '',
-        meta: [ref.category, ref.region].where((s) => s != null && s.isNotEmpty).join(' · '),
+        title: target.title ?? '',
+        meta: [target.category, target.region].where((s) => s != null && s.isNotEmpty).join(' · '),
         onTap: hasSourceId
             ? () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => DirectoryDetailPage(
-                      sourceId: ref.sourceId,
+                      sourceId: target.sourceId,
                       kind: DirectoryItemKind.values.firstWhere(
-                        (k) => k.wireName == (ref.kind ?? 'nationalProject'),
+                        (k) => k.wireName == (target.kind ?? 'nationalProject'),
                         orElse: () => DirectoryItemKind.nationalProject,
                       ),
                       onBack: () => Navigator.of(context).pop(),
@@ -411,7 +413,7 @@ class DirectoryDetailPage extends ConsumerWidget {
                 );
               }
             : hasDetailUrl
-                ? () => SafeUrlLauncher.launch(context, ref.detailUrl!)
+                ? () => SafeUrlLauncher.launch(context, target.detailUrl!)
                 : null,
       ),
     );
@@ -419,27 +421,34 @@ class DirectoryDetailPage extends ConsumerWidget {
 
   Widget _buildRelatedInheritor(
     BuildContext context,
-    DirectoryReferenceDto ref,
+    WidgetRef widgetRef,
+    DirectoryReferenceDto target,
     AppLocalizations l10n,
   ) {
+    final hasSourceId = target.sourceId != null && target.sourceId!.isNotEmpty;
+    final hasDetailUrl = target.detailUrl != null && target.detailUrl!.isNotEmpty;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: ReferenceCard(
-        title: ref.title ?? '',
-        meta: ref.region,
-        onTap: () {
-          // 导航到传承人详情占位页
-          if (ref.sourceId != null && ref.sourceId!.isNotEmpty) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => InheritorDetailPage(
-                  sourceId: ref.sourceId,
-                  onBack: () => Navigator.of(context).pop(),
-                ),
-              ),
-            );
-          }
-        },
+        title: target.title ?? '',
+        meta: target.region,
+        onTap: hasSourceId
+            ? () {
+                // 记录阅读路径
+                _recordReadingPath(widgetRef, target, 'related');
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => InheritorDetailPage(
+                      sourceId: target.sourceId,
+                      onBack: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                );
+              }
+            : hasDetailUrl
+                ? () => SafeUrlLauncher.launch(context, target.detailUrl!)
+                : null,
       ),
     );
   }
@@ -461,5 +470,23 @@ class DirectoryDetailPage extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  void _recordReadingPath(
+    WidgetRef ref,
+    DirectoryReferenceDto target,
+    String source,
+  ) {
+    final repo = ref.read(readingPathRepositoryProvider);
+    final event = ReadingPathEvent(
+      fromType: 'directoryItem',
+      fromId: itemId,
+      toType: 'inheritor',
+      toId: target.sourceId ?? '',
+      toTitle: target.title,
+      source: source,
+      toSourceId: target.sourceId,
+    );
+    repo.record(event);
   }
 }

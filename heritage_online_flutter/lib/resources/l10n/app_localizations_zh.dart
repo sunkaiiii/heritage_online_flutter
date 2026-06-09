@@ -195,6 +195,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get inheritorRelatedInheritorsTitle => '相关传承人';
 
   @override
+  String get favoritesEmptyMessage => '还没有收藏内容。';
+
+  @override
+  String get recentEmptyMessage => '还没有浏览记录。';
+
+  @override
+  String get actionClearRecent => '清空最近浏览';
+
+  @override
+  String get errorOpenUrl => '无法打开链接';
+
+  @override
+  String get readingPathEmpty => '你浏览详情后会在这里形成探索路径';
+
+  @override
+  String get readingPathClear => '清空阅读路径';
+
+  @override
   String get articleDetailTitle => '文章详情';
 
   @override
@@ -336,9 +354,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get articleRelatedTitle => '相关文章';
-
-  @override
-  String get errorOpenUrl => '无法打开链接';
 
   @override
   String directoryStatisticsOverviewFormat(String kind) {

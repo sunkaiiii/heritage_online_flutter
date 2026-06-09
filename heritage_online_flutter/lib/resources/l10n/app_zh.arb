@@ -311,6 +311,36 @@
     "description": "传承人详情相关传承人标题"
   },
 
+  "favoritesEmptyMessage": "还没有收藏内容。",
+  "@favoritesEmptyMessage": {
+    "description": "收藏列表空状态消息"
+  },
+
+  "recentEmptyMessage": "还没有浏览记录。",
+  "@recentEmptyMessage": {
+    "description": "最近浏览列表空状态消息"
+  },
+
+  "actionClearRecent": "清空最近浏览",
+  "@actionClearRecent": {
+    "description": "清空最近浏览按钮"
+  },
+
+  "errorOpenUrl": "无法打开链接",
+  "@errorOpenUrl": {
+    "description": "打开链接失败错误消息"
+  },
+
+  "readingPathEmpty": "你浏览详情后会在这里形成探索路径",
+  "@readingPathEmpty": {
+    "description": "阅读路径空状态消息"
+  },
+
+  "readingPathClear": "清空阅读路径",
+  "@readingPathClear": {
+    "description": "清空阅读路径按钮"
+  },
+
   "articleDetailTitle": "文章详情",
   "@articleDetailTitle": {
     "description": "文章详情页标题"

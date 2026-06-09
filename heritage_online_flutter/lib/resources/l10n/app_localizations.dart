@@ -470,6 +470,42 @@ abstract class AppLocalizations {
   /// **'Related Inheritors'**
   String get inheritorRelatedInheritorsTitle;
 
+  /// Favorites list empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet.'**
+  String get favoritesEmptyMessage;
+
+  /// Recently viewed list empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'No browsing history yet.'**
+  String get recentEmptyMessage;
+
+  /// Clear recently viewed button
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Recent'**
+  String get actionClearRecent;
+
+  /// Unable to open URL error message
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open link'**
+  String get errorOpenUrl;
+
+  /// Reading path empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'Your exploration path will appear here after browsing details'**
+  String get readingPathEmpty;
+
+  /// Clear reading path button
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Reading Path'**
+  String get readingPathClear;
+
   /// Article detail page title
   ///
   /// In en, this message translates to:
@@ -751,12 +787,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Related Articles'**
   String get articleRelatedTitle;
-
-  /// Unable to open URL error message
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to open link'**
-  String get errorOpenUrl;
 
   /// Statistics overview title with kind
   ///

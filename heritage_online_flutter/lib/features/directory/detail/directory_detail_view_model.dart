@@ -1,25 +1,32 @@
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/saved/saved.dart';
 
 import 'directory_detail_ui_state.dart';
 
 /// 名录详情 ViewModel
 class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
-  final HeritageRepository repository;
+  final HeritageRepository _repository;
+  final SavedContentRepository _savedRepository;
   final String? itemId;
   final String? sourceId;
   final DirectoryItemKind kind;
 
   DirectoryDetailViewModel({
-    required this.repository,
+    required HeritageRepository repository,
+    required SavedContentRepository savedRepository,
     this.itemId,
     this.sourceId,
     this.kind = DirectoryItemKind.nationalProject,
-  }) : super(const DirectoryDetailUiState()) {
+  })  : _repository = repository,
+        _savedRepository = savedRepository,
+        super(const DirectoryDetailUiState()) {
     loadItem();
   }
 
@@ -34,11 +41,20 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
         kind: kind,
       );
 
-      final item = await repository.directoryItemDetail(lookup);
+      final item = await _repository.directoryItemDetail(lookup);
+
+      // 检查收藏状态
+      final target = _buildTarget(item);
+      final isFavorite = _savedRepository.isFavorite(target);
+
       state = state.copyWith(
         isLoading: false,
         item: item,
+        isFavorite: isFavorite,
       );
+
+      // 记录浏览
+      _recordViewed(item);
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -49,7 +65,43 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
 
   /// 切换收藏状态
   void toggleFavorite() {
-    state = state.copyWith(isFavorite: !state.isFavorite);
+    final item = state.item;
+    if (item == null) return;
+
+    final snapshot = _buildSnapshot(item);
+    _savedRepository.toggleFavorite(snapshot);
+
+    final target = _buildTarget(item);
+    final isFavorite = _savedRepository.isFavorite(target);
+    state = state.copyWith(isFavorite: isFavorite);
+  }
+
+  SavedContentTarget _buildTarget(dynamic item) {
+    return SavedContentTarget(
+      id: item.id,
+      sourceId: sourceId,
+      sourceUrl: item.sourceUrl,
+      kind: item.kind?.wireName,
+    );
+  }
+
+  SavedContentSnapshot _buildSnapshot(dynamic item) {
+    return SavedContentSnapshot(
+      contentType: SavedContentType.directoryItem,
+      id: item.id,
+      title: item.title,
+      summary: item.summary,
+      category: item.category,
+      region: item.region,
+      year: item.publishedYear,
+      sourceUrl: item.sourceUrl,
+      target: _buildTarget(item),
+    );
+  }
+
+  void _recordViewed(dynamic item) {
+    final snapshot = _buildSnapshot(item);
+    _savedRepository.recordViewed(snapshot);
   }
 }
 
@@ -85,8 +137,10 @@ final directoryDetailViewModelProvider = StateNotifierProvider.autoDispose
     .family<DirectoryDetailViewModel, DirectoryDetailUiState, DirectoryDetailParams>(
   (ref, params) {
     final repository = ref.watch(heritageRepositoryProvider);
+    final savedRepository = ref.watch(savedContentRepositoryProvider);
     return DirectoryDetailViewModel(
       repository: repository,
+      savedRepository: savedRepository,
       itemId: params.itemId,
       sourceId: params.sourceId,
       kind: params.kind,
