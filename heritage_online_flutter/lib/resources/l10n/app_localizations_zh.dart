@@ -317,6 +317,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoveryTimelineSubtitle => '按年份浏览非遗内容';
 
   @override
+  String get exploreTopicTimeline => '时间线';
+
+  @override
+  String get exploreTopicRelated => '相关主题';
+
+  @override
+  String get learningFeaturedItems => '精选内容';
+
+  @override
+  String get learningPathSteps => '学习步骤';
+
+  @override
+  String get learningRelatedTopics => '相关主题';
+
+  @override
   String get filterButton => '筛选';
 
   @override

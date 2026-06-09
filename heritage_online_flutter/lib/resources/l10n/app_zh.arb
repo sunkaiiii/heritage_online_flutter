@@ -516,6 +516,31 @@
     "description": "发现页时间线副标题"
   },
 
+  "exploreTopicTimeline": "时间线",
+  "@exploreTopicTimeline": {
+    "description": "探索主题详情时间线区块标题"
+  },
+
+  "exploreTopicRelated": "相关主题",
+  "@exploreTopicRelated": {
+    "description": "探索主题详情相关主题区块标题"
+  },
+
+  "learningFeaturedItems": "精选内容",
+  "@learningFeaturedItems": {
+    "description": "学习路径精选内容区块标题"
+  },
+
+  "learningPathSteps": "学习步骤",
+  "@learningPathSteps": {
+    "description": "学习路径步骤区块标题"
+  },
+
+  "learningRelatedTopics": "相关主题",
+  "@learningRelatedTopics": {
+    "description": "学习路径相关主题区块标题"
+  },
+
   "filterButton": "筛选",
   "@filterButton": {
     "description": "筛选按钮"

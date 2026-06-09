@@ -516,6 +516,31 @@
     "description": "Discovery timeline subtitle"
   },
 
+  "exploreTopicTimeline": "Timeline",
+  "@exploreTopicTimeline": {
+    "description": "Explore topic detail timeline section title"
+  },
+
+  "exploreTopicRelated": "Related Topics",
+  "@exploreTopicRelated": {
+    "description": "Explore topic detail related topics section title"
+  },
+
+  "learningFeaturedItems": "Featured Items",
+  "@learningFeaturedItems": {
+    "description": "Learning path featured items section title"
+  },
+
+  "learningPathSteps": "Learning Steps",
+  "@learningPathSteps": {
+    "description": "Learning path steps section title"
+  },
+
+  "learningRelatedTopics": "Related Topics",
+  "@learningRelatedTopics": {
+    "description": "Learning path related topics section title"
+  },
+
   "filterButton": "Filter",
   "@filterButton": {
     "description": "Filter button"

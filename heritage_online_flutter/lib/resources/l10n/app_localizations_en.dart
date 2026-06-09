@@ -321,6 +321,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoveryTimelineSubtitle => 'Browse heritage content by year';
 
   @override
+  String get exploreTopicTimeline => 'Timeline';
+
+  @override
+  String get exploreTopicRelated => 'Related Topics';
+
+  @override
+  String get learningFeaturedItems => 'Featured Items';
+
+  @override
+  String get learningPathSteps => 'Learning Steps';
+
+  @override
+  String get learningRelatedTopics => 'Related Topics';
+
+  @override
   String get filterButton => 'Filter';
 
   @override

@@ -710,6 +710,36 @@ abstract class AppLocalizations {
   /// **'Browse heritage content by year'**
   String get discoveryTimelineSubtitle;
 
+  /// Explore topic detail timeline section title
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get exploreTopicTimeline;
+
+  /// Explore topic detail related topics section title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Topics'**
+  String get exploreTopicRelated;
+
+  /// Learning path featured items section title
+  ///
+  /// In en, this message translates to:
+  /// **'Featured Items'**
+  String get learningFeaturedItems;
+
+  /// Learning path steps section title
+  ///
+  /// In en, this message translates to:
+  /// **'Learning Steps'**
+  String get learningPathSteps;
+
+  /// Learning path related topics section title
+  ///
+  /// In en, this message translates to:
+  /// **'Related Topics'**
+  String get learningRelatedTopics;
+
   /// Filter button
   ///
   /// In en, this message translates to:

@@ -131,11 +131,17 @@ abstract class HeritageRepository {
   /// 获取探索索引
   Future<dynamic> exploreIndex();
 
-  /// 获取探索主题
+  /// 获取探索主题列表
   Future<List<dynamic>> exploreTopics({String? type, int limit = 20});
 
-  /// 获取学习路径
+  /// 获取探索主题详情
+  Future<dynamic> exploreTopic(String type, String key, {int limit = 6});
+
+  /// 获取学习路径列表
   Future<List<dynamic>> learningPaths();
+
+  /// 获取学习路径详情
+  Future<dynamic> learningPathDetail(String id, {int limit = 6});
 
   /// 获取精选合集
   Future<List<dynamic>> featuredCollections();

@@ -315,9 +315,21 @@ class DefaultHeritageRepository implements HeritageRepository {
   }
 
   @override
+  Future<dynamic> exploreTopic(String type, String key, {int limit = 6}) async {
+    final response = await _apiClient.getExploreTopic(type, key, limit: limit);
+    return response.data;
+  }
+
+  @override
   Future<List<dynamic>> learningPaths() async {
     final response = await _apiClient.getLearningPaths();
     return response.data as List<dynamic>;
+  }
+
+  @override
+  Future<dynamic> learningPathDetail(String id, {int limit = 6}) async {
+    final response = await _apiClient.getLearningPathDetail(id, limit: limit);
+    return response.data;
   }
 
   @override

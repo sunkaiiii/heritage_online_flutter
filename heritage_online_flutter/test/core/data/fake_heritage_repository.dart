@@ -272,9 +272,21 @@ class FakeHeritageRepository implements HeritageRepository {
   }
 
   @override
+  Future<dynamic> exploreTopic(String type, String key, {int limit = 6}) async {
+    _checkError();
+    return null;
+  }
+
+  @override
   Future<List<dynamic>> learningPaths() async {
     _checkError();
     return [];
+  }
+
+  @override
+  Future<dynamic> learningPathDetail(String id, {int limit = 6}) async {
+    _checkError();
+    return null;
   }
 
   @override
