@@ -107,4 +107,38 @@ abstract class HeritageRepository {
   /// 通过 InheritorDetailLookup 获取传承人详情
   /// 优先级：inheritorId > sourceId
   Future<InheritorDetailDto> inheritorDetail(InheritorDetailLookup lookup);
+
+  // ==================== 发现页 ====================
+
+  /// 获取探索索引
+  Future<dynamic> exploreIndex();
+
+  /// 获取探索主题
+  Future<List<dynamic>> exploreTopics({String? type, int limit = 20});
+
+  /// 获取学习路径
+  Future<List<dynamic>> learningPaths();
+
+  /// 获取精选合集
+  Future<List<dynamic>> featuredCollections();
+
+  /// 获取地区图谱
+  Future<dynamic> regionAtlas();
+
+  // ==================== 发现增强 ====================
+
+  /// 获取今日发现
+  Future<dynamic> discoveryToday();
+
+  /// 获取趋势内容
+  Future<dynamic> discoveryTrending();
+
+  /// 获取本周精选
+  Future<dynamic> discoveryWeekly();
+
+  /// 偶遇内容
+  Future<dynamic> discoverySerendipity();
+
+  /// 随机内容
+  Future<dynamic> discoveryRandom({String? type});
 }

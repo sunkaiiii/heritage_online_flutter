@@ -214,6 +214,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get readingPathClear => 'Clear Reading Path';
 
   @override
+  String get discoveryTaxonomy => 'Taxonomy';
+
+  @override
+  String get discoveryStories => 'Data Stories';
+
+  @override
+  String get discoverySerendipity => 'Serendipity';
+
+  @override
+  String get discoverySerendipityLoading => 'Exploring…';
+
+  @override
+  String get discoveryToday => 'Today\'s Discovery';
+
+  @override
+  String get discoveryTrending => 'Trending';
+
+  @override
+  String get discoveryWeekly => 'This Week\'s Heritage';
+
+  @override
   String get articleDetailTitle => 'Article Detail';
 
   @override

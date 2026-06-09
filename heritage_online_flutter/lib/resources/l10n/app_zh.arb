@@ -341,6 +341,41 @@
     "description": "清空阅读路径按钮"
   },
 
+  "discoveryTaxonomy": "主题库",
+  "@discoveryTaxonomy": {
+    "description": "发现页主题库入口"
+  },
+
+  "discoveryStories": "数据故事",
+  "@discoveryStories": {
+    "description": "发现页数据故事入口"
+  },
+
+  "discoverySerendipity": "随便看看",
+  "@discoverySerendipity": {
+    "description": "发现页随便看看入口"
+  },
+
+  "discoverySerendipityLoading": "正在探索…",
+  "@discoverySerendipityLoading": {
+    "description": "随便看看按钮加载中文本"
+  },
+
+  "discoveryToday": "今日发现",
+  "@discoveryToday": {
+    "description": "发现页今日发现区块标题"
+  },
+
+  "discoveryTrending": "正在被看见",
+  "@discoveryTrending": {
+    "description": "发现页趋势内容区块标题"
+  },
+
+  "discoveryWeekly": "本周非遗包",
+  "@discoveryWeekly": {
+    "description": "发现页本周精选区块标题"
+  },
+
   "articleDetailTitle": "文章详情",
   "@articleDetailTitle": {
     "description": "文章详情页标题"

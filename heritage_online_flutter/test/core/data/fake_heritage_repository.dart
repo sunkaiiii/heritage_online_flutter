@@ -236,4 +236,64 @@ class FakeHeritageRepository implements HeritageRepository {
 
     throw ArgumentError('Missing inheritor lookup key');
   }
+
+  @override
+  Future<dynamic> exploreIndex() async {
+    _checkError();
+    return null;
+  }
+
+  @override
+  Future<List<dynamic>> exploreTopics({String? type, int limit = 20}) async {
+    _checkError();
+    return [];
+  }
+
+  @override
+  Future<List<dynamic>> learningPaths() async {
+    _checkError();
+    return [];
+  }
+
+  @override
+  Future<List<dynamic>> featuredCollections() async {
+    _checkError();
+    return [];
+  }
+
+  @override
+  Future<dynamic> regionAtlas() async {
+    _checkError();
+    return null;
+  }
+
+  @override
+  Future<dynamic> discoveryToday() async {
+    _checkError();
+    return null;
+  }
+
+  @override
+  Future<dynamic> discoveryTrending() async {
+    _checkError();
+    return null;
+  }
+
+  @override
+  Future<dynamic> discoveryWeekly() async {
+    _checkError();
+    return null;
+  }
+
+  @override
+  Future<dynamic> discoverySerendipity() async {
+    _checkError();
+    return null;
+  }
+
+  @override
+  Future<dynamic> discoveryRandom({String? type}) async {
+    _checkError();
+    return null;
+  }
 }

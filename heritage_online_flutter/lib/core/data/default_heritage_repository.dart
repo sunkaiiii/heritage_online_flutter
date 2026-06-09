@@ -265,4 +265,68 @@ class DefaultHeritageRepository implements HeritageRepository {
 
     throw ArgumentError('Missing inheritor lookup key');
   }
+
+  // ==================== 发现页 ====================
+
+  @override
+  Future<dynamic> exploreIndex() async {
+    final response = await _apiClient.getExploreIndex();
+    return response.data;
+  }
+
+  @override
+  Future<List<dynamic>> exploreTopics({String? type, int limit = 20}) async {
+    final response = await _apiClient.getExploreTopics(type: type, limit: limit);
+    return response.data as List<dynamic>;
+  }
+
+  @override
+  Future<List<dynamic>> learningPaths() async {
+    final response = await _apiClient.getLearningPaths();
+    return response.data as List<dynamic>;
+  }
+
+  @override
+  Future<List<dynamic>> featuredCollections() async {
+    final response = await _apiClient.getFeaturedCollections();
+    return response.data as List<dynamic>;
+  }
+
+  @override
+  Future<dynamic> regionAtlas() async {
+    final response = await _apiClient.getRegionAtlas();
+    return response.data;
+  }
+
+  // ==================== 发现增强 ====================
+
+  @override
+  Future<dynamic> discoveryToday() async {
+    final response = await _apiClient.getDiscoveryToday();
+    return response.data;
+  }
+
+  @override
+  Future<dynamic> discoveryTrending() async {
+    final response = await _apiClient.getDiscoveryTrending();
+    return response.data;
+  }
+
+  @override
+  Future<dynamic> discoveryWeekly() async {
+    final response = await _apiClient.getDiscoveryWeekly();
+    return response.data;
+  }
+
+  @override
+  Future<dynamic> discoverySerendipity() async {
+    final response = await _apiClient.getDiscoverySerendipity();
+    return response.data;
+  }
+
+  @override
+  Future<dynamic> discoveryRandom({String? type}) async {
+    final response = await _apiClient.getDiscoveryRandom(type: type);
+    return response.data;
+  }
 }

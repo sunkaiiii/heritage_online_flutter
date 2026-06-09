@@ -506,6 +506,48 @@ abstract class AppLocalizations {
   /// **'Clear Reading Path'**
   String get readingPathClear;
 
+  /// Discovery page taxonomy entry
+  ///
+  /// In en, this message translates to:
+  /// **'Taxonomy'**
+  String get discoveryTaxonomy;
+
+  /// Discovery page data stories entry
+  ///
+  /// In en, this message translates to:
+  /// **'Data Stories'**
+  String get discoveryStories;
+
+  /// Discovery page serendipity entry
+  ///
+  /// In en, this message translates to:
+  /// **'Serendipity'**
+  String get discoverySerendipity;
+
+  /// Serendipity button loading text
+  ///
+  /// In en, this message translates to:
+  /// **'Exploring…'**
+  String get discoverySerendipityLoading;
+
+  /// Discovery page today section title
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Discovery'**
+  String get discoveryToday;
+
+  /// Discovery page trending section title
+  ///
+  /// In en, this message translates to:
+  /// **'Trending'**
+  String get discoveryTrending;
+
+  /// Discovery page weekly section title
+  ///
+  /// In en, this message translates to:
+  /// **'This Week\'s Heritage'**
+  String get discoveryWeekly;
+
   /// Article detail page title
   ///
   /// In en, this message translates to:

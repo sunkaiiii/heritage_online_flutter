@@ -338,4 +338,33 @@ extension ApiClientExtensions on ApiClient {
     addOptionalParam(params, 'limit', limit);
     return get('api/collections/topic/${pathSegment(type)}/${pathSegment(key)}', queryParameters: params);
   }
+
+  // ==================== 发现增强 ====================
+
+  /// 获取今日发现
+  Future<Response> getDiscoveryToday() {
+    return get('api/discovery/today');
+  }
+
+  /// 获取趋势内容
+  Future<Response> getDiscoveryTrending() {
+    return get('api/discovery/trending');
+  }
+
+  /// 获取本周精选
+  Future<Response> getDiscoveryWeekly() {
+    return get('api/discovery/weekly');
+  }
+
+  /// 偶遇内容
+  Future<Response> getDiscoverySerendipity() {
+    return get('api/discovery/serendipity');
+  }
+
+  /// 随机内容
+  Future<Response> getDiscoveryRandom({String? type}) {
+    final params = <String, dynamic>{};
+    addOptionalParam(params, 'type', type);
+    return get('api/discovery/random', queryParameters: params);
+  }
 }

@@ -341,6 +341,41 @@
     "description": "Clear reading path button"
   },
 
+  "discoveryTaxonomy": "Taxonomy",
+  "@discoveryTaxonomy": {
+    "description": "Discovery page taxonomy entry"
+  },
+
+  "discoveryStories": "Data Stories",
+  "@discoveryStories": {
+    "description": "Discovery page data stories entry"
+  },
+
+  "discoverySerendipity": "Serendipity",
+  "@discoverySerendipity": {
+    "description": "Discovery page serendipity entry"
+  },
+
+  "discoverySerendipityLoading": "Exploring…",
+  "@discoverySerendipityLoading": {
+    "description": "Serendipity button loading text"
+  },
+
+  "discoveryToday": "Today's Discovery",
+  "@discoveryToday": {
+    "description": "Discovery page today section title"
+  },
+
+  "discoveryTrending": "Trending",
+  "@discoveryTrending": {
+    "description": "Discovery page trending section title"
+  },
+
+  "discoveryWeekly": "This Week's Heritage",
+  "@discoveryWeekly": {
+    "description": "Discovery page weekly section title"
+  },
+
   "articleDetailTitle": "Article Detail",
   "@articleDetailTitle": {
     "description": "Article detail page title"

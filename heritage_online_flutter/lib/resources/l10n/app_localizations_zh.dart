@@ -213,6 +213,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get readingPathClear => '清空阅读路径';
 
   @override
+  String get discoveryTaxonomy => '主题库';
+
+  @override
+  String get discoveryStories => '数据故事';
+
+  @override
+  String get discoverySerendipity => '随便看看';
+
+  @override
+  String get discoverySerendipityLoading => '正在探索…';
+
+  @override
+  String get discoveryToday => '今日发现';
+
+  @override
+  String get discoveryTrending => '正在被看见';
+
+  @override
+  String get discoveryWeekly => '本周非遗包';
+
+  @override
   String get articleDetailTitle => '文章详情';
 
   @override
