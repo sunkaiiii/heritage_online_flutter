@@ -266,6 +266,40 @@ class DefaultHeritageRepository implements HeritageRepository {
     throw ArgumentError('Missing inheritor lookup key');
   }
 
+  // ==================== 搜索 ====================
+
+  @override
+  Future<dynamic> searchV2({
+    String? keywords,
+    List<String>? types,
+    int? page,
+    int? pageSize,
+    String? region,
+    String? category,
+    int? year,
+    String? kind,
+    bool? hasImage,
+  }) async {
+    final response = await _apiClient.searchV2(
+      query: keywords,
+      types: types,
+      page: page,
+      pageSize: pageSize,
+      region: region,
+      category: category,
+      year: year,
+      kind: kind,
+      hasImage: hasImage,
+    );
+    return response.data;
+  }
+
+  @override
+  Future<List<dynamic>> searchSuggestions(String prefix, {int limit = 10}) async {
+    final response = await _apiClient.getSearchSuggestions(prefix, limit: limit);
+    return response.data as List<dynamic>;
+  }
+
   // ==================== 发现页 ====================
 
   @override

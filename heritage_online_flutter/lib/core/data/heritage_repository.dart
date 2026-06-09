@@ -108,6 +108,24 @@ abstract class HeritageRepository {
   /// 优先级：inheritorId > sourceId
   Future<InheritorDetailDto> inheritorDetail(InheritorDetailLookup lookup);
 
+  // ==================== 搜索 ====================
+
+  /// 搜索 v2
+  Future<dynamic> searchV2({
+    String? keywords,
+    List<String>? types,
+    int? page,
+    int? pageSize,
+    String? region,
+    String? category,
+    int? year,
+    String? kind,
+    bool? hasImage,
+  });
+
+  /// 获取搜索建议
+  Future<List<dynamic>> searchSuggestions(String prefix, {int limit = 10});
+
   // ==================== 发现页 ====================
 
   /// 获取探索索引

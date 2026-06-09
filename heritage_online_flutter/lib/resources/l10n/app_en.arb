@@ -356,6 +356,56 @@
     "description": "Discovery page serendipity entry"
   },
 
+  "searchEmptyMessage": "No results found",
+  "@searchEmptyMessage": {
+    "description": "Search results empty message"
+  },
+
+  "searchLabel": "Search",
+  "@searchLabel": {
+    "description": "Search button text"
+  },
+
+  "searchPlaceholder": "Search heritage content",
+  "@searchPlaceholder": {
+    "description": "Search input placeholder"
+  },
+
+  "searchResultCount": "{count} result(s)",
+  "@searchResultCount": {
+    "description": "Search result count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchFilter": "Filter",
+  "@searchFilter": {
+    "description": "Search filter button"
+  },
+
+  "searchFilterTitle": "Search Filters",
+  "@searchFilterTitle": {
+    "description": "Search filter sheet title"
+  },
+
+  "searchFilterClearAll": "Clear all filters",
+  "@searchFilterClearAll": {
+    "description": "Clear all search filters button"
+  },
+
+  "searchLoadMore": "Load more",
+  "@searchLoadMore": {
+    "description": "Load more button"
+  },
+
+  "searchTypeAny": "All",
+  "@searchTypeAny": {
+    "description": "Search type: all"
+  },
+
   "discoverySerendipityLoading": "Exploring…",
   "@discoverySerendipityLoading": {
     "description": "Serendipity button loading text"
@@ -707,6 +757,26 @@
   "filterPlaceholderListType": "e.g. representative",
   "@filterPlaceholderListType": {
     "description": "List type filter placeholder"
+  },
+
+  "filterFieldKind": "Kind",
+  "@filterFieldKind": {
+    "description": "Kind filter field label"
+  },
+
+  "filterFieldHasImage": "Has image",
+  "@filterFieldHasImage": {
+    "description": "Has image filter field label"
+  },
+
+  "filterHasImageYes": "Yes",
+  "@filterHasImageYes": {
+    "description": "Has image filter: yes"
+  },
+
+  "filterHasImageNo": "No",
+  "@filterHasImageNo": {
+    "description": "Has image filter: no"
   },
 
   "directoryDetailGallery": "Gallery",

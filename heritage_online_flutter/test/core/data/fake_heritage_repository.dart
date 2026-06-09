@@ -238,6 +238,28 @@ class FakeHeritageRepository implements HeritageRepository {
   }
 
   @override
+  Future<dynamic> searchV2({
+    String? keywords,
+    List<String>? types,
+    int? page,
+    int? pageSize,
+    String? region,
+    String? category,
+    int? year,
+    String? kind,
+    bool? hasImage,
+  }) async {
+    _checkError();
+    return {'items': [], 'hasMore': false, 'total': 0};
+  }
+
+  @override
+  Future<List<dynamic>> searchSuggestions(String prefix, {int limit = 10}) async {
+    _checkError();
+    return [];
+  }
+
+  @override
   Future<dynamic> exploreIndex() async {
     _checkError();
     return null;

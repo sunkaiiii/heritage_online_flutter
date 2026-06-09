@@ -223,6 +223,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverySerendipity => 'Serendipity';
 
   @override
+  String get searchEmptyMessage => 'No results found';
+
+  @override
+  String get searchLabel => 'Search';
+
+  @override
+  String get searchPlaceholder => 'Search heritage content';
+
+  @override
+  String searchResultCount(int count) {
+    return '$count result(s)';
+  }
+
+  @override
+  String get searchFilter => 'Filter';
+
+  @override
+  String get searchFilterTitle => 'Search Filters';
+
+  @override
+  String get searchFilterClearAll => 'Clear all filters';
+
+  @override
+  String get searchLoadMore => 'Load more';
+
+  @override
+  String get searchTypeAny => 'All';
+
+  @override
   String get discoverySerendipityLoading => 'Exploring…';
 
   @override
@@ -424,6 +453,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterPlaceholderListType => 'e.g. representative';
+
+  @override
+  String get filterFieldKind => 'Kind';
+
+  @override
+  String get filterFieldHasImage => 'Has image';
+
+  @override
+  String get filterHasImageYes => 'Yes';
+
+  @override
+  String get filterHasImageNo => 'No';
 
   @override
   String get directoryDetailGallery => 'Gallery';

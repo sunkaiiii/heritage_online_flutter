@@ -356,6 +356,56 @@
     "description": "发现页随便看看入口"
   },
 
+  "searchEmptyMessage": "未找到相关结果",
+  "@searchEmptyMessage": {
+    "description": "搜索结果为空消息"
+  },
+
+  "searchLabel": "搜索",
+  "@searchLabel": {
+    "description": "搜索按钮文案"
+  },
+
+  "searchPlaceholder": "搜索非遗内容",
+  "@searchPlaceholder": {
+    "description": "搜索输入框占位文本"
+  },
+
+  "searchResultCount": "共 {count} 条结果",
+  "@searchResultCount": {
+    "description": "搜索结果数量",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchFilter": "筛选",
+  "@searchFilter": {
+    "description": "搜索筛选按钮"
+  },
+
+  "searchFilterTitle": "搜索筛选",
+  "@searchFilterTitle": {
+    "description": "搜索筛选弹窗标题"
+  },
+
+  "searchFilterClearAll": "清空筛选",
+  "@searchFilterClearAll": {
+    "description": "清空搜索筛选按钮"
+  },
+
+  "searchLoadMore": "加载更多",
+  "@searchLoadMore": {
+    "description": "加载更多按钮"
+  },
+
+  "searchTypeAny": "全部",
+  "@searchTypeAny": {
+    "description": "搜索类型：全部"
+  },
+
   "discoverySerendipityLoading": "正在探索…",
   "@discoverySerendipityLoading": {
     "description": "随便看看按钮加载中文本"
@@ -707,6 +757,26 @@
   "filterPlaceholderListType": "例如 representative",
   "@filterPlaceholderListType": {
     "description": "入选类型筛选占位文案"
+  },
+
+  "filterFieldKind": "种类",
+  "@filterFieldKind": {
+    "description": "种类筛选字段标签"
+  },
+
+  "filterFieldHasImage": "有图",
+  "@filterFieldHasImage": {
+    "description": "有图筛选字段标签"
+  },
+
+  "filterHasImageYes": "有图",
+  "@filterHasImageYes": {
+    "description": "有图筛选：是"
+  },
+
+  "filterHasImageNo": "无图",
+  "@filterHasImageNo": {
+    "description": "有图筛选：否"
   },
 
   "directoryDetailGallery": "图库",

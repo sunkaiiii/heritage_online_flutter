@@ -222,6 +222,35 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverySerendipity => '随便看看';
 
   @override
+  String get searchEmptyMessage => '未找到相关结果';
+
+  @override
+  String get searchLabel => '搜索';
+
+  @override
+  String get searchPlaceholder => '搜索非遗内容';
+
+  @override
+  String searchResultCount(int count) {
+    return '共 $count 条结果';
+  }
+
+  @override
+  String get searchFilter => '筛选';
+
+  @override
+  String get searchFilterTitle => '搜索筛选';
+
+  @override
+  String get searchFilterClearAll => '清空筛选';
+
+  @override
+  String get searchLoadMore => '加载更多';
+
+  @override
+  String get searchTypeAny => '全部';
+
+  @override
   String get discoverySerendipityLoading => '正在探索…';
 
   @override
@@ -419,6 +448,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get filterPlaceholderListType => '例如 representative';
+
+  @override
+  String get filterFieldKind => '种类';
+
+  @override
+  String get filterFieldHasImage => '有图';
+
+  @override
+  String get filterHasImageYes => '有图';
+
+  @override
+  String get filterHasImageNo => '无图';
 
   @override
   String get directoryDetailGallery => '图库';

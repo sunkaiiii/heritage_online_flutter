@@ -524,6 +524,60 @@ abstract class AppLocalizations {
   /// **'Serendipity'**
   String get discoverySerendipity;
 
+  /// Search results empty message
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get searchEmptyMessage;
+
+  /// Search button text
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchLabel;
+
+  /// Search input placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Search heritage content'**
+  String get searchPlaceholder;
+
+  /// Search result count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} result(s)'**
+  String searchResultCount(int count);
+
+  /// Search filter button
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get searchFilter;
+
+  /// Search filter sheet title
+  ///
+  /// In en, this message translates to:
+  /// **'Search Filters'**
+  String get searchFilterTitle;
+
+  /// Clear all search filters button
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all filters'**
+  String get searchFilterClearAll;
+
+  /// Load more button
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get searchLoadMore;
+
+  /// Search type: all
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get searchTypeAny;
+
   /// Serendipity button loading text
   ///
   /// In en, this message translates to:
@@ -901,6 +955,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'e.g. representative'**
   String get filterPlaceholderListType;
+
+  /// Kind filter field label
+  ///
+  /// In en, this message translates to:
+  /// **'Kind'**
+  String get filterFieldKind;
+
+  /// Has image filter field label
+  ///
+  /// In en, this message translates to:
+  /// **'Has image'**
+  String get filterFieldHasImage;
+
+  /// Has image filter: yes
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get filterHasImageYes;
+
+  /// Has image filter: no
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get filterHasImageNo;
 
   /// Directory detail gallery section title
   ///
