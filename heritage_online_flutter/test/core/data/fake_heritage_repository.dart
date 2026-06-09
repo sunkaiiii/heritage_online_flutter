@@ -3,6 +3,7 @@ import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 /// Fake Heritage Repository 用于测试
 /// 可以替换真实实现，方便单元测试
@@ -329,5 +330,35 @@ class FakeHeritageRepository implements HeritageRepository {
   Future<dynamic> discoveryRandom({String? type}) async {
     _checkError();
     return null;
+  }
+
+  // ==================== 时间线 ====================
+
+  /// 模拟时间线年份数据
+  List<TimelineYearBucketDto> mockTimelineYears = [];
+
+  /// 模拟时间线响应
+  TimelineV2ResponseDto? mockTimelineResponse;
+
+  @override
+  Future<List<TimelineYearBucketDto>> timelineYears() async {
+    _checkError();
+    return mockTimelineYears;
+  }
+
+  @override
+  Future<TimelineV2ResponseDto> timelineV2({
+    int? year,
+    List<String>? types,
+    int? page,
+    int? pageSize,
+    String? category,
+    String? region,
+    String? kind,
+    bool? hasImage,
+  }) async {
+    _checkError();
+    if (mockTimelineResponse != null) return mockTimelineResponse!;
+    return const TimelineV2ResponseDto();
   }
 }

@@ -528,4 +528,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get factLabelRepresentativeProject => 'Representative Project';
+
+  @override
+  String get timelineSelectYear => 'Select a year to browse';
+
+  @override
+  String get timelineLoadMore => 'Load more';
+
+  @override
+  String get timelineTypeAll => 'All';
+
+  @override
+  String timelineYearStats(
+    int total,
+    int articles,
+    int directories,
+    int inheritors,
+  ) {
+    return '$total items · $articles articles · $directories directory · $inheritors inheritors';
+  }
+
+  @override
+  String get timelineNoItems => 'No content for this year';
 }

@@ -4,6 +4,7 @@ import 'package:heritage_online_flutter/core/network/api_client.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 /// 默认 Heritage Repository 实现
 /// UI 只依赖 Repository，不直接依赖 API client
@@ -374,5 +375,40 @@ class DefaultHeritageRepository implements HeritageRepository {
   Future<dynamic> discoveryRandom({String? type}) async {
     final response = await _apiClient.getDiscoveryRandom(type: type);
     return response.data;
+  }
+
+  // ==================== 时间线 ====================
+
+  @override
+  Future<List<TimelineYearBucketDto>> timelineYears() async {
+    final response = await _apiClient.getTimelineYears();
+    final data = _toList(response.data);
+    return data
+        .map((json) => TimelineYearBucketDto.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<TimelineV2ResponseDto> timelineV2({
+    int? year,
+    List<String>? types,
+    int? page,
+    int? pageSize,
+    String? category,
+    String? region,
+    String? kind,
+    bool? hasImage,
+  }) async {
+    final response = await _apiClient.getTimelineV2(
+      year: year,
+      types: types,
+      page: page,
+      pageSize: pageSize,
+      category: category,
+      region: region,
+      kind: kind,
+      hasImage: hasImage,
+    );
+    return TimelineV2ResponseDto.fromJson(_toMap(response.data));
   }
 }

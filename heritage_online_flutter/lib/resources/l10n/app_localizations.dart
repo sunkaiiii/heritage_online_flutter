@@ -1105,6 +1105,41 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Representative Project'**
   String get factLabelRepresentativeProject;
+
+  /// Timeline select year prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Select a year to browse'**
+  String get timelineSelectYear;
+
+  /// Timeline load more button
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get timelineLoadMore;
+
+  /// Timeline type filter: all
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get timelineTypeAll;
+
+  /// Timeline year bucket stats
+  ///
+  /// In en, this message translates to:
+  /// **'{total} items · {articles} articles · {directories} directory · {inheritors} inheritors'**
+  String timelineYearStats(
+    int total,
+    int articles,
+    int directories,
+    int inheritors,
+  );
+
+  /// Timeline empty items message
+  ///
+  /// In en, this message translates to:
+  /// **'No content for this year'**
+  String get timelineNoItems;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
 import 'models/detail_lookup.dart';
 
@@ -165,4 +166,21 @@ abstract class HeritageRepository {
 
   /// 随机内容
   Future<dynamic> discoveryRandom({String? type});
+
+  // ==================== 时间线 ====================
+
+  /// 获取时间线年份列表
+  Future<List<TimelineYearBucketDto>> timelineYears();
+
+  /// 获取时间线 v2 内容
+  Future<TimelineV2ResponseDto> timelineV2({
+    int? year,
+    List<String>? types,
+    int? page,
+    int? pageSize,
+    String? category,
+    String? region,
+    String? kind,
+    bool? hasImage,
+  });
 }

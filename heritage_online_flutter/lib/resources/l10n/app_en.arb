@@ -882,5 +882,36 @@
   "factLabelRepresentativeProject": "Representative Project",
   "@factLabelRepresentativeProject": {
     "description": "FactCard representative project label"
+  },
+
+  "timelineSelectYear": "Select a year to browse",
+  "@timelineSelectYear": {
+    "description": "Timeline select year prompt"
+  },
+
+  "timelineLoadMore": "Load more",
+  "@timelineLoadMore": {
+    "description": "Timeline load more button"
+  },
+
+  "timelineTypeAll": "All",
+  "@timelineTypeAll": {
+    "description": "Timeline type filter: all"
+  },
+
+  "timelineYearStats": "{total} items · {articles} articles · {directories} directory · {inheritors} inheritors",
+  "@timelineYearStats": {
+    "description": "Timeline year bucket stats",
+    "placeholders": {
+      "total": { "type": "int" },
+      "articles": { "type": "int" },
+      "directories": { "type": "int" },
+      "inheritors": { "type": "int" }
+    }
+  },
+
+  "timelineNoItems": "No content for this year",
+  "@timelineNoItems": {
+    "description": "Timeline empty items message"
   }
 }

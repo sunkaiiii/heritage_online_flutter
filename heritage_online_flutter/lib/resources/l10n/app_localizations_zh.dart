@@ -523,4 +523,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get factLabelRepresentativeProject => '代表性项目';
+
+  @override
+  String get timelineSelectYear => '请选择年份浏览';
+
+  @override
+  String get timelineLoadMore => '加载更多';
+
+  @override
+  String get timelineTypeAll => '全部';
+
+  @override
+  String timelineYearStats(
+    int total,
+    int articles,
+    int directories,
+    int inheritors,
+  ) {
+    return '共 $total 项 · $articles 篇文章 · $directories 个名录 · $inheritors 位传承人';
+  }
+
+  @override
+  String get timelineNoItems => '该年份暂无内容';
 }

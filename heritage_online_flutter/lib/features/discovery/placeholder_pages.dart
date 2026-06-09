@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/features/discovery/timeline/timeline_page.dart';
 import 'package:heritage_online_flutter/features/explore/explore_topic_page.dart';
 import 'package:heritage_online_flutter/features/learning/learning_path_page.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
@@ -276,18 +277,14 @@ class RegionAtlasPage extends StatelessWidget {
   }
 }
 
-/// 时间线页占位
+/// 时间线页 — 使用新的 TimelineDetailPage 实现
 class TimelinePage extends StatelessWidget {
   const TimelinePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.discoveryTimeline)),
-      body: PageBackground(
-        child: Center(child: Text(l10n.commonEmpty)),
-      ),
+    return TimelineDetailPage(
+      onBack: () => Navigator.of(context).pop(),
     );
   }
 }

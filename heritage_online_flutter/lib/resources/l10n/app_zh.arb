@@ -882,5 +882,36 @@
   "factLabelRepresentativeProject": "代表性项目",
   "@factLabelRepresentativeProject": {
     "description": "FactCard 代表性项目标签"
+  },
+
+  "timelineSelectYear": "请选择年份浏览",
+  "@timelineSelectYear": {
+    "description": "时间线选择年份提示"
+  },
+
+  "timelineLoadMore": "加载更多",
+  "@timelineLoadMore": {
+    "description": "时间线加载更多按钮"
+  },
+
+  "timelineTypeAll": "全部",
+  "@timelineTypeAll": {
+    "description": "时间线类型筛选：全部"
+  },
+
+  "timelineYearStats": "共 {total} 项 · {articles} 篇文章 · {directories} 个名录 · {inheritors} 位传承人",
+  "@timelineYearStats": {
+    "description": "时间线年份桶统计",
+    "placeholders": {
+      "total": { "type": "int" },
+      "articles": { "type": "int" },
+      "directories": { "type": "int" },
+      "inheritors": { "type": "int" }
+    }
+  },
+
+  "timelineNoItems": "该年份暂无内容",
+  "@timelineNoItems": {
+    "description": "时间线无条目消息"
   }
 }
