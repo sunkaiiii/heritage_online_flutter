@@ -1,7 +1,10 @@
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
@@ -49,6 +52,12 @@ abstract class HeritageRepository {
   /// 优先级：articleId > sourceId > sourceUrl
   Future<ArticleDetailDto> articleDetail(ArticleDetailLookup lookup);
 
+  /// 获取文章 Context
+  Future<DetailContextDto> articleContext(String id);
+
+  /// 获取文章 Digest
+  Future<ContentDigestDto> articleDigest(String id);
+
   // ==================== 名录 ====================
 
   /// 获取名录列表
@@ -88,6 +97,12 @@ abstract class HeritageRepository {
     int limit = 50,
   });
 
+  /// 获取名录 Context
+  Future<DetailContextDto> directoryItemContext(String id);
+
+  /// 获取名录 Digest
+  Future<ContentDigestDto> directoryItemDigest(String id);
+
   // ==================== 传承人 ====================
 
   /// 获取传承人列表
@@ -110,6 +125,21 @@ abstract class HeritageRepository {
   /// 通过 InheritorDetailLookup 获取传承人详情
   /// 优先级：inheritorId > sourceId
   Future<InheritorDetailDto> inheritorDetail(InheritorDetailLookup lookup);
+
+  /// 获取传承人 Context
+  Future<DetailContextDto> inheritorContext(String id);
+
+  /// 获取传承人 Digest
+  Future<ContentDigestDto> inheritorDigest(String id);
+
+  // ==================== 推荐 ====================
+
+  /// 获取综合推荐
+  Future<BlendedRecommendationResponseDto> blendedRecommendations(
+    String type,
+    String id, {
+    int limit = 10,
+  });
 
   // ==================== 搜索 ====================
 

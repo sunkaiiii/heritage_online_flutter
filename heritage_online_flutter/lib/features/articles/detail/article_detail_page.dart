@@ -6,6 +6,7 @@ import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/features/articles/detail/article_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/articles/detail/article_detail_view_model.dart';
+import 'package:heritage_online_flutter/features/common/detail_explore_view_model.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/preview/image_preview_overlay.dart';
@@ -162,6 +163,11 @@ class ArticleDetailPage extends ConsumerWidget {
                       (ref) => _buildRelatedArticle(context, ref),
                     ),
                   ],
+
+                  // 底部探索区（digest / context / blended）
+                  if (article.id != null && article.id!.isNotEmpty)
+                    _buildExploreSection(
+                        context, ref, article.id!, 'article'),
                 ],
               ),
             ),
@@ -380,5 +386,30 @@ class ArticleDetailPage extends ConsumerWidget {
         );
       }
     }
+  }
+
+  Widget _buildExploreSection(
+    BuildContext context,
+    WidgetRef ref,
+    String contentId,
+    String contentType,
+  ) {
+    final exploreParams = DetailExploreParams(
+      id: contentId,
+      contentType: contentType,
+    );
+    final exploreState =
+        ref.watch(detailExploreViewModelProvider(exploreParams));
+    final exploreVM =
+        ref.read(detailExploreViewModelProvider(exploreParams).notifier);
+
+    return DetailExploreSection(
+      state: exploreState,
+      contentType: contentType,
+      contentId: contentId,
+      onDigestRetry: () => exploreVM.retryDigest(),
+      onContextRetry: () => exploreVM.retryContext(),
+      onBlendedRetry: () => exploreVM.retryBlended(),
+    );
   }
 }

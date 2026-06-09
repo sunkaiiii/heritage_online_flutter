@@ -1,4 +1,5 @@
 export 'content_card.dart';
+export 'detail_explore_section.dart';
 export 'empty_state.dart';
 export 'error_retry_row.dart';
 export 'fact_card.dart';

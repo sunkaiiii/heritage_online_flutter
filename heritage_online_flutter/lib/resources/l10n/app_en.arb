@@ -979,5 +979,68 @@
   "collectionEmptyItems": "This collection is empty",
   "@collectionEmptyItems": {
     "description": "Collection empty items message"
+  },
+
+  "exploreSectionTitle": "Explore",
+  "@exploreSectionTitle": {
+    "description": "Detail page explore section title"
+  },
+
+  "digestTitle": "Quick Read",
+  "@digestTitle": {
+    "description": "Content digest section title"
+  },
+
+  "digestReadingTime": "{minutes} min read",
+  "@digestReadingTime": {
+    "description": "Digest reading time",
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+
+  "digestHighlights": "Highlights",
+  "@digestHighlights": {
+    "description": "Digest highlights section"
+  },
+
+  "digestKeyFacts": "Key Facts",
+  "@digestKeyFacts": {
+    "description": "Digest key facts section"
+  },
+
+  "blendedRecommendationsTitle": "Recommended for You",
+  "@blendedRecommendationsTitle": {
+    "description": "Blended recommendations section title"
+  },
+
+  "contextRelatedTitle": "Related",
+  "@contextRelatedTitle": {
+    "description": "Context related items section title"
+  },
+
+  "contextRecommendationsTitle": "Recommendations",
+  "@contextRecommendationsTitle": {
+    "description": "Context recommendations section title"
+  },
+
+  "contextSemanticTitle": "Semantic Recommendations",
+  "@contextSemanticTitle": {
+    "description": "Context semantic recommendations section title"
+  },
+
+  "contextCollectionsTitle": "Collections",
+  "@contextCollectionsTitle": {
+    "description": "Context collections section title"
+  },
+
+  "contextTopicsTitle": "Explore Topics",
+  "@contextTopicsTitle": {
+    "description": "Context explore topics section title"
+  },
+
+  "contextGraphTitle": "Relationships",
+  "@contextGraphTitle": {
+    "description": "Context graph relationships section title"
   }
 }

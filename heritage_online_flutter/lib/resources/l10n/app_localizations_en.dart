@@ -590,4 +590,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get collectionEmptyItems => 'This collection is empty';
+
+  @override
+  String get exploreSectionTitle => 'Explore';
+
+  @override
+  String get digestTitle => 'Quick Read';
+
+  @override
+  String digestReadingTime(int minutes) {
+    return '$minutes min read';
+  }
+
+  @override
+  String get digestHighlights => 'Highlights';
+
+  @override
+  String get digestKeyFacts => 'Key Facts';
+
+  @override
+  String get blendedRecommendationsTitle => 'Recommended for You';
+
+  @override
+  String get contextRelatedTitle => 'Related';
+
+  @override
+  String get contextRecommendationsTitle => 'Recommendations';
+
+  @override
+  String get contextSemanticTitle => 'Semantic Recommendations';
+
+  @override
+  String get contextCollectionsTitle => 'Collections';
+
+  @override
+  String get contextTopicsTitle => 'Explore Topics';
+
+  @override
+  String get contextGraphTitle => 'Relationships';
 }

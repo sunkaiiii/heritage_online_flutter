@@ -979,5 +979,68 @@
   "collectionEmptyItems": "该合集暂无内容",
   "@collectionEmptyItems": {
     "description": "合集空内容消息"
+  },
+
+  "exploreSectionTitle": "探索",
+  "@exploreSectionTitle": {
+    "description": "详情页探索区标题"
+  },
+
+  "digestTitle": "速览",
+  "@digestTitle": {
+    "description": "内容速览区块标题"
+  },
+
+  "digestReadingTime": "约 {minutes} 分钟阅读",
+  "@digestReadingTime": {
+    "description": "速览阅读时间",
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+
+  "digestHighlights": "要点",
+  "@digestHighlights": {
+    "description": "速览要点区块"
+  },
+
+  "digestKeyFacts": "关键信息",
+  "@digestKeyFacts": {
+    "description": "速览关键信息区块"
+  },
+
+  "blendedRecommendationsTitle": "为你推荐",
+  "@blendedRecommendationsTitle": {
+    "description": "综合推荐区块标题"
+  },
+
+  "contextRelatedTitle": "相关",
+  "@contextRelatedTitle": {
+    "description": "Context 相关内容区块标题"
+  },
+
+  "contextRecommendationsTitle": "推荐",
+  "@contextRecommendationsTitle": {
+    "description": "Context 推荐区块标题"
+  },
+
+  "contextSemanticTitle": "语义推荐",
+  "@contextSemanticTitle": {
+    "description": "Context 语义推荐区块标题"
+  },
+
+  "contextCollectionsTitle": "合集",
+  "@contextCollectionsTitle": {
+    "description": "Context 合集区块标题"
+  },
+
+  "contextTopicsTitle": "探索主题",
+  "@contextTopicsTitle": {
+    "description": "Context 探索主题区块标题"
+  },
+
+  "contextGraphTitle": "关系线索",
+  "@contextGraphTitle": {
+    "description": "Context 关系线索区块标题"
   }
 }

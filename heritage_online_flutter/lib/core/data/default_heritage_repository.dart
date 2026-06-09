@@ -4,7 +4,10 @@ import 'package:heritage_online_flutter/core/network/api_client.dart';
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
@@ -118,6 +121,18 @@ class DefaultHeritageRepository implements HeritageRepository {
     throw ArgumentError('Missing article lookup key');
   }
 
+  @override
+  Future<DetailContextDto> articleContext(String id) async {
+    final response = await _apiClient.getArticleContext(id);
+    return DetailContextDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<ContentDigestDto> articleDigest(String id) async {
+    final response = await _apiClient.getArticleDigest(id);
+    return ContentDigestDto.fromJson(_toMap(response.data));
+  }
+
   // ==================== 名录 ====================
 
   @override
@@ -211,6 +226,18 @@ class DefaultHeritageRepository implements HeritageRepository {
     return DirectoryStatisticDimensionDto.fromJson(_toMap(response.data));
   }
 
+  @override
+  Future<DetailContextDto> directoryItemContext(String id) async {
+    final response = await _apiClient.getDirectoryItemContext(id);
+    return DetailContextDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<ContentDigestDto> directoryItemDigest(String id) async {
+    final response = await _apiClient.getDirectoryItemDigest(id);
+    return ContentDigestDto.fromJson(_toMap(response.data));
+  }
+
   // ==================== 传承人 ====================
 
   @override
@@ -267,6 +294,34 @@ class DefaultHeritageRepository implements HeritageRepository {
     }
 
     throw ArgumentError('Missing inheritor lookup key');
+  }
+
+  @override
+  Future<DetailContextDto> inheritorContext(String id) async {
+    final response = await _apiClient.getInheritorContext(id);
+    return DetailContextDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<ContentDigestDto> inheritorDigest(String id) async {
+    final response = await _apiClient.getInheritorDigest(id);
+    return ContentDigestDto.fromJson(_toMap(response.data));
+  }
+
+  // ==================== 推荐 ====================
+
+  @override
+  Future<BlendedRecommendationResponseDto> blendedRecommendations(
+    String type,
+    String id, {
+    int limit = 10,
+  }) async {
+    final response = await _apiClient.getBlendedRecommendations(
+      type,
+      id,
+      limit: limit,
+    );
+    return BlendedRecommendationResponseDto.fromJson(_toMap(response.data));
   }
 
   // ==================== 搜索 ====================

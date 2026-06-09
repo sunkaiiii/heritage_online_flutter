@@ -6,6 +6,7 @@ import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_view_model.dart';
+import 'package:heritage_online_flutter/features/common/detail_explore_view_model.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/preview/image_preview_overlay.dart';
@@ -160,6 +161,11 @@ class InheritorDetailPage extends ConsumerWidget {
                       (ref) => _buildRelatedInheritor(context, ref, l10n),
                     ),
                   ],
+
+                  // 底部探索区
+                  if (item.id != null && item.id!.isNotEmpty)
+                    _buildExploreSection(
+                        context, ref, item.id!, 'inheritor'),
                 ],
               ),
             ),
@@ -353,6 +359,31 @@ class InheritorDetailPage extends ConsumerWidget {
           }
         },
       ),
+    );
+  }
+
+  Widget _buildExploreSection(
+    BuildContext context,
+    WidgetRef ref,
+    String contentId,
+    String contentType,
+  ) {
+    final exploreParams = DetailExploreParams(
+      id: contentId,
+      contentType: contentType,
+    );
+    final exploreState =
+        ref.watch(detailExploreViewModelProvider(exploreParams));
+    final exploreVM =
+        ref.read(detailExploreViewModelProvider(exploreParams).notifier);
+
+    return DetailExploreSection(
+      state: exploreState,
+      contentType: contentType,
+      contentId: contentId,
+      onDigestRetry: () => exploreVM.retryDigest(),
+      onContextRetry: () => exploreVM.retryContext(),
+      onBlendedRetry: () => exploreVM.retryBlended(),
     );
   }
 }

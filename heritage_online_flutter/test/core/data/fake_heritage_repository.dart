@@ -3,7 +3,10 @@ import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 
@@ -396,5 +399,69 @@ class FakeHeritageRepository implements HeritageRepository {
     _checkError();
     if (mockTimelineResponse != null) return mockTimelineResponse!;
     return const TimelineV2ResponseDto();
+  }
+
+  // ==================== Context / Digest / Blended ====================
+
+  /// 模拟 Context 响应
+  DetailContextDto? mockContext;
+
+  /// 模拟 Digest 响应
+  ContentDigestDto? mockDigest;
+
+  /// 模拟综合推荐响应
+  BlendedRecommendationResponseDto? mockBlendedRecommendations;
+
+  @override
+  Future<DetailContextDto> articleContext(String id) async {
+    _checkError();
+    if (mockContext != null) return mockContext!;
+    return const DetailContextDto();
+  }
+
+  @override
+  Future<ContentDigestDto> articleDigest(String id) async {
+    _checkError();
+    if (mockDigest != null) return mockDigest!;
+    return const ContentDigestDto();
+  }
+
+  @override
+  Future<DetailContextDto> directoryItemContext(String id) async {
+    _checkError();
+    if (mockContext != null) return mockContext!;
+    return const DetailContextDto();
+  }
+
+  @override
+  Future<ContentDigestDto> directoryItemDigest(String id) async {
+    _checkError();
+    if (mockDigest != null) return mockDigest!;
+    return const ContentDigestDto();
+  }
+
+  @override
+  Future<DetailContextDto> inheritorContext(String id) async {
+    _checkError();
+    if (mockContext != null) return mockContext!;
+    return const DetailContextDto();
+  }
+
+  @override
+  Future<ContentDigestDto> inheritorDigest(String id) async {
+    _checkError();
+    if (mockDigest != null) return mockDigest!;
+    return const ContentDigestDto();
+  }
+
+  @override
+  Future<BlendedRecommendationResponseDto> blendedRecommendations(
+    String type,
+    String id, {
+    int limit = 10,
+  }) async {
+    _checkError();
+    if (mockBlendedRecommendations != null) return mockBlendedRecommendations!;
+    return const BlendedRecommendationResponseDto();
   }
 }

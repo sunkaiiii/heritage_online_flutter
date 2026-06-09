@@ -585,4 +585,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get collectionEmptyItems => '该合集暂无内容';
+
+  @override
+  String get exploreSectionTitle => '探索';
+
+  @override
+  String get digestTitle => '速览';
+
+  @override
+  String digestReadingTime(int minutes) {
+    return '约 $minutes 分钟阅读';
+  }
+
+  @override
+  String get digestHighlights => '要点';
+
+  @override
+  String get digestKeyFacts => '关键信息';
+
+  @override
+  String get blendedRecommendationsTitle => '为你推荐';
+
+  @override
+  String get contextRelatedTitle => '相关';
+
+  @override
+  String get contextRecommendationsTitle => '推荐';
+
+  @override
+  String get contextSemanticTitle => '语义推荐';
+
+  @override
+  String get contextCollectionsTitle => '合集';
+
+  @override
+  String get contextTopicsTitle => '探索主题';
+
+  @override
+  String get contextGraphTitle => '关系线索';
 }

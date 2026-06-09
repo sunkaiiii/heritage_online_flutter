@@ -1212,6 +1212,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This collection is empty'**
   String get collectionEmptyItems;
+
+  /// Detail page explore section title
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get exploreSectionTitle;
+
+  /// Content digest section title
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Read'**
+  String get digestTitle;
+
+  /// Digest reading time
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min read'**
+  String digestReadingTime(int minutes);
+
+  /// Digest highlights section
+  ///
+  /// In en, this message translates to:
+  /// **'Highlights'**
+  String get digestHighlights;
+
+  /// Digest key facts section
+  ///
+  /// In en, this message translates to:
+  /// **'Key Facts'**
+  String get digestKeyFacts;
+
+  /// Blended recommendations section title
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended for You'**
+  String get blendedRecommendationsTitle;
+
+  /// Context related items section title
+  ///
+  /// In en, this message translates to:
+  /// **'Related'**
+  String get contextRelatedTitle;
+
+  /// Context recommendations section title
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendations'**
+  String get contextRecommendationsTitle;
+
+  /// Context semantic recommendations section title
+  ///
+  /// In en, this message translates to:
+  /// **'Semantic Recommendations'**
+  String get contextSemanticTitle;
+
+  /// Context collections section title
+  ///
+  /// In en, this message translates to:
+  /// **'Collections'**
+  String get contextCollectionsTitle;
+
+  /// Context explore topics section title
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Topics'**
+  String get contextTopicsTitle;
+
+  /// Context graph relationships section title
+  ///
+  /// In en, this message translates to:
+  /// **'Relationships'**
+  String get contextGraphTitle;
 }
 
 class _AppLocalizationsDelegate

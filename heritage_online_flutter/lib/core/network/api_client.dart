@@ -367,4 +367,30 @@ extension ApiClientExtensions on ApiClient {
     addOptionalParam(params, 'type', type);
     return get('api/discovery/random', queryParameters: params);
   }
+
+  // ==================== 推荐 ====================
+
+  /// 获取综合推荐
+  Future<Response> getBlendedRecommendations(
+    String type,
+    String id, {
+    int? limit,
+    double? ruleWeight,
+    double? semanticWeight,
+    double? sameCategoryWeight,
+    double? sameRegionWeight,
+    bool? diversify,
+  }) {
+    final params = <String, dynamic>{};
+    addOptionalParam(params, 'limit', limit);
+    addOptionalParam(params, 'ruleWeight', ruleWeight);
+    addOptionalParam(params, 'semanticWeight', semanticWeight);
+    addOptionalParam(params, 'sameCategoryWeight', sameCategoryWeight);
+    addOptionalParam(params, 'sameRegionWeight', sameRegionWeight);
+    addOptionalParam(params, 'diversify', diversify);
+    return get(
+      'api/recommendations/blended/${pathSegment(type)}/${pathSegment(id)}',
+      queryParameters: params,
+    );
+  }
 }

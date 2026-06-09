@@ -8,6 +8,7 @@ import 'package:heritage_online_flutter/core/reading_path/reading_path.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_view_model.dart';
+import 'package:heritage_online_flutter/features/common/detail_explore_view_model.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart' show InheritorDetailPage;
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
@@ -193,6 +194,11 @@ class DirectoryDetailPage extends ConsumerWidget {
                       (ref) => _buildRelatedDocument(context, ref, l10n),
                     ),
                   ],
+
+                  // 底部探索区
+                  if (item.id != null && item.id!.isNotEmpty)
+                    _buildExploreSection(
+                        context, ref, item.id!, 'directoryItem'),
                 ],
               ),
             ),
@@ -488,5 +494,30 @@ class DirectoryDetailPage extends ConsumerWidget {
       toSourceId: target.sourceId,
     );
     repo.record(event);
+  }
+
+  Widget _buildExploreSection(
+    BuildContext context,
+    WidgetRef ref,
+    String contentId,
+    String contentType,
+  ) {
+    final exploreParams = DetailExploreParams(
+      id: contentId,
+      contentType: contentType,
+    );
+    final exploreState =
+        ref.watch(detailExploreViewModelProvider(exploreParams));
+    final exploreVM =
+        ref.read(detailExploreViewModelProvider(exploreParams).notifier);
+
+    return DetailExploreSection(
+      state: exploreState,
+      contentType: contentType,
+      contentId: contentId,
+      onDigestRetry: () => exploreVM.retryDigest(),
+      onContextRetry: () => exploreVM.retryContext(),
+      onBlendedRetry: () => exploreVM.retryBlended(),
+    );
   }
 }
