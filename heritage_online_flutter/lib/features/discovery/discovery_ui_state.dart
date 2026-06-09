@@ -1,3 +1,5 @@
+import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
+
 /// 发现区块状态
 class DiscoverySectionState<T> {
   final bool isLoading;
@@ -45,7 +47,7 @@ class DiscoveryUiState {
   /// 学习路径列表
   final DiscoverySectionState<List<dynamic>> learningPaths;
   /// 精选合集列表
-  final DiscoverySectionState<List<dynamic>> collections;
+  final DiscoverySectionState<List<FeaturedCollectionDto>> collections;
   /// 地区图谱数据
   final DiscoverySectionState regionAtlas;
   /// 随便看看按钮 loading
@@ -87,7 +89,7 @@ class DiscoveryUiState {
     DiscoverySectionState? exploreIndex,
     DiscoverySectionState<List<dynamic>>? topics,
     DiscoverySectionState<List<dynamic>>? learningPaths,
-    DiscoverySectionState<List<dynamic>>? collections,
+    DiscoverySectionState<List<FeaturedCollectionDto>>? collections,
     DiscoverySectionState? regionAtlas,
     bool? serendipityLoading,
   }) {

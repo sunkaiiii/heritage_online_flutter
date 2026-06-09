@@ -582,4 +582,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get regionAtlasRelatedRegions => 'Related Regions';
+
+  @override
+  String collectionItemCount(int count) {
+    return '$count items';
+  }
+
+  @override
+  String get collectionEmptyItems => 'This collection is empty';
 }

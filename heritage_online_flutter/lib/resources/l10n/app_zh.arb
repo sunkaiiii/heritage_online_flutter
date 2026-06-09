@@ -966,5 +966,18 @@
   "regionAtlasRelatedRegions": "相关地区",
   "@regionAtlasRelatedRegions": {
     "description": "地区详情相关地区标题"
+  },
+
+  "collectionItemCount": "共 {count} 项",
+  "@collectionItemCount": {
+    "description": "合集条目数量",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "collectionEmptyItems": "该合集暂无内容",
+  "@collectionEmptyItems": {
+    "description": "合集空内容消息"
   }
 }

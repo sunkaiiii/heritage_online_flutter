@@ -1,3 +1,4 @@
+import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
@@ -146,7 +147,13 @@ abstract class HeritageRepository {
   Future<dynamic> learningPathDetail(String id, {int limit = 6});
 
   /// 获取精选合集
-  Future<List<dynamic>> featuredCollections();
+  Future<List<FeaturedCollectionDto>> featuredCollections();
+
+  /// 获取合集详情
+  Future<CollectionDto> collection(String id, {int limit = 10});
+
+  /// 获取主题合集
+  Future<CollectionDto> topicCollection(String type, String key, {int limit = 10});
 
   /// 获取地区图谱
   Future<RegionAtlasDto> regionAtlas();

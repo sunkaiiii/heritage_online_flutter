@@ -1,6 +1,7 @@
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/network/api_client.dart';
+import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
@@ -335,9 +336,24 @@ class DefaultHeritageRepository implements HeritageRepository {
   }
 
   @override
-  Future<List<dynamic>> featuredCollections() async {
+  Future<List<FeaturedCollectionDto>> featuredCollections() async {
     final response = await _apiClient.getFeaturedCollections();
-    return response.data as List<dynamic>;
+    final data = _toList(response.data);
+    return data
+        .map((json) => FeaturedCollectionDto.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<CollectionDto> collection(String id, {int limit = 10}) async {
+    final response = await _apiClient.getCollection(id, limit: limit);
+    return CollectionDto.fromJson(_toMap(response.data));
+  }
+
+  @override
+  Future<CollectionDto> topicCollection(String type, String key, {int limit = 10}) async {
+    final response = await _apiClient.getTopicCollection(type, key, limit: limit);
+    return CollectionDto.fromJson(_toMap(response.data));
   }
 
   @override

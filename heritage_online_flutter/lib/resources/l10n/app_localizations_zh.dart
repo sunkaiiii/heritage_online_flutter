@@ -577,4 +577,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get regionAtlasRelatedRegions => '相关地区';
+
+  @override
+  String collectionItemCount(int count) {
+    return '共 $count 项';
+  }
+
+  @override
+  String get collectionEmptyItems => '该合集暂无内容';
 }

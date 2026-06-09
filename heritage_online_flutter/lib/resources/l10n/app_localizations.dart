@@ -1200,6 +1200,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Related Regions'**
   String get regionAtlasRelatedRegions;
+
+  /// Collection item count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items'**
+  String collectionItemCount(int count);
+
+  /// Collection empty items message
+  ///
+  /// In en, this message translates to:
+  /// **'This collection is empty'**
+  String get collectionEmptyItems;
 }
 
 class _AppLocalizationsDelegate

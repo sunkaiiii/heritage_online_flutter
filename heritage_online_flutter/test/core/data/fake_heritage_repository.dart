@@ -1,5 +1,6 @@
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
+import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
@@ -291,10 +292,30 @@ class FakeHeritageRepository implements HeritageRepository {
     return null;
   }
 
+  /// 模拟精选合集
+  List<FeaturedCollectionDto> mockFeaturedCollections = [];
+
+  /// 模拟合集详情
+  CollectionDto? mockCollection;
+
   @override
-  Future<List<dynamic>> featuredCollections() async {
+  Future<List<FeaturedCollectionDto>> featuredCollections() async {
     _checkError();
-    return [];
+    return mockFeaturedCollections;
+  }
+
+  @override
+  Future<CollectionDto> collection(String id, {int limit = 10}) async {
+    _checkError();
+    if (mockCollection != null) return mockCollection!;
+    return const CollectionDto();
+  }
+
+  @override
+  Future<CollectionDto> topicCollection(String type, String key, {int limit = 10}) async {
+    _checkError();
+    if (mockCollection != null) return mockCollection!;
+    return const CollectionDto();
   }
 
   /// 模拟地区图谱响应

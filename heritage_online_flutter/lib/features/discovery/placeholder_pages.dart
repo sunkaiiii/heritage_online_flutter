@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/features/discovery/collection/featured_collections_page.dart';
 import 'package:heritage_online_flutter/features/discovery/region_atlas/region_atlas_page.dart';
 import 'package:heritage_online_flutter/features/discovery/timeline/timeline_page.dart';
 import 'package:heritage_online_flutter/features/explore/explore_topic_page.dart';
@@ -246,18 +247,14 @@ class LearningPathsPage extends ConsumerWidget {
   }
 }
 
-/// 精选合集页占位
+/// 精选合集页 — 使用新的 FeaturedCollectionsPage 实现
 class FeaturedCollectionsPage extends StatelessWidget {
   const FeaturedCollectionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.discoveryFeaturedCollections)),
-      body: PageBackground(
-        child: Center(child: Text(l10n.commonEmpty)),
-      ),
+    return FeaturedCollectionsListPage(
+      onBack: () => Navigator.of(context).pop(),
     );
   }
 }

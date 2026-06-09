@@ -966,5 +966,18 @@
   "regionAtlasRelatedRegions": "Related Regions",
   "@regionAtlasRelatedRegions": {
     "description": "Region detail related regions title"
+  },
+
+  "collectionItemCount": "{count} items",
+  "@collectionItemCount": {
+    "description": "Collection item count",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "collectionEmptyItems": "This collection is empty",
+  "@collectionEmptyItems": {
+    "description": "Collection empty items message"
   }
 }
