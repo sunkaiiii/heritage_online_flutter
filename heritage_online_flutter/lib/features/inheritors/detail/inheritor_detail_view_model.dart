@@ -2,9 +2,12 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:heritage_online_flutter/core/cache/detail_cache_provider.dart';
+import 'package:heritage_online_flutter/core/cache/detail_cache_repository.dart';
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/saved/saved.dart';
 
 import 'inheritor_detail_ui_state.dart';
@@ -13,33 +16,59 @@ import 'inheritor_detail_ui_state.dart';
 class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
   final HeritageRepository _repository;
   final SavedContentRepository _savedRepository;
+  final DetailCacheRepository _cacheRepository;
   final String? inheritorId;
   final String? sourceId;
 
   InheritorDetailViewModel({
     required HeritageRepository repository,
     required SavedContentRepository savedRepository,
+    required DetailCacheRepository cacheRepository,
     this.inheritorId,
     this.sourceId,
   })  : _repository = repository,
         _savedRepository = savedRepository,
+        _cacheRepository = cacheRepository,
         super(const InheritorDetailUiState()) {
     loadItem();
   }
 
-  /// 加载传承人详情
+  /// 加载传承人详情（缓存优先）
   Future<void> loadItem() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: null, isStale: false);
 
+    final lookup = InheritorDetailLookup(
+      inheritorId: inheritorId,
+      sourceId: sourceId,
+    );
+
+    // 1. 尝试从缓存加载
+    final cacheKey = inheritorId ?? sourceId;
+    if (cacheKey != null && cacheKey.isNotEmpty) {
+      final cached = _cacheRepository.getInheritorCache(cacheKey);
+      if (cached != null) {
+        try {
+          final item = InheritorDetailDto.fromJson(cached);
+          final target = _buildTarget(item);
+          final isFavorite = _savedRepository.isFavorite(target);
+          final isStale = _cacheRepository.isStaleEntry('inheritor', cacheKey);
+
+          state = state.copyWith(
+            isLoading: false,
+            item: item,
+            isFavorite: isFavorite,
+            isStale: isStale,
+          );
+        } catch (_) {
+          // 缓存解析失败，忽略
+        }
+      }
+    }
+
+    // 2. 从网络刷新
     try {
-      final lookup = InheritorDetailLookup(
-        inheritorId: inheritorId,
-        sourceId: sourceId,
-      );
-
       final item = await _repository.inheritorDetail(lookup);
 
-      // 检查收藏状态
       final target = _buildTarget(item);
       final isFavorite = _savedRepository.isFavorite(target);
 
@@ -47,15 +76,31 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
         isLoading: false,
         item: item,
         isFavorite: isFavorite,
+        isStale: false,
+        error: null,
       );
+
+      // 3. 更新缓存
+      if (cacheKey != null && cacheKey.isNotEmpty) {
+        _cacheRepository.saveInheritorCache(cacheKey, item.toJson());
+      }
 
       // 记录浏览
       _recordViewed(item);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      // 4. 网络失败：如果有缓存数据则显示 stale 提示，否则显示错误
+      if (state.item != null) {
+        state = state.copyWith(
+          isLoading: false,
+          isStale: true,
+          error: null,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        );
+      }
     }
   }
 
@@ -86,6 +131,7 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
       id: item.id,
       title: item.name,
       summary: item.description,
+      coverImageJson: item.coverImage != null ? 'true' : null,
       category: item.category,
       region: item.region,
       sourceUrl: item.sourceUrl,
@@ -129,9 +175,11 @@ final inheritorDetailViewModelProvider = StateNotifierProvider.autoDispose
   (ref, params) {
     final repository = ref.watch(heritageRepositoryProvider);
     final savedRepository = ref.watch(savedContentRepositoryProvider);
+    final cacheRepository = ref.watch(detailCacheRepositoryProvider);
     return InheritorDetailViewModel(
       repository: repository,
       savedRepository: savedRepository,
+      cacheRepository: cacheRepository,
       inheritorId: params.inheritorId,
       sourceId: params.sourceId,
     );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/reading_path/reading_path.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_view_model.dart';
@@ -102,6 +103,38 @@ class InheritorDetailPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Stale 提示
+            if (state.isStale)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                color: Theme.of(context).colorScheme.tertiaryContainer,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.cloud_off,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.contentMayBeStale,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onTertiaryContainer,
+                            ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => ref
+                          .read(inheritorDetailViewModelProvider(params).notifier)
+                          .loadItem(),
+                      child: Text(l10n.actionRefresh),
+                    ),
+                  ],
+                ),
+              ),
+
             // Hero 图片
             _buildHeroImage(context, item, l10n),
 
@@ -148,7 +181,7 @@ class InheritorDetailPage extends ConsumerWidget {
                     SectionHeader(title: l10n.inheritorRelatedProjectsTitle),
                     const SizedBox(height: 12),
                     ...item.relatedProjects.map(
-                      (ref) => _buildRelatedProject(context, ref, l10n),
+                      (projRef) => _buildRelatedProject(context, ref, projRef, l10n),
                     ),
                   ],
 
@@ -158,7 +191,7 @@ class InheritorDetailPage extends ConsumerWidget {
                     SectionHeader(title: l10n.inheritorRelatedInheritorsTitle),
                     const SizedBox(height: 12),
                     ...item.relatedInheritors.map(
-                      (ref) => _buildRelatedInheritor(context, ref, l10n),
+                      (inhRef) => _buildRelatedInheritor(context, ref, inhRef, l10n),
                     ),
                   ],
 
@@ -307,22 +340,24 @@ class InheritorDetailPage extends ConsumerWidget {
 
   Widget _buildRelatedProject(
     BuildContext context,
-    DirectoryReferenceDto ref,
+    WidgetRef ref,
+    DirectoryReferenceDto directoryRef,
     AppLocalizations l10n,
   ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: ReferenceCard(
-        title: ref.title ?? '',
-        meta: [ref.category, ref.region].where((s) => s != null && s.isNotEmpty).join(' · '),
+        title: directoryRef.title ?? '',
+        meta: [directoryRef.category, directoryRef.region].where((s) => s != null && s.isNotEmpty).join(' · '),
         onTap: () {
-          if (ref.sourceId != null && ref.sourceId!.isNotEmpty) {
+          if (directoryRef.sourceId != null && directoryRef.sourceId!.isNotEmpty) {
+            _recordReadingPath(ref, directoryRef, 'related', 'directoryItem');
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => DirectoryDetailPage(
-                  sourceId: ref.sourceId,
+                  sourceId: directoryRef.sourceId,
                   kind: DirectoryItemKind.values.firstWhere(
-                    (k) => k.wireName == (ref.kind ?? 'nationalProject'),
+                    (k) => k.wireName == (directoryRef.kind ?? 'nationalProject'),
                     orElse: () => DirectoryItemKind.nationalProject,
                   ),
                   onBack: () => Navigator.of(context).pop(),
@@ -337,21 +372,23 @@ class InheritorDetailPage extends ConsumerWidget {
 
   Widget _buildRelatedInheritor(
     BuildContext context,
-    DirectoryReferenceDto ref,
+    WidgetRef ref,
+    DirectoryReferenceDto inheritorRef,
     AppLocalizations l10n,
   ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: ReferenceCard(
-        title: ref.title ?? '',
-        meta: ref.region,
+        title: inheritorRef.title ?? '',
+        meta: inheritorRef.region,
         onTap: () {
           // 导航到相关传承人详情
-          if (ref.sourceId != null && ref.sourceId!.isNotEmpty) {
+          if (inheritorRef.sourceId != null && inheritorRef.sourceId!.isNotEmpty) {
+            _recordReadingPath(ref, inheritorRef, 'related', 'inheritor');
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => InheritorDetailPage(
-                  sourceId: ref.sourceId,
+                  sourceId: inheritorRef.sourceId,
                   onBack: () => Navigator.of(context).pop(),
                 ),
               ),
@@ -360,6 +397,31 @@ class InheritorDetailPage extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  void _recordReadingPath(
+    WidgetRef ref,
+    DirectoryReferenceDto target,
+    String source,
+    String toType,
+  ) {
+    final state = ref.read(inheritorDetailViewModelProvider(InheritorDetailParams(
+      inheritorId: inheritorId,
+      sourceId: sourceId,
+    )));
+    final currentItem = state.item;
+    final repo = ref.read(readingPathRepositoryProvider);
+    final event = ReadingPathEvent(
+      fromType: 'inheritor',
+      fromId: currentItem?.id ?? '',
+      fromTitle: currentItem?.name,
+      toType: toType,
+      toId: target.sourceId ?? '',
+      toTitle: target.title,
+      source: source,
+      toSourceId: target.sourceId,
+    );
+    repo.record(event);
   }
 
   Widget _buildExploreSection(

@@ -108,6 +108,38 @@ class DirectoryDetailPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Stale 提示
+            if (state.isStale)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                color: Theme.of(context).colorScheme.tertiaryContainer,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.cloud_off,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.contentMayBeStale,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onTertiaryContainer,
+                            ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => ref
+                          .read(directoryDetailViewModelProvider(params).notifier)
+                          .loadItem(),
+                      child: Text(l10n.actionRefresh),
+                    ),
+                  ],
+                ),
+              ),
+
             // Hero 图片
             _buildHeroImage(context, item, l10n),
 
@@ -405,6 +437,7 @@ class DirectoryDetailPage extends ConsumerWidget {
         meta: [target.category, target.region].where((s) => s != null && s.isNotEmpty).join(' · '),
         onTap: hasSourceId
             ? () {
+                _recordReadingPath(widgetRef, target, 'related', 'directoryItem');
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => DirectoryDetailPage(
@@ -442,7 +475,7 @@ class DirectoryDetailPage extends ConsumerWidget {
         onTap: hasSourceId
             ? () {
                 // 记录阅读路径
-                _recordReadingPath(widgetRef, target, 'related');
+                _recordReadingPath(widgetRef, target, 'related', 'inheritor');
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => InheritorDetailPage(
@@ -482,12 +515,20 @@ class DirectoryDetailPage extends ConsumerWidget {
     WidgetRef ref,
     DirectoryReferenceDto target,
     String source,
+    String toType,
   ) {
+    final state = ref.read(directoryDetailViewModelProvider(DirectoryDetailParams(
+      itemId: itemId,
+      sourceId: sourceId,
+      kind: kind,
+    )));
+    final currentItem = state.item;
     final repo = ref.read(readingPathRepositoryProvider);
     final event = ReadingPathEvent(
       fromType: 'directoryItem',
-      fromId: itemId,
-      toType: 'inheritor',
+      fromId: currentItem?.id ?? '',
+      fromTitle: currentItem?.title,
+      toType: toType,
       toId: target.sourceId ?? '',
       toTitle: target.title,
       source: source,

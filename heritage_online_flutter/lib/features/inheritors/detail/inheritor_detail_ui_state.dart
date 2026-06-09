@@ -6,12 +6,14 @@ class InheritorDetailUiState {
   final InheritorDetailDto? item;
   final String? error;
   final bool isFavorite;
+  final bool isStale;
 
   const InheritorDetailUiState({
     this.isLoading = true,
     this.item,
     this.error,
     this.isFavorite = false,
+    this.isStale = false,
   });
 
   InheritorDetailUiState copyWith({
@@ -19,12 +21,14 @@ class InheritorDetailUiState {
     InheritorDetailDto? item,
     String? error,
     bool? isFavorite,
+    bool? isStale,
   }) {
     return InheritorDetailUiState(
       isLoading: isLoading ?? this.isLoading,
       item: item ?? this.item,
       error: error,
       isFavorite: isFavorite ?? this.isFavorite,
+      isStale: isStale ?? this.isStale,
     );
   }
 }

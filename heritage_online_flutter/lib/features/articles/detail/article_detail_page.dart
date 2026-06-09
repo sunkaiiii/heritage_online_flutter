@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/reading_path/reading_path.dart';
 import 'package:heritage_online_flutter/features/articles/detail/article_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/articles/detail/article_detail_view_model.dart';
 import 'package:heritage_online_flutter/features/common/detail_explore_view_model.dart';
@@ -107,6 +108,38 @@ class ArticleDetailPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Stale 提示
+            if (state.isStale)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                color: Theme.of(context).colorScheme.tertiaryContainer,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.cloud_off,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.contentMayBeStale,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onTertiaryContainer,
+                            ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => ref
+                          .read(articleDetailViewModelProvider(params).notifier)
+                          .loadArticle(),
+                      child: Text(l10n.actionRefresh),
+                    ),
+                  ],
+                ),
+              ),
+
             // Hero 图片
             _buildHeroImage(context, article, l10n),
 
@@ -160,7 +193,7 @@ class ArticleDetailPage extends ConsumerWidget {
                     SectionHeader(title: l10n.articleRelatedTitle),
                     const SizedBox(height: 12),
                     ...article.relatedArticles.map(
-                      (ref) => _buildRelatedArticle(context, ref),
+                      (relatedRef) => _buildRelatedArticle(context, ref, relatedRef),
                     ),
                   ],
 
@@ -317,30 +350,51 @@ class ArticleDetailPage extends ConsumerWidget {
 
   Widget _buildRelatedArticle(
     BuildContext context,
-    ArticleReferenceDto ref,
+    WidgetRef ref,
+    ArticleReferenceDto relatedRef,
   ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: ReferenceCard(
-        title: ref.title ?? '',
-        meta: _safeSubstring(ref.publishedAt, 0, 10),
-        onTap: () => _navigateToRelatedArticle(context, ref),
+        title: relatedRef.title ?? '',
+        meta: _safeSubstring(relatedRef.publishedAt, 0, 10),
+        onTap: () => _navigateToRelatedArticle(ref, context, relatedRef),
       ),
     );
   }
 
   /// 导航到相关文章
   /// 优先级：sourceId > detailUrl（作为 sourceUrl）> 外部链接
-  void _navigateToRelatedArticle(BuildContext context, ArticleReferenceDto ref) {
-    final hasSourceId = ref.sourceId != null && ref.sourceId!.isNotEmpty;
-    final hasDetailUrl = ref.detailUrl != null && ref.detailUrl!.isNotEmpty;
+  void _navigateToRelatedArticle(WidgetRef ref, BuildContext context, ArticleReferenceDto articleRef) {
+    final hasSourceId = articleRef.sourceId != null && articleRef.sourceId!.isNotEmpty;
+    final hasDetailUrl = articleRef.detailUrl != null && articleRef.detailUrl!.isNotEmpty;
 
     if (!hasSourceId && !hasDetailUrl) return;
 
+    // 记录阅读路径
+    final readingRepo = ref.read(readingPathRepositoryProvider);
+    final state = ref.read(articleDetailViewModelProvider(ArticleDetailParams(
+      articleId: articleId,
+      sourceId: sourceId,
+      sourceUrl: sourceUrl,
+      category: category,
+    )));
+    final currentArticle = state.article;
+    readingRepo.record(ReadingPathEvent(
+      fromType: 'article',
+      fromId: currentArticle?.id ?? '',
+      fromTitle: currentArticle?.title,
+      toType: 'article',
+      toId: articleRef.sourceId ?? '',
+      toTitle: articleRef.title,
+      source: 'related',
+      toSourceId: articleRef.sourceId,
+    ));
+
     // 构建详情参数
     final params = ArticleDetailParams(
-      sourceId: hasSourceId ? ref.sourceId : null,
-      sourceUrl: !hasSourceId && hasDetailUrl ? ref.detailUrl : null,
+      sourceId: hasSourceId ? articleRef.sourceId : null,
+      sourceUrl: !hasSourceId && hasDetailUrl ? articleRef.detailUrl : null,
       category: ArticleCategory.news,
     );
 

@@ -2,11 +2,14 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:heritage_online_flutter/core/cache/detail_cache_repository.dart';
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/models/detail_lookup.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/saved/saved.dart';
+import 'package:heritage_online_flutter/core/cache/detail_cache_provider.dart';
 
 import 'article_detail_ui_state.dart';
 
@@ -14,6 +17,7 @@ import 'article_detail_ui_state.dart';
 class ArticleDetailViewModel extends StateNotifier<ArticleDetailUiState> {
   final HeritageRepository _repository;
   final SavedContentRepository _savedRepository;
+  final DetailCacheRepository _cacheRepository;
   final String? articleId;
   final String? sourceId;
   final String? sourceUrl;
@@ -22,31 +26,56 @@ class ArticleDetailViewModel extends StateNotifier<ArticleDetailUiState> {
   ArticleDetailViewModel({
     required HeritageRepository repository,
     required SavedContentRepository savedRepository,
+    required DetailCacheRepository cacheRepository,
     this.articleId,
     this.sourceId,
     this.sourceUrl,
     this.category = ArticleCategory.news,
   })  : _repository = repository,
         _savedRepository = savedRepository,
+        _cacheRepository = cacheRepository,
         super(const ArticleDetailUiState()) {
     loadArticle();
   }
 
-  /// 加载文章详情
+  /// 加载文章详情（缓存优先）
   Future<void> loadArticle() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: null, isStale: false);
 
+    final lookup = ArticleDetailLookup(
+      articleId: articleId,
+      sourceId: sourceId,
+      sourceUrl: sourceUrl,
+      category: category,
+    );
+
+    // 1. 尝试从缓存加载
+    final cacheKey = articleId ?? sourceId ?? sourceUrl;
+    if (cacheKey != null && cacheKey.isNotEmpty) {
+      final cached = _cacheRepository.getArticleCache(cacheKey);
+      if (cached != null) {
+        try {
+          final article = ArticleDetailDto.fromJson(cached);
+          final target = _buildTarget(article);
+          final isFavorite = _savedRepository.isFavorite(target);
+          final isStale = _cacheRepository.isStaleEntry('article', cacheKey);
+
+          state = state.copyWith(
+            isLoading: false,
+            article: article,
+            isFavorite: isFavorite,
+            isStale: isStale,
+          );
+        } catch (_) {
+          // 缓存解析失败，忽略
+        }
+      }
+    }
+
+    // 2. 从网络刷新
     try {
-      final lookup = ArticleDetailLookup(
-        articleId: articleId,
-        sourceId: sourceId,
-        sourceUrl: sourceUrl,
-        category: category,
-      );
-
       final article = await _repository.articleDetail(lookup);
 
-      // 检查收藏状态
       final target = _buildTarget(article);
       final isFavorite = _savedRepository.isFavorite(target);
 
@@ -54,15 +83,31 @@ class ArticleDetailViewModel extends StateNotifier<ArticleDetailUiState> {
         isLoading: false,
         article: article,
         isFavorite: isFavorite,
+        isStale: false,
+        error: null,
       );
+
+      // 3. 更新缓存
+      if (cacheKey != null && cacheKey.isNotEmpty) {
+        _cacheRepository.saveArticleCache(cacheKey, article.toJson());
+      }
 
       // 记录浏览
       _recordViewed(article);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      // 4. 网络失败：如果有缓存数据则显示 stale 提示，否则显示错误
+      if (state.article != null) {
+        state = state.copyWith(
+          isLoading: false,
+          isStale: true,
+          error: null,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        );
+      }
     }
   }
 
@@ -84,7 +129,7 @@ class ArticleDetailViewModel extends StateNotifier<ArticleDetailUiState> {
       id: article.id,
       sourceId: sourceId,
       sourceUrl: article.sourceUrl,
-      category: article.category?.wireName,
+      category: article.category.wireName,
     );
   }
 
@@ -95,7 +140,7 @@ class ArticleDetailViewModel extends StateNotifier<ArticleDetailUiState> {
       title: article.title,
       summary: article.summary,
       coverImageJson: article.coverImage != null ? 'true' : null,
-      category: article.category?.wireName,
+      category: article.category.wireName,
       sourceUrl: article.sourceUrl,
       target: _buildTarget(article),
     );
@@ -113,9 +158,11 @@ final articleDetailViewModelProvider = StateNotifierProvider.autoDispose
   (ref, params) {
     final repository = ref.watch(heritageRepositoryProvider);
     final savedRepository = ref.watch(savedContentRepositoryProvider);
+    final cacheRepository = ref.watch(detailCacheRepositoryProvider);
     return ArticleDetailViewModel(
       repository: repository,
       savedRepository: savedRepository,
+      cacheRepository: cacheRepository,
       articleId: params.articleId,
       sourceId: params.sourceId,
       sourceUrl: params.sourceUrl,
