@@ -15,19 +15,19 @@ import 'inheritor_detail_ui_state.dart';
 /// 传承人详情 ViewModel
 class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
   final HeritageRepository _repository;
-  final SavedContentRepository _savedRepository;
+  final SavedContentNotifier _savedNotifier;
   final DetailCacheRepository _cacheRepository;
   final String? inheritorId;
   final String? sourceId;
 
   InheritorDetailViewModel({
     required HeritageRepository repository,
-    required SavedContentRepository savedRepository,
+    required SavedContentNotifier savedNotifier,
     required DetailCacheRepository cacheRepository,
     this.inheritorId,
     this.sourceId,
   })  : _repository = repository,
-        _savedRepository = savedRepository,
+        _savedNotifier = savedNotifier,
         _cacheRepository = cacheRepository,
         super(const InheritorDetailUiState()) {
     loadItem();
@@ -42,26 +42,26 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
       sourceId: sourceId,
     );
 
-    // 1. 尝试从缓存加载
-    final cacheKey = inheritorId ?? sourceId;
-    if (cacheKey != null && cacheKey.isNotEmpty) {
-      final cached = _cacheRepository.getInheritorCache(cacheKey);
-      if (cached != null) {
-        try {
-          final item = InheritorDetailDto.fromJson(cached);
-          final target = _buildTarget(item);
-          final isFavorite = _savedRepository.isFavorite(target);
-          final isStale = _cacheRepository.isStaleEntry('inheritor', cacheKey);
+    // 1. 尝试从缓存加载（alias-aware）
+    final cached = _cacheRepository.getInheritorCacheWithFallback(
+      inheritorId: inheritorId, sourceId: sourceId,
+    );
+    if (cached != null) {
+      try {
+        final item = InheritorDetailDto.fromJson(cached);
+        final isFavorite = _checkIsFavorite(item);
+        final isStale = _cacheRepository.isInheritorStale(
+          inheritorId: inheritorId, sourceId: sourceId,
+        );
 
-          state = state.copyWith(
-            isLoading: false,
-            item: item,
-            isFavorite: isFavorite,
-            isStale: isStale,
-          );
-        } catch (_) {
-          // 缓存解析失败，忽略
-        }
+        state = state.copyWith(
+          isLoading: false,
+          item: item,
+          isFavorite: isFavorite,
+          isStale: isStale,
+        );
+      } catch (_) {
+        // 缓存解析失败，忽略
       }
     }
 
@@ -69,8 +69,7 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
     try {
       final item = await _repository.inheritorDetail(lookup);
 
-      final target = _buildTarget(item);
-      final isFavorite = _savedRepository.isFavorite(target);
+      final isFavorite = _checkIsFavorite(item);
 
       state = state.copyWith(
         isLoading: false,
@@ -80,10 +79,10 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
         error: null,
       );
 
-      // 3. 更新缓存
-      if (cacheKey != null && cacheKey.isNotEmpty) {
-        _cacheRepository.saveInheritorCache(cacheKey, item.toJson());
-      }
+      // 3. 更新缓存（保存所有 alias key）
+      _cacheRepository.saveInheritorCacheWithAliases(
+        id: item.id, sourceId: sourceId, json: item.toJson(),
+      );
 
       // 记录浏览
       _recordViewed(item);
@@ -110,11 +109,15 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
     if (item == null) return;
 
     final snapshot = _buildSnapshot(item);
-    _savedRepository.toggleFavorite(snapshot);
+    _savedNotifier.toggleFavorite(snapshot);
 
-    final target = _buildTarget(item);
-    final isFavorite = _savedRepository.isFavorite(target);
+    final isFavorite = _checkIsFavorite(item);
     state = state.copyWith(isFavorite: isFavorite);
+  }
+
+  bool _checkIsFavorite(dynamic item) {
+    final target = _buildTarget(item);
+    return _savedNotifier.isFavoriteWithType(SavedContentType.inheritor, target);
   }
 
   SavedContentTarget _buildTarget(dynamic item) {
@@ -141,7 +144,7 @@ class InheritorDetailViewModel extends StateNotifier<InheritorDetailUiState> {
 
   void _recordViewed(dynamic item) {
     final snapshot = _buildSnapshot(item);
-    _savedRepository.recordViewed(snapshot);
+    _savedNotifier.recordViewed(snapshot);
   }
 }
 
@@ -174,11 +177,11 @@ final inheritorDetailViewModelProvider = StateNotifierProvider.autoDispose
     .family<InheritorDetailViewModel, InheritorDetailUiState, InheritorDetailParams>(
   (ref, params) {
     final repository = ref.watch(heritageRepositoryProvider);
-    final savedRepository = ref.watch(savedContentRepositoryProvider);
+    final savedNotifier = ref.watch(savedContentNotifierProvider.notifier);
     final cacheRepository = ref.watch(detailCacheRepositoryProvider);
     return InheritorDetailViewModel(
       repository: repository,
-      savedRepository: savedRepository,
+      savedNotifier: savedNotifier,
       cacheRepository: cacheRepository,
       inheritorId: params.inheritorId,
       sourceId: params.sourceId,

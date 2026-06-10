@@ -710,4 +710,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compareStatTotal => 'Total';
+
+  @override
+  String get urlLaunchEmpty => 'URL is empty';
+
+  @override
+  String get urlLaunchInvalid => 'Invalid URL format';
+
+  @override
+  String get urlLaunchUnsupportedScheme => 'Unsupported URL scheme';
+
+  @override
+  String get urlLaunchCannotOpen => 'Cannot open URL';
+
+  @override
+  String get urlLaunchFailed => 'Failed to open URL';
+
+  @override
+  String get digestCollapse => 'Collapse';
+
+  @override
+  String get digestExpand => 'Expand';
+
+  @override
+  String get storyRegionBeijing => 'Beijing';
+
+  @override
+  String get storyRegionShanghai => 'Shanghai';
+
+  @override
+  String get storyRegionSichuan => 'Sichuan';
+
+  @override
+  String get storyRegionJiangsu => 'Jiangsu';
+
+  @override
+  String get storyRegionZhejiang => 'Zhejiang';
+
+  @override
+  String get storyRegionGuangdong => 'Guangdong';
+
+  @override
+  String get storyCategoryTraditionalCraft => 'Traditional Craft';
+
+  @override
+  String get storyCategoryTraditionalMusic => 'Traditional Music';
+
+  @override
+  String get storyCategoryTraditionalDrama => 'Traditional Drama';
+
+  @override
+  String get storyCategoryTraditionalArt => 'Traditional Art';
+
+  @override
+  String get storyCategoryFolkCustom => 'Folk Custom';
+
+  @override
+  String get storyCategoryFolkLiterature => 'Folk Literature';
 }

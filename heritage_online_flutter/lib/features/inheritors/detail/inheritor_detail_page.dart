@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/reading_path/reading_path.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_view_model.dart';
 import 'package:heritage_online_flutter/features/common/detail_explore_view_model.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/preview/image_preview_overlay.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
 import 'package:heritage_online_flutter/ui/utils/safe_url_launcher.dart';
 
@@ -352,17 +352,10 @@ class InheritorDetailPage extends ConsumerWidget {
         onTap: () {
           if (directoryRef.sourceId != null && directoryRef.sourceId!.isNotEmpty) {
             _recordReadingPath(ref, directoryRef, 'related', 'directoryItem');
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DirectoryDetailPage(
-                  sourceId: directoryRef.sourceId,
-                  kind: DirectoryItemKind.values.firstWhere(
-                    (k) => k.wireName == (directoryRef.kind ?? 'nationalProject'),
-                    orElse: () => DirectoryItemKind.nationalProject,
-                  ),
-                  onBack: () => Navigator.of(context).pop(),
-                ),
-              ),
+            ContentNavigator.toDirectory(
+              context,
+              sourceId: directoryRef.sourceId,
+              kind: directoryRef.kind,
             );
           }
         },
@@ -385,13 +378,9 @@ class InheritorDetailPage extends ConsumerWidget {
           // 导航到相关传承人详情
           if (inheritorRef.sourceId != null && inheritorRef.sourceId!.isNotEmpty) {
             _recordReadingPath(ref, inheritorRef, 'related', 'inheritor');
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => InheritorDetailPage(
-                  sourceId: inheritorRef.sourceId,
-                  onBack: () => Navigator.of(context).pop(),
-                ),
-              ),
+            ContentNavigator.toInheritor(
+              context,
+              sourceId: inheritorRef.sourceId,
             );
           }
         },
@@ -439,13 +428,44 @@ class InheritorDetailPage extends ConsumerWidget {
     final exploreVM =
         ref.read(detailExploreViewModelProvider(exploreParams).notifier);
 
+    final readingNotifier = ref.read(readingPathNotifierProvider.notifier);
+    final currentState = ref.read(inheritorDetailViewModelProvider(InheritorDetailParams(
+      inheritorId: inheritorId,
+      sourceId: sourceId,
+    )));
+
     return DetailExploreSection(
       state: exploreState,
       contentType: contentType,
       contentId: contentId,
+      contentTitle: currentState.item?.name,
       onDigestRetry: () => exploreVM.retryDigest(),
       onContextRetry: () => exploreVM.retryContext(),
       onBlendedRetry: () => exploreVM.retryBlended(),
+      onNavigate: ({
+        required String toType,
+        required String toId,
+        required String source,
+        String? toTitle,
+        String? toCategory,
+        String? toKind,
+        String? toSourceId,
+        String? toSourceUrl,
+      }) {
+        readingNotifier.record(ReadingPathEvent(
+          fromType: contentType,
+          fromId: contentId,
+          fromTitle: currentState.item?.name,
+          toType: toType,
+          toId: toId,
+          toTitle: toTitle,
+          source: source,
+          toCategory: toCategory,
+          toKind: toKind,
+          toSourceId: toSourceId,
+          toSourceUrl: toSourceUrl,
+        ));
+      },
     );
   }
 }

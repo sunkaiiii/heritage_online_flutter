@@ -48,15 +48,18 @@ class SavedContentRepository {
   }
 
   /// 检查是否已收藏
+  /// 尝试用新格式 key 匹配，回退到旧格式
   bool isFavorite(SavedContentTarget target) {
-    final key = SavedContentEntity.computeKeyFromTarget(target);
     final favorites = getFavorites();
-    return favorites.any((e) => e.contentKey == key && e.isFavorite);
+    return favorites.any((e) => e.isFavorite && _matchesKey(e, target));
   }
 
   /// 切换收藏状态
+  /// 如果没有有效 lookup key，跳过操作
   void toggleFavorite(SavedContentSnapshot snapshot) {
     final key = SavedContentEntity.computeKey(snapshot);
+    if (key == null) return;
+
     final favorites = getFavorites();
     final index = favorites.indexWhere((e) => e.contentKey == key);
 
@@ -78,19 +81,23 @@ class SavedContentRepository {
       }
     } else {
       // 不存在，新增
-      final entity = SavedContentEntity.fromSnapshot(snapshot).copyWith(
+      final entity = SavedContentEntity.tryFromSnapshot(snapshot);
+      if (entity == null) return;
+      favorites.add(entity.copyWith(
         isFavorite: true,
         favoritedAt: DateTime.now().millisecondsSinceEpoch,
-      );
-      favorites.add(entity);
+      ));
     }
 
     _saveFavorites(favorites);
   }
 
   /// 记录浏览
+  /// 如果没有有效 lookup key，跳过操作
   void recordViewed(SavedContentSnapshot snapshot) {
     final key = SavedContentEntity.computeKey(snapshot);
+    if (key == null) return;
+
     final recent = getRecentlyViewed();
     final index = recent.indexWhere((e) => e.contentKey == key);
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -100,7 +107,8 @@ class SavedContentRepository {
       recent[index] = recent[index].copyWith(lastViewedAt: now);
     } else {
       // 不存在，新增
-      final entity = SavedContentEntity.fromSnapshot(snapshot);
+      final entity = SavedContentEntity.tryFromSnapshot(snapshot);
+      if (entity == null) return;
       recent.add(entity);
     }
 
@@ -111,19 +119,42 @@ class SavedContentRepository {
   }
 
   /// 删除收藏
+  /// 尝试用新格式 key 匹配，回退到旧格式
   void removeFavorite(SavedContentTarget target) {
-    final key = SavedContentEntity.computeKeyFromTarget(target);
     final favorites = getFavorites();
-    favorites.removeWhere((e) => e.contentKey == key);
+    favorites.removeWhere((e) => _matchesKey(e, target));
     _saveFavorites(favorites);
   }
 
   /// 删除最近浏览
+  /// 尝试用新格式 key 匹配，回退到旧格式
   void removeRecent(SavedContentTarget target) {
-    final key = SavedContentEntity.computeKeyFromTarget(target);
     final recent = getRecentlyViewed();
-    recent.removeWhere((e) => e.contentKey == key);
+    recent.removeWhere((e) => _matchesKey(e, target));
     _saveRecent(recent);
+  }
+
+  /// 检查实体是否匹配目标（支持新旧 key 格式）
+  bool _matchesKey(SavedContentEntity entity, SavedContentTarget target) {
+    // 尝试新格式 key 匹配
+    final contentType = SavedContentType.fromWireName(entity.contentType);
+    final newKey = SavedContentEntity.computeKeyFromTargetWithType(
+      contentType,
+      SavedContentTarget(
+        id: target.id,
+        sourceId: target.sourceId,
+        sourceUrl: target.sourceUrl,
+        category: entity.targetCategory,
+        kind: entity.targetKind,
+      ),
+    );
+    if (newKey != null && entity.contentKey == newKey) return true;
+
+    // 回退到旧格式 key 匹配（仅 id/sourceId/sourceUrl）
+    final oldKey = SavedContentEntity.computeKeyFromTarget(target);
+    if (oldKey != null && entity.contentKey == oldKey) return true;
+
+    return false;
   }
 
   /// 清空最近浏览

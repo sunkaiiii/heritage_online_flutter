@@ -5,11 +5,9 @@ import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/timeline_dtos.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
-import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
 import 'package:heritage_online_flutter/features/discovery/timeline/timeline_ui_state.dart';
 import 'package:heritage_online_flutter/features/discovery/timeline/timeline_view_model.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
@@ -335,46 +333,15 @@ class _TimelineItemsList extends StatelessWidget {
   }
 
   void _navigateToDetail(BuildContext context, TimelineItemDto item) {
-    final type = item.type ?? '';
-
-    if (type == 'article') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ArticleDetailPage(
-            articleId: item.id?.isNotEmpty == true ? item.id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
-            category: item.category?.isNotEmpty == true
-                ? ArticleCategory.fromWireName(item.category!)
-                : ArticleCategory.news,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
-      );
-    } else if (type == 'directoryItem') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => DirectoryDetailPage(
-            itemId: item.id?.isNotEmpty == true ? item.id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            kind: item.kind?.isNotEmpty == true
-                ? DirectoryItemKind.fromWireName(item.kind!)
-                : DirectoryItemKind.nationalProject,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
-      );
-    } else if (type == 'inheritor') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => InheritorDetailPage(
-            inheritorId: item.id?.isNotEmpty == true ? item.id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
-      );
-    }
+    ContentNavigator.toDetail(
+      context,
+      type: item.type ?? '',
+      id: item.id,
+      sourceId: item.sourceId,
+      sourceUrl: item.sourceUrl,
+      category: item.category,
+      kind: item.kind,
+    );
   }
 }
 

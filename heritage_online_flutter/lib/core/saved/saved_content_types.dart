@@ -196,8 +196,10 @@ class SavedContentEntity {
   }
 
   /// 从快照创建实体
-  factory SavedContentEntity.fromSnapshot(SavedContentSnapshot snapshot) {
+  /// 如果没有有效 lookup key（id/sourceId/sourceUrl 都为空），返回 null
+  static SavedContentEntity? tryFromSnapshot(SavedContentSnapshot snapshot) {
     final key = computeKey(snapshot);
+    if (key == null) return null;
     final now = DateTime.now().millisecondsSinceEpoch;
     return SavedContentEntity(
       contentKey: key,
@@ -220,20 +222,68 @@ class SavedContentEntity {
   }
 
   /// 计算内容唯一 key
-  /// 优先级：target.id > target.sourceUrl > target.sourceId > 'unknown'
-  static String computeKey(SavedContentSnapshot snapshot) {
-    return snapshot.target.id ??
-        snapshot.target.sourceUrl ??
-        snapshot.target.sourceId ??
-        'unknown';
+  /// 格式：{contentType}|{category_or_kind}|{lookup_key_type}:{lookup_key_value}
+  /// 包含 contentType 和 category/kind 避免跨类型冲突
+  /// 如果没有有效 lookup key，返回 null
+  static String? computeKey(SavedContentSnapshot snapshot) {
+    final lookupKey = _buildLookupKey(snapshot.target);
+    if (lookupKey == null) return null;
+
+    final type = snapshot.contentType.wireName;
+    final qualifier = _buildQualifier(snapshot.contentType, snapshot.target);
+    return '$type|$qualifier|$lookupKey';
   }
 
   /// 计算目标唯一 key
-  /// 优先级：target.id > target.sourceUrl > target.sourceId > 'unknown'
-  static String computeKeyFromTarget(SavedContentTarget target) {
+  /// 需要 contentType 来构建完整 key
+  static String? computeKeyFromTargetWithType(
+    SavedContentType contentType,
+    SavedContentTarget target,
+  ) {
+    final lookupKey = _buildLookupKey(target);
+    if (lookupKey == null) return null;
+
+    final type = contentType.wireName;
+    final qualifier = _buildQualifier(contentType, target);
+    return '$type|$qualifier|$lookupKey';
+  }
+
+  /// 计算目标唯一 key（兼容旧接口，缺少 contentType 时仅用 lookup key）
+  /// 优先级：target.id > target.sourceUrl > target.sourceId > null
+  static String? computeKeyFromTarget(SavedContentTarget target) {
     return target.id ??
         target.sourceUrl ??
-        target.sourceId ??
-        'unknown';
+        target.sourceId;
+  }
+
+  /// 构建 lookup key 部分
+  static String? _buildLookupKey(SavedContentTarget target) {
+    if (target.id != null && target.id!.isNotEmpty) {
+      return 'id:${target.id}';
+    }
+    if (target.sourceUrl != null && target.sourceUrl!.isNotEmpty) {
+      return 'sourceUrl:${target.sourceUrl}';
+    }
+    if (target.sourceId != null && target.sourceId!.isNotEmpty) {
+      return 'sourceId:${target.sourceId}';
+    }
+    return null;
+  }
+
+  /// 构建 qualifier 部分（category 或 kind）
+  static String _buildQualifier(
+    SavedContentType contentType,
+    SavedContentTarget target,
+  ) {
+    switch (contentType) {
+      case SavedContentType.article:
+        return target.category?.isNotEmpty == true
+            ? target.category!
+            : 'unknown';
+      case SavedContentType.directoryItem:
+        return target.kind?.isNotEmpty == true ? target.kind! : 'unknown';
+      case SavedContentType.inheritor:
+        return 'default';
+    }
   }
 }

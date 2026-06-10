@@ -7,11 +7,9 @@ import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/explore_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
-import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
 import 'package:heritage_online_flutter/features/discovery/region_atlas/region_atlas_ui_state.dart';
 import 'package:heritage_online_flutter/features/discovery/region_atlas/region_atlas_view_model.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
@@ -174,43 +172,31 @@ class RegionDetailPage extends ConsumerWidget {
   }
 
   void _navigateToArticleDetail(BuildContext context, ArticleSummaryDto item) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ArticleDetailPage(
-          articleId: item.id?.isNotEmpty == true ? item.id : null,
-          sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-          sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
-          category: item.category,
-          onBack: () => Navigator.of(context).pop(),
-        ),
-      ),
+    ContentNavigator.toArticle(
+      context,
+      id: item.id,
+      sourceId: item.sourceId,
+      sourceUrl: item.sourceUrl,
+      category: item.category.wireName,
     );
   }
 
   void _navigateToDirectoryDetail(
       BuildContext context, DirectoryItemSummaryDto item) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => DirectoryDetailPage(
-          itemId: item.id?.isNotEmpty == true ? item.id : null,
-          sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-          kind: item.kind,
-          onBack: () => Navigator.of(context).pop(),
-        ),
-      ),
+    ContentNavigator.toDirectory(
+      context,
+      id: item.id,
+      sourceId: item.sourceId,
+      kind: item.kind.wireName,
     );
   }
 
   void _navigateToInheritorDetail(
       BuildContext context, InheritorSummaryDto item) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => InheritorDetailPage(
-          inheritorId: item.id?.isNotEmpty == true ? item.id : null,
-          sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-          onBack: () => Navigator.of(context).pop(),
-        ),
-      ),
+    ContentNavigator.toInheritor(
+      context,
+      id: item.id,
+      sourceId: item.sourceId,
     );
   }
 }

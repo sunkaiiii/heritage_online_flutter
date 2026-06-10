@@ -5,11 +5,9 @@ import 'package:heritage_online_flutter/core/data/repository_provider.dart';
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/explore_dtos.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
-import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
 
 /// 探索主题详情页
@@ -269,32 +267,20 @@ class _ExploreTopicDetailPageState extends ConsumerState<ExploreTopicDetailPage>
     final type = item.type ?? '';
 
     if (type == 'article') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ArticleDetailPage(
-            articleId: item.id?.isNotEmpty == true ? item.id : null,
-            sourceUrl: item.sourceUrl,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
+      ContentNavigator.toArticle(
+        context,
+        id: item.id,
+        sourceUrl: item.sourceUrl,
       );
     } else if (type == 'directoryItem') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => DirectoryDetailPage(
-            itemId: item.id?.isNotEmpty == true ? item.id : null,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
+      ContentNavigator.toDirectory(
+        context,
+        id: item.id,
       );
     } else if (type == 'inheritor') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => InheritorDetailPage(
-            inheritorId: item.id?.isNotEmpty == true ? item.id : null,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
+      ContentNavigator.toInheritor(
+        context,
+        id: item.id,
       );
     }
   }

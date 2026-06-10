@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
 import 'package:heritage_online_flutter/core/network/dto/story_dtos.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
+import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
+import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
+import 'package:heritage_online_flutter/features/discovery/explore_topic/explore_topic_detail_page.dart';
+import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 
@@ -33,33 +37,53 @@ class StoriesIndexPage extends ConsumerWidget {
             _StoryCategorySection(
               title: l10n.storiesByRegion,
               icon: Icons.map,
-              items: const ['北京', '上海', '四川', '江苏', '浙江', '广东'],
-              onItemSelected: (item) => _navigateToStory(
+              entries: [
+                _StoryEntry(wireValue: '北京', label: l10n.storyRegionBeijing),
+                _StoryEntry(wireValue: '上海', label: l10n.storyRegionShanghai),
+                _StoryEntry(wireValue: '四川', label: l10n.storyRegionSichuan),
+                _StoryEntry(wireValue: '江苏', label: l10n.storyRegionJiangsu),
+                _StoryEntry(wireValue: '浙江', label: l10n.storyRegionZhejiang),
+                _StoryEntry(wireValue: '广东', label: l10n.storyRegionGuangdong),
+              ],
+              onItemSelected: (entry) => _navigateToStory(
                 context,
                 StoryType.region,
-                item,
+                entry.wireValue,
               ),
             ),
             const SizedBox(height: 24),
             _StoryCategorySection(
               title: l10n.storiesByCategory,
               icon: Icons.category,
-              items: const ['传统技艺', '传统音乐', '传统戏剧', '传统美术', '民俗', '民间文学'],
-              onItemSelected: (item) => _navigateToStory(
+              entries: [
+                _StoryEntry(wireValue: '传统技艺', label: l10n.storyCategoryTraditionalCraft),
+                _StoryEntry(wireValue: '传统音乐', label: l10n.storyCategoryTraditionalMusic),
+                _StoryEntry(wireValue: '传统戏剧', label: l10n.storyCategoryTraditionalDrama),
+                _StoryEntry(wireValue: '传统美术', label: l10n.storyCategoryTraditionalArt),
+                _StoryEntry(wireValue: '民俗', label: l10n.storyCategoryFolkCustom),
+                _StoryEntry(wireValue: '民间文学', label: l10n.storyCategoryFolkLiterature),
+              ],
+              onItemSelected: (entry) => _navigateToStory(
                 context,
                 StoryType.category,
-                item,
+                entry.wireValue,
               ),
             ),
             const SizedBox(height: 24),
             _StoryCategorySection(
               title: l10n.storiesByYear,
               icon: Icons.calendar_today,
-              items: const ['2024', '2023', '2022', '2021', '2020'],
-              onItemSelected: (item) => _navigateToStory(
+              entries: [
+                _StoryEntry(wireValue: '2024', label: '2024'),
+                _StoryEntry(wireValue: '2023', label: '2023'),
+                _StoryEntry(wireValue: '2022', label: '2022'),
+                _StoryEntry(wireValue: '2021', label: '2021'),
+                _StoryEntry(wireValue: '2020', label: '2020'),
+              ],
+              onItemSelected: (entry) => _navigateToStory(
                 context,
                 StoryType.year,
-                item,
+                entry.wireValue,
               ),
             ),
           ],
@@ -83,17 +107,25 @@ class StoriesIndexPage extends ConsumerWidget {
 
 enum StoryType { region, category, year }
 
+/// 故事入口配置（wire value 用于 API，label 用于 UI 显示）
+class _StoryEntry {
+  final String wireValue;
+  final String label;
+
+  const _StoryEntry({required this.wireValue, required this.label});
+}
+
 /// 故事分类区块
 class _StoryCategorySection extends StatelessWidget {
   final String title;
   final IconData icon;
-  final List<String> items;
-  final ValueChanged<String> onItemSelected;
+  final List<_StoryEntry> entries;
+  final ValueChanged<_StoryEntry> onItemSelected;
 
   const _StoryCategorySection({
     required this.title,
     required this.icon,
-    required this.items,
+    required this.entries,
     required this.onItemSelected,
   });
 
@@ -113,10 +145,10 @@ class _StoryCategorySection extends StatelessWidget {
         Wrap(
           spacing: 8,
           runSpacing: 4,
-          children: items
-              .map((item) => ActionChip(
-                    label: Text(item),
-                    onPressed: () => onItemSelected(item),
+          children: entries
+              .map((entry) => ActionChip(
+                    label: Text(entry.label),
+                    onPressed: () => onItemSelected(entry),
                   ))
               .toList(),
         ),
@@ -245,7 +277,20 @@ class _StoryDetailPageState extends ConsumerState<StoryDetailPage> {
               spacing: 8,
               runSpacing: 4,
               children: story.relatedTopics
-                  .map((t) => MetaChip(text: t.title ?? t.key ?? ''))
+                  .map((t) => ActionChip(
+                        label: Text(t.title ?? t.key ?? ''),
+                        onPressed: () {
+                          if (t.type != null && t.key != null) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => ExploreTopicDetailPage(
+                                type: t.type!,
+                                topicKey: t.key!,
+                                onBack: () => Navigator.of(context).pop(),
+                              ),
+                            ));
+                          }
+                        },
+                      ))
                   .toList(),
             ),
           ],
@@ -274,17 +319,24 @@ class _StoryDetailPageState extends ConsumerState<StoryDetailPage> {
               const SizedBox(height: 8),
               ...section.items.map((item) => Padding(
                     padding: const EdgeInsets.only(bottom: 4),
-                    child: Row(
-                      children: [
-                        MetaChip(
-                            text: localizedContentType(context, item.type) ??
-                                item.type),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(item.title,
-                              style: Theme.of(context).textTheme.bodyMedium),
+                    child: InkWell(
+                      onTap: () => _navigateToStoryItem(context, item),
+                      borderRadius: BorderRadius.circular(8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          children: [
+                            MetaChip(
+                                text: localizedContentType(context, item.type) ??
+                                    item.type),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(item.title,
+                                  style: Theme.of(context).textTheme.bodyMedium),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   )),
             ],
@@ -293,4 +345,41 @@ class _StoryDetailPageState extends ConsumerState<StoryDetailPage> {
       ),
     );
   }
-}
+  /// 导航故事 item 到对应详情页
+  void _navigateToStoryItem(BuildContext context, DataStoryItemDto item) {
+    final type = item.type;
+    final id = item.id;
+    final sourceId = item.sourceId;
+    final sourceUrl = item.sourceUrl;
+
+    switch (type) {
+      case 'article':
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => ArticleDetailPage(
+            articleId: id?.isNotEmpty == true ? id : null,
+            sourceId: sourceId?.isNotEmpty == true ? sourceId : null,
+            sourceUrl: sourceUrl.isNotEmpty ? sourceUrl : null,
+            onBack: () => Navigator.of(context).pop(),
+          ),
+        ));
+        break;
+      case 'directoryItem':
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => DirectoryDetailPage(
+            itemId: id?.isNotEmpty == true ? id : null,
+            sourceId: sourceId?.isNotEmpty == true ? sourceId : null,
+            onBack: () => Navigator.of(context).pop(),
+          ),
+        ));
+        break;
+      case 'inheritor':
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => InheritorDetailPage(
+            inheritorId: id?.isNotEmpty == true ? id : null,
+            sourceId: sourceId?.isNotEmpty == true ? sourceId : null,
+            onBack: () => Navigator.of(context).pop(),
+          ),
+        ));
+        break;
+    }
+  }}

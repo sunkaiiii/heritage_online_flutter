@@ -73,15 +73,13 @@ class _FavoritesTab extends ConsumerWidget {
         return _SavedContentCard(
           entity: item,
           onRemove: () {
-            final repo = ref.read(savedContentRepositoryProvider);
+            final notifier = ref.read(savedContentNotifierProvider.notifier);
             final target = SavedContentTarget(
               id: item.targetId,
               sourceId: item.targetSourceId,
               sourceUrl: item.targetSourceUrl,
             );
-            repo.removeFavorite(target);
-            // 刷新
-            ref.invalidate(favoritesProvider);
+            notifier.removeFavorite(target);
           },
         );
       },
@@ -110,9 +108,8 @@ class _RecentTab extends ConsumerWidget {
             children: [
               TextButton(
                 onPressed: () {
-                  final repo = ref.read(savedContentRepositoryProvider);
-                  repo.clearRecent();
-                  ref.invalidate(recentlyViewedProvider);
+                  final notifier = ref.read(savedContentNotifierProvider.notifier);
+                  notifier.clearRecent();
                 },
                 child: Text(l10n.actionClearRecent),
               ),
@@ -128,14 +125,13 @@ class _RecentTab extends ConsumerWidget {
               return _SavedContentCard(
                 entity: item,
                 onRemove: () {
-                  final repo = ref.read(savedContentRepositoryProvider);
+                  final notifier = ref.read(savedContentNotifierProvider.notifier);
                   final target = SavedContentTarget(
                     id: item.targetId,
                     sourceId: item.targetSourceId,
                     sourceUrl: item.targetSourceUrl,
                   );
-                  repo.removeRecent(target);
-                  ref.invalidate(recentlyViewedProvider);
+                  notifier.removeRecent(target);
                 },
               );
             },
@@ -167,9 +163,8 @@ class _ReadingPathTab extends ConsumerWidget {
             children: [
               TextButton(
                 onPressed: () {
-                  final repo = ref.read(readingPathRepositoryProvider);
-                  repo.clear();
-                  ref.invalidate(readingPathProvider);
+                  final notifier = ref.read(readingPathNotifierProvider.notifier);
+                  notifier.clear();
                 },
                 child: Text(l10n.readingPathClear),
               ),

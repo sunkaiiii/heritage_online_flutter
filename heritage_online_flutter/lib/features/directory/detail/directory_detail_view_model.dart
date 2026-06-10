@@ -16,7 +16,7 @@ import 'directory_detail_ui_state.dart';
 /// 名录详情 ViewModel
 class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
   final HeritageRepository _repository;
-  final SavedContentRepository _savedRepository;
+  final SavedContentNotifier _savedNotifier;
   final DetailCacheRepository _cacheRepository;
   final String? itemId;
   final String? sourceId;
@@ -24,13 +24,13 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
 
   DirectoryDetailViewModel({
     required HeritageRepository repository,
-    required SavedContentRepository savedRepository,
+    required SavedContentNotifier savedNotifier,
     required DetailCacheRepository cacheRepository,
     this.itemId,
     this.sourceId,
     this.kind = DirectoryItemKind.nationalProject,
   })  : _repository = repository,
-        _savedRepository = savedRepository,
+        _savedNotifier = savedNotifier,
         _cacheRepository = cacheRepository,
         super(const DirectoryDetailUiState()) {
     loadItem();
@@ -46,26 +46,26 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
       kind: kind,
     );
 
-    // 1. 尝试从缓存加载
-    final cacheKey = itemId ?? sourceId;
-    if (cacheKey != null && cacheKey.isNotEmpty) {
-      final cached = _cacheRepository.getDirectoryCache(cacheKey);
-      if (cached != null) {
-        try {
-          final item = DirectoryItemDetailDto.fromJson(cached);
-          final target = _buildTarget(item);
-          final isFavorite = _savedRepository.isFavorite(target);
-          final isStale = _cacheRepository.isStaleEntry('directory', cacheKey);
+    // 1. 尝试从缓存加载（alias-aware）
+    final cached = _cacheRepository.getDirectoryCacheWithFallback(
+      itemId: itemId, sourceId: sourceId, kind: kind.wireName,
+    );
+    if (cached != null) {
+      try {
+        final item = DirectoryItemDetailDto.fromJson(cached);
+        final isFavorite = _checkIsFavorite(item);
+        final isStale = _cacheRepository.isDirectoryStale(
+          itemId: itemId, sourceId: sourceId, kind: kind.wireName,
+        );
 
-          state = state.copyWith(
-            isLoading: false,
-            item: item,
-            isFavorite: isFavorite,
-            isStale: isStale,
-          );
-        } catch (_) {
-          // 缓存解析失败，忽略
-        }
+        state = state.copyWith(
+          isLoading: false,
+          item: item,
+          isFavorite: isFavorite,
+          isStale: isStale,
+        );
+      } catch (_) {
+        // 缓存解析失败，忽略
       }
     }
 
@@ -73,8 +73,7 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
     try {
       final item = await _repository.directoryItemDetail(lookup);
 
-      final target = _buildTarget(item);
-      final isFavorite = _savedRepository.isFavorite(target);
+      final isFavorite = _checkIsFavorite(item);
 
       state = state.copyWith(
         isLoading: false,
@@ -84,10 +83,10 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
         error: null,
       );
 
-      // 3. 更新缓存
-      if (cacheKey != null && cacheKey.isNotEmpty) {
-        _cacheRepository.saveDirectoryCache(cacheKey, item.toJson());
-      }
+      // 3. 更新缓存（保存所有 alias key）
+      _cacheRepository.saveDirectoryCacheWithAliases(
+        id: item.id, sourceId: sourceId, kind: item.kind.wireName, json: item.toJson(),
+      );
 
       // 记录浏览
       _recordViewed(item);
@@ -114,10 +113,9 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
     if (item == null) return;
 
     final snapshot = _buildSnapshot(item);
-    _savedRepository.toggleFavorite(snapshot);
+    _savedNotifier.toggleFavorite(snapshot);
 
-    final target = _buildTarget(item);
-    final isFavorite = _savedRepository.isFavorite(target);
+    final isFavorite = _checkIsFavorite(item);
     state = state.copyWith(isFavorite: isFavorite);
   }
 
@@ -145,9 +143,14 @@ class DirectoryDetailViewModel extends StateNotifier<DirectoryDetailUiState> {
     );
   }
 
+  bool _checkIsFavorite(dynamic item) {
+    final target = _buildTarget(item);
+    return _savedNotifier.isFavoriteWithType(SavedContentType.directoryItem, target);
+  }
+
   void _recordViewed(dynamic item) {
     final snapshot = _buildSnapshot(item);
-    _savedRepository.recordViewed(snapshot);
+    _savedNotifier.recordViewed(snapshot);
   }
 }
 
@@ -183,11 +186,11 @@ final directoryDetailViewModelProvider = StateNotifierProvider.autoDispose
     .family<DirectoryDetailViewModel, DirectoryDetailUiState, DirectoryDetailParams>(
   (ref, params) {
     final repository = ref.watch(heritageRepositoryProvider);
-    final savedRepository = ref.watch(savedContentRepositoryProvider);
+    final savedNotifier = ref.watch(savedContentNotifierProvider.notifier);
     final cacheRepository = ref.watch(detailCacheRepositoryProvider);
     return DirectoryDetailViewModel(
       repository: repository,
-      savedRepository: savedRepository,
+      savedNotifier: savedNotifier,
       cacheRepository: cacheRepository,
       itemId: params.itemId,
       sourceId: params.sourceId,

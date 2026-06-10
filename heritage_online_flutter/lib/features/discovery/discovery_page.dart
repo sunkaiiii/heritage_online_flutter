@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/discovery_dtos.dart';
-import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
 import 'package:heritage_online_flutter/features/discovery/collection/collection_detail_page.dart';
 import 'package:heritage_online_flutter/features/discovery/discovery_ui_state.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/features/discovery/discovery_view_model.dart';
 import 'package:heritage_online_flutter/features/discovery/explore_topic/explore_topic_detail_page.dart';
 import 'package:heritage_online_flutter/features/discovery/placeholder_pages.dart';
@@ -671,36 +669,13 @@ class DiscoveryPage extends ConsumerWidget {
     final sourceId = item.sourceId;
     if (id.isEmpty && sourceId == null) return;
 
-    switch (type) {
-      case 'article':
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => ArticleDetailPage(
-            articleId: id.isNotEmpty ? id : null,
-            sourceId: sourceId,
-            sourceUrl: item.sourceUrl,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ));
-        break;
-      case 'directoryItem':
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => DirectoryDetailPage(
-            itemId: id.isNotEmpty ? id : null,
-            sourceId: sourceId,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ));
-        break;
-      case 'inheritor':
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => InheritorDetailPage(
-            inheritorId: id.isNotEmpty ? id : null,
-            sourceId: sourceId,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ));
-        break;
-    }
+    ContentNavigator.toDetail(
+      context,
+      type: type,
+      id: id.isNotEmpty ? id : null,
+      sourceId: sourceId,
+      sourceUrl: item.sourceUrl,
+    );
   }
 
   Widget _buildSectionPlaceholder(BuildContext context, String title) {

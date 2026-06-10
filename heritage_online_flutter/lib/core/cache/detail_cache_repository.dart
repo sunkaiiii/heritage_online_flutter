@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'detail_cache_key_builder.dart';
+
 /// 详情缓存 Repository
 /// 使用 SharedPreferences 缓存文章/名录/传承人详情的完整 JSON
 /// 支持 LRU 淘汰和过期检测
+/// 使用 DetailCacheKeyBuilder 构建包含 category/kind 的缓存 key
 class DetailCacheRepository {
   static const _articlePrefix = 'detail_cache_article_';
   static const _directoryPrefix = 'detail_cache_directory_';
@@ -75,6 +78,166 @@ class DetailCacheRepository {
   /// 清除传承人缓存
   void clearInheritorCache() {
     _clearTypeCache(_inheritorIndexKey, _inheritorPrefix);
+  }
+
+  // ==================== Alias-aware 方法 ====================
+
+  /// 保存文章详情并生成所有 alias key
+  void saveArticleCacheWithAliases({
+    String? id,
+    String? sourceId,
+    String? sourceUrl,
+    String? category,
+    required Map<String, dynamic> json,
+  }) {
+    final aliases = DetailCacheKeyBuilder.articleAliases(
+      id: id, sourceId: sourceId, sourceUrl: sourceUrl, category: category,
+    );
+    for (final key in aliases) {
+      _saveCache('$_articlePrefix$key', json);
+      _updateIndex(_articleIndexKey, key);
+    }
+    _evictIfNeeded(_articleIndexKey, _articlePrefix);
+  }
+
+  /// 读取文章缓存，按 lookup 优先级尝试多个 key
+  Map<String, dynamic>? getArticleCacheWithFallback({
+    String? articleId,
+    String? sourceId,
+    String? sourceUrl,
+    String? category,
+  }) {
+    final candidates = [
+      DetailCacheKeyBuilder.articleKey(articleId: articleId, category: category),
+      DetailCacheKeyBuilder.articleKey(sourceId: sourceId, category: category),
+      DetailCacheKeyBuilder.articleKey(sourceUrl: sourceUrl, category: category),
+    ];
+    for (final key in candidates) {
+      if (key == null) continue;
+      final cached = _getCache('$_articlePrefix$key');
+      if (cached != null) return cached;
+    }
+    return null;
+  }
+
+  /// 检查文章缓存是否过期（按 fallback 顺序检查）
+  bool isArticleStale({
+    String? articleId,
+    String? sourceId,
+    String? sourceUrl,
+    String? category,
+  }) {
+    final candidates = [
+      DetailCacheKeyBuilder.articleKey(articleId: articleId, category: category),
+      DetailCacheKeyBuilder.articleKey(sourceId: sourceId, category: category),
+      DetailCacheKeyBuilder.articleKey(sourceUrl: sourceUrl, category: category),
+    ];
+    for (final key in candidates) {
+      if (key == null) continue;
+      if (!isStale('$_articlePrefix$key')) return false;
+    }
+    return true;
+  }
+
+  /// 保存名录详情并生成所有 alias key
+  void saveDirectoryCacheWithAliases({
+    String? id,
+    String? sourceId,
+    String? kind,
+    required Map<String, dynamic> json,
+  }) {
+    final aliases = DetailCacheKeyBuilder.directoryAliases(
+      id: id, sourceId: sourceId, kind: kind,
+    );
+    for (final key in aliases) {
+      _saveCache('$_directoryPrefix$key', json);
+      _updateIndex(_directoryIndexKey, key);
+    }
+    _evictIfNeeded(_directoryIndexKey, _directoryPrefix);
+  }
+
+  /// 读取名录缓存，按 lookup 优先级尝试多个 key
+  Map<String, dynamic>? getDirectoryCacheWithFallback({
+    String? itemId,
+    String? sourceId,
+    String? kind,
+  }) {
+    final candidates = [
+      DetailCacheKeyBuilder.directoryKey(itemId: itemId, kind: kind),
+      DetailCacheKeyBuilder.directoryKey(sourceId: sourceId, kind: kind),
+    ];
+    for (final key in candidates) {
+      if (key == null) continue;
+      final cached = _getCache('$_directoryPrefix$key');
+      if (cached != null) return cached;
+    }
+    return null;
+  }
+
+  /// 检查名录缓存是否过期
+  bool isDirectoryStale({
+    String? itemId,
+    String? sourceId,
+    String? kind,
+  }) {
+    final candidates = [
+      DetailCacheKeyBuilder.directoryKey(itemId: itemId, kind: kind),
+      DetailCacheKeyBuilder.directoryKey(sourceId: sourceId, kind: kind),
+    ];
+    for (final key in candidates) {
+      if (key == null) continue;
+      if (!isStale('$_directoryPrefix$key')) return false;
+    }
+    return true;
+  }
+
+  /// 保存传承人详情并生成所有 alias key
+  void saveInheritorCacheWithAliases({
+    String? id,
+    String? sourceId,
+    required Map<String, dynamic> json,
+  }) {
+    final aliases = DetailCacheKeyBuilder.inheritorAliases(
+      id: id, sourceId: sourceId,
+    );
+    for (final key in aliases) {
+      _saveCache('$_inheritorPrefix$key', json);
+      _updateIndex(_inheritorIndexKey, key);
+    }
+    _evictIfNeeded(_inheritorIndexKey, _inheritorPrefix);
+  }
+
+  /// 读取传承人缓存，按 lookup 优先级尝试多个 key
+  Map<String, dynamic>? getInheritorCacheWithFallback({
+    String? inheritorId,
+    String? sourceId,
+  }) {
+    final candidates = [
+      DetailCacheKeyBuilder.inheritorKey(inheritorId: inheritorId),
+      DetailCacheKeyBuilder.inheritorKey(sourceId: sourceId),
+    ];
+    for (final key in candidates) {
+      if (key == null) continue;
+      final cached = _getCache('$_inheritorPrefix$key');
+      if (cached != null) return cached;
+    }
+    return null;
+  }
+
+  /// 检查传承人缓存是否过期
+  bool isInheritorStale({
+    String? inheritorId,
+    String? sourceId,
+  }) {
+    final candidates = [
+      DetailCacheKeyBuilder.inheritorKey(inheritorId: inheritorId),
+      DetailCacheKeyBuilder.inheritorKey(sourceId: sourceId),
+    ];
+    for (final key in candidates) {
+      if (key == null) continue;
+      if (!isStale('$_inheritorPrefix$key')) return false;
+    }
+    return true;
   }
 
   // ==================== 通用方法 ====================

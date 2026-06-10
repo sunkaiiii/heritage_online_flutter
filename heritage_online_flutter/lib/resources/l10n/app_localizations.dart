@@ -1303,19 +1303,19 @@ abstract class AppLocalizations {
   /// **'Relationships'**
   String get contextGraphTitle;
 
-  /// Stories index by region section
+  /// Stories index: browse by region
   ///
   /// In en, this message translates to:
   /// **'By Region'**
   String get storiesByRegion;
 
-  /// Stories index by category section
+  /// Stories index: browse by category
   ///
   /// In en, this message translates to:
   /// **'By Category'**
   String get storiesByCategory;
 
-  /// Stories index by year section
+  /// Stories index: browse by year
   ///
   /// In en, this message translates to:
   /// **'By Year'**
@@ -1440,6 +1440,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get compareStatTotal;
+
+  /// Error message when URL is empty
+  ///
+  /// In en, this message translates to:
+  /// **'URL is empty'**
+  String get urlLaunchEmpty;
+
+  /// Error message when URL format is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid URL format'**
+  String get urlLaunchInvalid;
+
+  /// Error message when URL scheme is not http/https
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported URL scheme'**
+  String get urlLaunchUnsupportedScheme;
+
+  /// Error message when URL cannot be opened
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open URL'**
+  String get urlLaunchCannotOpen;
+
+  /// Error message when URL launch fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to open URL'**
+  String get urlLaunchFailed;
+
+  /// Button to collapse digest highlights
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse'**
+  String get digestCollapse;
+
+  /// Button to expand digest highlights
+  ///
+  /// In en, this message translates to:
+  /// **'Expand'**
+  String get digestExpand;
+
+  /// No description provided for @storyRegionBeijing.
+  ///
+  /// In en, this message translates to:
+  /// **'Beijing'**
+  String get storyRegionBeijing;
+
+  /// No description provided for @storyRegionShanghai.
+  ///
+  /// In en, this message translates to:
+  /// **'Shanghai'**
+  String get storyRegionShanghai;
+
+  /// No description provided for @storyRegionSichuan.
+  ///
+  /// In en, this message translates to:
+  /// **'Sichuan'**
+  String get storyRegionSichuan;
+
+  /// No description provided for @storyRegionJiangsu.
+  ///
+  /// In en, this message translates to:
+  /// **'Jiangsu'**
+  String get storyRegionJiangsu;
+
+  /// No description provided for @storyRegionZhejiang.
+  ///
+  /// In en, this message translates to:
+  /// **'Zhejiang'**
+  String get storyRegionZhejiang;
+
+  /// No description provided for @storyRegionGuangdong.
+  ///
+  /// In en, this message translates to:
+  /// **'Guangdong'**
+  String get storyRegionGuangdong;
+
+  /// No description provided for @storyCategoryTraditionalCraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional Craft'**
+  String get storyCategoryTraditionalCraft;
+
+  /// No description provided for @storyCategoryTraditionalMusic.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional Music'**
+  String get storyCategoryTraditionalMusic;
+
+  /// No description provided for @storyCategoryTraditionalDrama.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional Drama'**
+  String get storyCategoryTraditionalDrama;
+
+  /// No description provided for @storyCategoryTraditionalArt.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional Art'**
+  String get storyCategoryTraditionalArt;
+
+  /// No description provided for @storyCategoryFolkCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Folk Custom'**
+  String get storyCategoryFolkCustom;
+
+  /// No description provided for @storyCategoryFolkLiterature.
+  ///
+  /// In en, this message translates to:
+  /// **'Folk Literature'**
+  String get storyCategoryFolkLiterature;
 }
 
 class _AppLocalizationsDelegate

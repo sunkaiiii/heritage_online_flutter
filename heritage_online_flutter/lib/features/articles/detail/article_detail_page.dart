@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
@@ -11,7 +10,9 @@ import 'package:heritage_online_flutter/features/common/detail_explore_view_mode
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/preview/image_preview_overlay.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
+import 'package:heritage_online_flutter/ui/utils/safe_url_launcher.dart';
 
 /// 文章详情页
 class ArticleDetailPage extends ConsumerWidget {
@@ -391,22 +392,10 @@ class ArticleDetailPage extends ConsumerWidget {
       toSourceId: articleRef.sourceId,
     ));
 
-    // 构建详情参数
-    final params = ArticleDetailParams(
+    ContentNavigator.toArticle(
+      context,
       sourceId: hasSourceId ? articleRef.sourceId : null,
       sourceUrl: !hasSourceId && hasDetailUrl ? articleRef.detailUrl : null,
-      category: ArticleCategory.news,
-    );
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ArticleDetailPage(
-          sourceId: params.sourceId,
-          sourceUrl: params.sourceUrl,
-          category: params.category,
-          onBack: () => Navigator.of(context).pop(),
-        ),
-      ),
     );
   }
 
@@ -429,17 +418,7 @@ class ArticleDetailPage extends ConsumerWidget {
   }
 
   Future<void> _launchUrl(BuildContext context, String url) async {
-    final l10n = AppLocalizations.of(context)!;
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.errorOpenUrl)),
-        );
-      }
-    }
+    await SafeUrlLauncher.launch(context, url);
   }
 
   Widget _buildExploreSection(
@@ -457,13 +436,46 @@ class ArticleDetailPage extends ConsumerWidget {
     final exploreVM =
         ref.read(detailExploreViewModelProvider(exploreParams).notifier);
 
+    final readingNotifier = ref.read(readingPathNotifierProvider.notifier);
+    final currentState = ref.read(articleDetailViewModelProvider(ArticleDetailParams(
+      articleId: articleId,
+      sourceId: sourceId,
+      sourceUrl: sourceUrl,
+      category: category,
+    )));
+
     return DetailExploreSection(
       state: exploreState,
       contentType: contentType,
       contentId: contentId,
+      contentTitle: currentState.article?.title,
       onDigestRetry: () => exploreVM.retryDigest(),
       onContextRetry: () => exploreVM.retryContext(),
       onBlendedRetry: () => exploreVM.retryBlended(),
+      onNavigate: ({
+        required String toType,
+        required String toId,
+        required String source,
+        String? toTitle,
+        String? toCategory,
+        String? toKind,
+        String? toSourceId,
+        String? toSourceUrl,
+      }) {
+        readingNotifier.record(ReadingPathEvent(
+          fromType: contentType,
+          fromId: contentId,
+          fromTitle: currentState.article?.title,
+          toType: toType,
+          toId: toId,
+          toTitle: toTitle,
+          source: source,
+          toCategory: toCategory,
+          toKind: toKind,
+          toSourceId: toSourceId,
+          toSourceUrl: toSourceUrl,
+        ));
+      },
     );
   }
 }

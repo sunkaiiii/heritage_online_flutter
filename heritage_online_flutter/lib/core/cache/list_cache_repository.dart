@@ -32,17 +32,18 @@ class ListCacheRepository {
     _evictIfNeeded(_articleIndexKey, _articlePrefix);
   }
 
-  /// 追加文章列表缓存（append：追加 items）
+  /// 追加文章列表缓存（append：追加 items，按 id 去重）
   void appendArticleCache(String queryKey, ListCacheEntry newEntry) {
     final existing = getArticleCache(queryKey);
     if (existing != null) {
-      final merged = ListCacheEntry(
-        items: [...existing.items, ...newEntry.items],
+      final merged = _mergeWithDedup(existing.items, newEntry.items);
+      final entry = ListCacheEntry(
+        items: merged,
         hasMore: newEntry.hasMore,
         currentPage: newEntry.currentPage,
         cachedAt: DateTime.now(),
       );
-      _saveCache('$_articlePrefix$queryKey', merged);
+      _saveCache('$_articlePrefix$queryKey', entry);
     } else {
       saveArticleCache(queryKey, newEntry);
     }
@@ -67,17 +68,18 @@ class ListCacheRepository {
     _evictIfNeeded(_directoryIndexKey, _directoryPrefix);
   }
 
-  /// 追加名录列表缓存（append：追加 items）
+  /// 追加名录列表缓存（append：追加 items，按 id 去重）
   void appendDirectoryCache(String queryKey, ListCacheEntry newEntry) {
     final existing = getDirectoryCache(queryKey);
     if (existing != null) {
-      final merged = ListCacheEntry(
-        items: [...existing.items, ...newEntry.items],
+      final merged = _mergeWithDedup(existing.items, newEntry.items);
+      final entry = ListCacheEntry(
+        items: merged,
         hasMore: newEntry.hasMore,
         currentPage: newEntry.currentPage,
         cachedAt: DateTime.now(),
       );
-      _saveCache('$_directoryPrefix$queryKey', merged);
+      _saveCache('$_directoryPrefix$queryKey', entry);
     } else {
       saveDirectoryCache(queryKey, newEntry);
     }
@@ -102,17 +104,18 @@ class ListCacheRepository {
     _evictIfNeeded(_inheritorIndexKey, _inheritorPrefix);
   }
 
-  /// 追加传承人列表缓存（append：追加 items）
+  /// 追加传承人列表缓存（append：追加 items，按 id 去重）
   void appendInheritorCache(String queryKey, ListCacheEntry newEntry) {
     final existing = getInheritorCache(queryKey);
     if (existing != null) {
-      final merged = ListCacheEntry(
-        items: [...existing.items, ...newEntry.items],
+      final merged = _mergeWithDedup(existing.items, newEntry.items);
+      final entry = ListCacheEntry(
+        items: merged,
         hasMore: newEntry.hasMore,
         currentPage: newEntry.currentPage,
         cachedAt: DateTime.now(),
       );
-      _saveCache('$_inheritorPrefix$queryKey', merged);
+      _saveCache('$_inheritorPrefix$queryKey', entry);
     } else {
       saveInheritorCache(queryKey, newEntry);
     }
@@ -168,6 +171,31 @@ class ListCacheRepository {
     } catch (e) {
       return [];
     }
+  }
+
+  /// 合并两个 item 列表，按 id/sourceId 去重
+  List<Map<String, dynamic>> _mergeWithDedup(
+    List<Map<String, dynamic>> existing,
+    List<Map<String, dynamic>> incoming,
+  ) {
+    final seenIds = <String>{};
+    final merged = <Map<String, dynamic>>[];
+
+    for (final item in existing) {
+      final id = item['id']?.toString() ?? item['sourceId']?.toString() ?? '';
+      if (id.isNotEmpty && seenIds.contains(id)) continue;
+      if (id.isNotEmpty) seenIds.add(id);
+      merged.add(item);
+    }
+
+    for (final item in incoming) {
+      final id = item['id']?.toString() ?? item['sourceId']?.toString() ?? '';
+      if (id.isNotEmpty && seenIds.contains(id)) continue;
+      if (id.isNotEmpty) seenIds.add(id);
+      merged.add(item);
+    }
+
+    return merged;
   }
 
   void _evictIfNeeded(String indexKey, String prefix) {

@@ -9,10 +9,10 @@ import 'package:heritage_online_flutter/core/utils/content_labels.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_ui_state.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_view_model.dart';
 import 'package:heritage_online_flutter/features/common/detail_explore_view_model.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart' show InheritorDetailPage;
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/preview/image_preview_overlay.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
 import 'package:heritage_online_flutter/ui/utils/safe_url_launcher.dart';
 
@@ -438,17 +438,10 @@ class DirectoryDetailPage extends ConsumerWidget {
         onTap: hasSourceId
             ? () {
                 _recordReadingPath(widgetRef, target, 'related', 'directoryItem');
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DirectoryDetailPage(
-                      sourceId: target.sourceId,
-                      kind: DirectoryItemKind.values.firstWhere(
-                        (k) => k.wireName == (target.kind ?? 'nationalProject'),
-                        orElse: () => DirectoryItemKind.nationalProject,
-                      ),
-                      onBack: () => Navigator.of(context).pop(),
-                    ),
-                  ),
+                ContentNavigator.toDirectory(
+                  context,
+                  sourceId: target.sourceId,
+                  kind: target.kind,
                 );
               }
             : hasDetailUrl
@@ -476,13 +469,9 @@ class DirectoryDetailPage extends ConsumerWidget {
             ? () {
                 // 记录阅读路径
                 _recordReadingPath(widgetRef, target, 'related', 'inheritor');
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => InheritorDetailPage(
-                      sourceId: target.sourceId,
-                      onBack: () => Navigator.of(context).pop(),
-                    ),
-                  ),
+                ContentNavigator.toInheritor(
+                  context,
+                  sourceId: target.sourceId,
                 );
               }
             : hasDetailUrl
@@ -552,13 +541,45 @@ class DirectoryDetailPage extends ConsumerWidget {
     final exploreVM =
         ref.read(detailExploreViewModelProvider(exploreParams).notifier);
 
+    final readingNotifier = ref.read(readingPathNotifierProvider.notifier);
+    final currentState = ref.read(directoryDetailViewModelProvider(DirectoryDetailParams(
+      itemId: itemId,
+      sourceId: sourceId,
+      kind: kind,
+    )));
+
     return DetailExploreSection(
       state: exploreState,
       contentType: contentType,
       contentId: contentId,
+      contentTitle: currentState.item?.title,
       onDigestRetry: () => exploreVM.retryDigest(),
       onContextRetry: () => exploreVM.retryContext(),
       onBlendedRetry: () => exploreVM.retryBlended(),
+      onNavigate: ({
+        required String toType,
+        required String toId,
+        required String source,
+        String? toTitle,
+        String? toCategory,
+        String? toKind,
+        String? toSourceId,
+        String? toSourceUrl,
+      }) {
+        readingNotifier.record(ReadingPathEvent(
+          fromType: contentType,
+          fromId: contentId,
+          fromTitle: currentState.item?.title,
+          toType: toType,
+          toId: toId,
+          toTitle: toTitle,
+          source: source,
+          toCategory: toCategory,
+          toKind: toKind,
+          toSourceId: toSourceId,
+          toSourceUrl: toSourceUrl,
+        ));
+      },
     );
   }
 }

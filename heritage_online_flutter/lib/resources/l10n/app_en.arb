@@ -1180,5 +1180,69 @@
   "compareStatTotal": "Total",
   "@compareStatTotal": {
     "description": "Compare stat: total count"
-  }
+  },
+
+  "urlLaunchEmpty": "URL is empty",
+  "@urlLaunchEmpty": {
+    "description": "Error message when URL is empty"
+  },
+
+  "urlLaunchInvalid": "Invalid URL format",
+  "@urlLaunchInvalid": {
+    "description": "Error message when URL format is invalid"
+  },
+
+  "urlLaunchUnsupportedScheme": "Unsupported URL scheme",
+  "@urlLaunchUnsupportedScheme": {
+    "description": "Error message when URL scheme is not http/https"
+  },
+
+  "urlLaunchCannotOpen": "Cannot open URL",
+  "@urlLaunchCannotOpen": {
+    "description": "Error message when URL cannot be opened"
+  },
+
+  "urlLaunchFailed": "Failed to open URL",
+  "@urlLaunchFailed": {
+    "description": "Error message when URL launch fails"
+  },
+
+  "digestCollapse": "Collapse",
+  "@digestCollapse": {
+    "description": "Button to collapse digest highlights"
+  },
+
+  "digestExpand": "Expand",
+  "@digestExpand": {
+    "description": "Button to expand digest highlights"
+  },
+
+  "storiesByRegion": "By Region",
+  "@storiesByRegion": {
+    "description": "Stories index: browse by region"
+  },
+
+  "storiesByCategory": "By Category",
+  "@storiesByCategory": {
+    "description": "Stories index: browse by category"
+  },
+
+  "storiesByYear": "By Year",
+  "@storiesByYear": {
+    "description": "Stories index: browse by year"
+  },
+
+  "storyRegionBeijing": "Beijing",
+  "storyRegionShanghai": "Shanghai",
+  "storyRegionSichuan": "Sichuan",
+  "storyRegionJiangsu": "Jiangsu",
+  "storyRegionZhejiang": "Zhejiang",
+  "storyRegionGuangdong": "Guangdong",
+
+  "storyCategoryTraditionalCraft": "Traditional Craft",
+  "storyCategoryTraditionalMusic": "Traditional Music",
+  "storyCategoryTraditionalDrama": "Traditional Drama",
+  "storyCategoryTraditionalArt": "Traditional Art",
+  "storyCategoryFolkCustom": "Folk Custom",
+  "storyCategoryFolkLiterature": "Folk Literature"
 }

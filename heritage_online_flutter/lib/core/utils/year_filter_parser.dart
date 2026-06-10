@@ -4,18 +4,27 @@ class YearFilterParser {
   /// 最小有效年份
   static const int minYear = 1900;
 
-  /// 解析年份筛选值
-  /// 返回 null 表示"不限"（空字符串）
-  /// 返回 int 表示有效年份
-  /// 返回 null（带错误）表示格式不正确
-  static int? parse(String text) {
+  /// 解析年份筛选值，只返回合法年份或 null
+  /// 空字符串返回 null（表示"不限"）
+  /// 非法值（非4位、超出范围、非数字）返回 null
+  static int? tryParseValidYear(String text) {
     final trimmed = text.trim();
     if (trimmed.isEmpty) return null;
 
+    if (trimmed.length != 4) return null;
+
     final year = int.tryParse(trimmed);
-    if (year == null) return null; // 不是数字
+    if (year == null) return null;
+
+    if (year < minYear || year > DateTime.now().year + 1) return null;
 
     return year;
+  }
+
+  /// 解析年份筛选值（兼容旧接口）
+  /// 只返回合法年份或 null
+  static int? parse(String text) {
+    return tryParseValidYear(text);
   }
 
   /// 校验年份输入是否合法
@@ -28,25 +37,30 @@ class YearFilterParser {
     final year = int.tryParse(trimmed);
     if (year == null) return false;
 
-    // 年份范围校验
     if (year < minYear || year > DateTime.now().year + 1) return false;
 
     return true;
   }
 
-  /// 获取错误消息（返回 null 表示无错误）
-  static String? validate(String text) {
+  /// 获取错误类型
+  static YearFilterError? getError(String text) {
     if (text.trim().isEmpty) return null;
 
-    if (text.trim().length != 4) return '请输入4位年份';
+    if (text.trim().length != 4) return YearFilterError.invalidFormat;
 
     final year = int.tryParse(text.trim());
-    if (year == null) return '请输入有效年份';
+    if (year == null) return YearFilterError.invalidFormat;
 
     if (year < minYear || year > DateTime.now().year + 1) {
-      return '年份范围: $minYear - ${DateTime.now().year + 1}';
+      return YearFilterError.outOfRange;
     }
 
     return null;
   }
+}
+
+/// 年份校验错误类型
+enum YearFilterError {
+  invalidFormat,
+  outOfRange;
 }

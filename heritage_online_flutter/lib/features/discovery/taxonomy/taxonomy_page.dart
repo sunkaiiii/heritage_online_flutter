@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
 import 'package:heritage_online_flutter/core/network/dto/taxonomy_dtos.dart';
-import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 
 /// 主题库索引页
@@ -260,8 +258,9 @@ class _KindCard extends StatelessWidget {
       child: ContentCard(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => TaxonomyCategoryDetailPage(
-              category: kind.key,
+            builder: (_) => TaxonomyKindDetailPage(
+              kind: kind.key,
+              title: kind.title,
               onBack: () => Navigator.of(context).pop(),
             ),
           ));
@@ -393,15 +392,13 @@ class _TaxonomyCategoryDetailPageState
             ...detail.articles.map((a) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: ListCard(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ArticleDetailPage(
-                        articleId: a.id,
-                        sourceId: a.sourceId,
-                        sourceUrl: a.sourceUrl,
-                        category: a.category,
-                        onBack: () => Navigator.of(context).pop(),
-                      ),
-                    )),
+                    onTap: () => ContentNavigator.toArticle(
+                      context,
+                      id: a.id,
+                      sourceId: a.sourceId,
+                      sourceUrl: a.sourceUrl,
+                      category: a.category.wireName,
+                    ),
                     image: SizedBox(
                       width: 48,
                       height: 48,
@@ -422,14 +419,12 @@ class _TaxonomyCategoryDetailPageState
             ...detail.directoryItems.map((d) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: ListCard(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => DirectoryDetailPage(
-                        itemId: d.id,
-                        sourceId: d.sourceId,
-                        kind: d.kind,
-                        onBack: () => Navigator.of(context).pop(),
-                      ),
-                    )),
+                    onTap: () => ContentNavigator.toDirectory(
+                      context,
+                      id: d.id,
+                      sourceId: d.sourceId,
+                      kind: d.kind.wireName,
+                    ),
                     image: SizedBox(
                       width: 48,
                       height: 48,
@@ -450,13 +445,11 @@ class _TaxonomyCategoryDetailPageState
             ...detail.inheritors.map((i) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: ListCard(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => InheritorDetailPage(
-                        inheritorId: i.id,
-                        sourceId: i.sourceId,
-                        onBack: () => Navigator.of(context).pop(),
-                      ),
-                    )),
+                    onTap: () => ContentNavigator.toInheritor(
+                      context,
+                      id: i.id,
+                      sourceId: i.sourceId,
+                    ),
                     image: SizedBox(
                       width: 48,
                       height: 48,
@@ -578,15 +571,13 @@ class _TaxonomyRegionDetailPageState
             ...detail.articles.map((a) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: ListCard(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ArticleDetailPage(
-                        articleId: a.id,
-                        sourceId: a.sourceId,
-                        sourceUrl: a.sourceUrl,
-                        category: a.category,
-                        onBack: () => Navigator.of(context).pop(),
-                      ),
-                    )),
+                    onTap: () => ContentNavigator.toArticle(
+                      context,
+                      id: a.id,
+                      sourceId: a.sourceId,
+                      sourceUrl: a.sourceUrl,
+                      category: a.category.wireName,
+                    ),
                     image: SizedBox(
                       width: 48,
                       height: 48,
@@ -606,14 +597,12 @@ class _TaxonomyRegionDetailPageState
             ...detail.directoryItems.map((d) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: ListCard(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => DirectoryDetailPage(
-                        itemId: d.id,
-                        sourceId: d.sourceId,
-                        kind: d.kind,
-                        onBack: () => Navigator.of(context).pop(),
-                      ),
-                    )),
+                    onTap: () => ContentNavigator.toDirectory(
+                      context,
+                      id: d.id,
+                      sourceId: d.sourceId,
+                      kind: d.kind.wireName,
+                    ),
                     image: SizedBox(
                       width: 48,
                       height: 48,
@@ -677,6 +666,124 @@ class _StatsRow extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// 种类详情页
+/// 显示 kind 统计和该 kind 下的名录列表
+class TaxonomyKindDetailPage extends ConsumerStatefulWidget {
+  final String kind;
+  final String title;
+  final VoidCallback onBack;
+
+  const TaxonomyKindDetailPage({
+    super.key,
+    required this.kind,
+    required this.title,
+    required this.onBack,
+  });
+
+  @override
+  ConsumerState<TaxonomyKindDetailPage> createState() =>
+      _TaxonomyKindDetailPageState();
+}
+
+class _TaxonomyKindDetailPageState
+    extends ConsumerState<TaxonomyKindDetailPage> {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: widget.onBack,
+          tooltip: l10n.actionBack,
+        ),
+        title: Text(widget.title),
+      ),
+      body: PageBackground(
+        child: _KindDirectoryList(kind: widget.kind),
+      ),
+    );
+  }
+}
+
+/// Kind 下的名录列表
+class _KindDirectoryList extends ConsumerStatefulWidget {
+  final String kind;
+
+  const _KindDirectoryList({required this.kind});
+
+  @override
+  ConsumerState<_KindDirectoryList> createState() => _KindDirectoryListState();
+}
+
+class _KindDirectoryListState extends ConsumerState<_KindDirectoryList> {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final repo = ref.watch(heritageRepositoryProvider);
+
+    return FutureBuilder(
+      future: repo.directoryItems(kind: widget.kind, pageSize: 50),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingPlaceholder();
+        }
+        if (snapshot.hasError) {
+          return ErrorRetryRow(
+            message: l10n.commonError,
+            onRetry: () => setState(() {}),
+          );
+        }
+        final items = snapshot.data?.items ?? [];
+        if (items.isEmpty) return EmptyState(message: l10n.commonEmpty);
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: ListCard(
+                onTap: () => ContentNavigator.toDirectory(
+                  context,
+                  id: item.id,
+                  sourceId: item.sourceId,
+                  kind: item.kind.wireName,
+                ),
+                image: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: ImagePlaceholder(
+                    text: (item.title?.isNotEmpty == true)
+                        ? item.title!.substring(0, 1)
+                        : '',
+                  ),
+                ),
+                text: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.title ?? '',
+                        style: Theme.of(context).textTheme.titleSmall,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                    if (item.category != null) ...[
+                      const SizedBox(height: 2),
+                      Text(item.category!,
+                          style: Theme.of(context).textTheme.bodySmall),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -636,13 +636,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get contextGraphTitle => '关系线索';
 
   @override
-  String get storiesByRegion => '按地区';
+  String get storiesByRegion => '按地区阅读';
 
   @override
-  String get storiesByCategory => '按分类';
+  String get storiesByCategory => '按分类阅读';
 
   @override
-  String get storiesByYear => '按年份';
+  String get storiesByYear => '按年份阅读';
 
   @override
   String storiesReadingTime(int minutes) {
@@ -705,4 +705,61 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get compareStatTotal => '总计';
+
+  @override
+  String get urlLaunchEmpty => '链接为空';
+
+  @override
+  String get urlLaunchInvalid => '无效的链接格式';
+
+  @override
+  String get urlLaunchUnsupportedScheme => '不支持的链接类型';
+
+  @override
+  String get urlLaunchCannotOpen => '无法打开链接';
+
+  @override
+  String get urlLaunchFailed => '打开链接失败';
+
+  @override
+  String get digestCollapse => '收起';
+
+  @override
+  String get digestExpand => '展开';
+
+  @override
+  String get storyRegionBeijing => '北京';
+
+  @override
+  String get storyRegionShanghai => '上海';
+
+  @override
+  String get storyRegionSichuan => '四川';
+
+  @override
+  String get storyRegionJiangsu => '江苏';
+
+  @override
+  String get storyRegionZhejiang => '浙江';
+
+  @override
+  String get storyRegionGuangdong => '广东';
+
+  @override
+  String get storyCategoryTraditionalCraft => '传统技艺';
+
+  @override
+  String get storyCategoryTraditionalMusic => '传统音乐';
+
+  @override
+  String get storyCategoryTraditionalDrama => '传统戏剧';
+
+  @override
+  String get storyCategoryTraditionalArt => '传统美术';
+
+  @override
+  String get storyCategoryFolkCustom => '民俗';
+
+  @override
+  String get storyCategoryFolkLiterature => '民间文学';
 }

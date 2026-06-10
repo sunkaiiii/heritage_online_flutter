@@ -8,6 +8,7 @@ import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/reading_path/reading_path_repository.dart';
 import 'package:heritage_online_flutter/core/reading_path/reading_path_types.dart';
+import 'package:heritage_online_flutter/core/saved/saved_content_notifier.dart';
 import 'package:heritage_online_flutter/core/saved/saved_content_repository.dart';
 import 'package:heritage_online_flutter/core/saved/saved_content_types.dart';
 import 'package:heritage_online_flutter/core/settings/app_language_mode.dart';
@@ -36,6 +37,7 @@ void main() {
   late SharedPreferences prefs;
   late FakeHeritageRepository repository;
   late SavedContentRepository savedRepo;
+  late SavedContentNotifier savedNotifier;
   late ReadingPathRepository readingPathRepo;
   late ListCacheRepository listCache;
   late DetailCacheRepository detailCache;
@@ -46,6 +48,7 @@ void main() {
     prefs = await SharedPreferences.getInstance();
     repository = FakeHeritageRepository();
     savedRepo = SavedContentRepository(prefs: prefs);
+    savedNotifier = SavedContentNotifier(savedRepo);
     readingPathRepo = ReadingPathRepository(prefs: prefs);
     listCache = ListCacheRepository(prefs: prefs);
     detailCache = DetailCacheRepository(prefs: prefs);
@@ -124,7 +127,7 @@ void main() {
     test('ArticleDetailViewModel 初始化 → 缓存优先 → 网络刷新', () async {
       final viewModel = ArticleDetailViewModel(
         repository: repository,
-        savedRepository: savedRepo,
+        savedNotifier: savedNotifier,
         cacheRepository: detailCache,
         articleId: 'article-1',
         category: ArticleCategory.news,
@@ -142,7 +145,7 @@ void main() {
 
       final viewModel = ArticleDetailViewModel(
         repository: repository,
-        savedRepository: savedRepo,
+        savedNotifier: savedNotifier,
         cacheRepository: detailCache,
         articleId: 'article-1',
         category: ArticleCategory.news,
@@ -158,7 +161,7 @@ void main() {
     test('ArticleDetailViewModel 切换收藏', () async {
       final viewModel = ArticleDetailViewModel(
         repository: repository,
-        savedRepository: savedRepo,
+        savedNotifier: savedNotifier,
         cacheRepository: detailCache,
         articleId: 'article-1',
         category: ArticleCategory.news,
@@ -197,7 +200,7 @@ void main() {
     test('DirectoryDetailViewModel 初始化 → 缓存 + 网络', () async {
       final viewModel = DirectoryDetailViewModel(
         repository: repository,
-        savedRepository: savedRepo,
+        savedNotifier: savedNotifier,
         cacheRepository: detailCache,
         itemId: 'dir-1',
         kind: DirectoryItemKind.nationalProject,
@@ -213,7 +216,7 @@ void main() {
 
       final viewModel = DirectoryDetailViewModel(
         repository: repository,
-        savedRepository: savedRepo,
+        savedNotifier: savedNotifier,
         cacheRepository: detailCache,
         itemId: 'dir-1',
         kind: DirectoryItemKind.nationalProject,
@@ -242,7 +245,7 @@ void main() {
     test('InheritorDetailViewModel 初始化 → 缓存 + 网络', () async {
       final viewModel = InheritorDetailViewModel(
         repository: repository,
-        savedRepository: savedRepo,
+        savedNotifier: savedNotifier,
         cacheRepository: detailCache,
         inheritorId: 'inh-1',
       );
@@ -257,7 +260,7 @@ void main() {
 
       final viewModel = InheritorDetailViewModel(
         repository: repository,
-        savedRepository: savedRepo,
+        savedNotifier: savedNotifier,
         cacheRepository: detailCache,
         inheritorId: 'inh-1',
       );
@@ -318,13 +321,13 @@ void main() {
       );
 
       // 收藏
-      expect(savedRepo.isFavorite(target), isFalse);
-      savedRepo.toggleFavorite(snapshot);
-      expect(savedRepo.isFavorite(target), isTrue);
+      expect(savedNotifier.isFavoriteWithType(SavedContentType.article, target), isFalse);
+      savedNotifier.toggleFavorite(snapshot);
+      expect(savedNotifier.isFavoriteWithType(SavedContentType.article, target), isTrue);
 
       // 取消收藏
-      savedRepo.toggleFavorite(snapshot);
-      expect(savedRepo.isFavorite(target), isFalse);
+      savedNotifier.toggleFavorite(snapshot);
+      expect(savedNotifier.isFavoriteWithType(SavedContentType.article, target), isFalse);
     });
 
     test('最近浏览 → 记录 → 重复更新', () {
@@ -334,13 +337,13 @@ void main() {
         target: SavedContentTarget(id: 'dir-1'),
       );
 
-      savedRepo.recordViewed(snapshot);
-      final first = savedRepo.getRecentlyViewed();
+      savedNotifier.recordViewed(snapshot);
+      final first = savedNotifier.state.recentlyViewed;
       expect(first.length, 1);
 
       // 重复记录只更新 time
-      savedRepo.recordViewed(snapshot);
-      final second = savedRepo.getRecentlyViewed();
+      savedNotifier.recordViewed(snapshot);
+      final second = savedNotifier.state.recentlyViewed;
       expect(second.length, 1);
     });
 
@@ -364,10 +367,10 @@ void main() {
       ];
 
       for (final s in snapshots) {
-        savedRepo.toggleFavorite(s);
+        savedNotifier.toggleFavorite(s);
       }
 
-      final favorites = savedRepo.getFavorites().where((e) => e.isFavorite);
+      final favorites = savedNotifier.state.favorites;
       expect(favorites.length, 3);
     });
   });

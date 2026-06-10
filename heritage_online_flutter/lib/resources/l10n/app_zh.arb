@@ -1180,5 +1180,69 @@
   "compareStatTotal": "总计",
   "@compareStatTotal": {
     "description": "对比统计：总计"
-  }
+  },
+
+  "urlLaunchEmpty": "链接为空",
+  "@urlLaunchEmpty": {
+    "description": "URL为空时的错误消息"
+  },
+
+  "urlLaunchInvalid": "无效的链接格式",
+  "@urlLaunchInvalid": {
+    "description": "URL格式无效时的错误消息"
+  },
+
+  "urlLaunchUnsupportedScheme": "不支持的链接类型",
+  "@urlLaunchUnsupportedScheme": {
+    "description": "URL协议不是http/https时的错误消息"
+  },
+
+  "urlLaunchCannotOpen": "无法打开链接",
+  "@urlLaunchCannotOpen": {
+    "description": "URL无法打开时的错误消息"
+  },
+
+  "urlLaunchFailed": "打开链接失败",
+  "@urlLaunchFailed": {
+    "description": "URL打开失败时的错误消息"
+  },
+
+  "digestCollapse": "收起",
+  "@digestCollapse": {
+    "description": "收起digest要点的按钮"
+  },
+
+  "digestExpand": "展开",
+  "@digestExpand": {
+    "description": "展开digest要点的按钮"
+  },
+
+  "storiesByRegion": "按地区阅读",
+  "@storiesByRegion": {
+    "description": "故事索引：按地区浏览"
+  },
+
+  "storiesByCategory": "按分类阅读",
+  "@storiesByCategory": {
+    "description": "故事索引：按分类浏览"
+  },
+
+  "storiesByYear": "按年份阅读",
+  "@storiesByYear": {
+    "description": "故事索引：按年份浏览"
+  },
+
+  "storyRegionBeijing": "北京",
+  "storyRegionShanghai": "上海",
+  "storyRegionSichuan": "四川",
+  "storyRegionJiangsu": "江苏",
+  "storyRegionZhejiang": "浙江",
+  "storyRegionGuangdong": "广东",
+
+  "storyCategoryTraditionalCraft": "传统技艺",
+  "storyCategoryTraditionalMusic": "传统音乐",
+  "storyCategoryTraditionalDrama": "传统戏剧",
+  "storyCategoryTraditionalArt": "传统美术",
+  "storyCategoryFolkCustom": "民俗",
+  "storyCategoryFolkLiterature": "民间文学"
 }

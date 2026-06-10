@@ -62,20 +62,27 @@ class TimelineViewModel extends StateNotifier<TimelineUiState> {
     _loadItems(reset: true);
   }
 
-  /// 加载更多
+  /// 加载更多（带竞态保护）
   Future<void> loadMore() async {
     if (state.isLoadingMore || !state.hasMore || state.selectedYear == null) return;
+
+    final version = _itemsRequestVersion;
+    final snapshotYear = state.selectedYear;
+    final snapshotTypes = state.selectedTypes.map((t) => t.wireName).toList();
 
     final nextPage = state.page + 1;
     state = state.copyWith(isLoadingMore: true, clearLoadMoreError: true);
 
     try {
       final response = await _repository.timelineV2(
-        year: state.selectedYear,
-        types: state.selectedTypes.map((t) => t.wireName).toList(),
+        year: snapshotYear,
+        types: snapshotTypes,
         page: nextPage,
         pageSize: _pageSize,
       );
+
+      // 竞态保护：如果年份或类型已变化，丢弃结果
+      if (version != _itemsRequestVersion) return;
 
       state = state.copyWith(
         isLoadingMore: false,
@@ -84,6 +91,9 @@ class TimelineViewModel extends StateNotifier<TimelineUiState> {
         hasMore: response.hasMore,
       );
     } catch (e) {
+      // 竞态保护：如果年份或类型已变化，丢弃错误
+      if (version != _itemsRequestVersion) return;
+
       state = state.copyWith(
         isLoadingMore: false,
         loadMoreError: e.toString(),

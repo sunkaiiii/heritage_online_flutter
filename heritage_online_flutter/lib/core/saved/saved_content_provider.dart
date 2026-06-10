@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/settings/settings_provider.dart';
 
+import 'saved_content_notifier.dart';
 import 'saved_content_repository.dart';
 import 'saved_content_types.dart';
 
@@ -11,20 +12,27 @@ final savedContentRepositoryProvider = Provider<SavedContentRepository>((ref) {
   return SavedContentRepository(prefs: prefs);
 });
 
-/// 收藏列表 Provider
-final favoritesProvider = Provider<List<SavedContentEntity>>((ref) {
+/// 收藏和最近浏览的响应式 Notifier Provider
+final savedContentNotifierProvider =
+    StateNotifierProvider<SavedContentNotifier, SavedContentState>((ref) {
   final repo = ref.watch(savedContentRepositoryProvider);
-  return repo.getFavorites().where((e) => e.isFavorite).toList();
+  return SavedContentNotifier(repo);
 });
 
-/// 最近浏览列表 Provider
+/// 收藏列表 Provider（从 notifier state 派生）
+final favoritesProvider = Provider<List<SavedContentEntity>>((ref) {
+  final notifierState = ref.watch(savedContentNotifierProvider);
+  return notifierState.favorites;
+});
+
+/// 最近浏览列表 Provider（从 notifier state 派生）
 final recentlyViewedProvider = Provider<List<SavedContentEntity>>((ref) {
-  final repo = ref.watch(savedContentRepositoryProvider);
-  return repo.getRecentlyViewed();
+  final notifierState = ref.watch(savedContentNotifierProvider);
+  return notifierState.recentlyViewed;
 });
 
 /// 收藏状态 Provider（按 target 查询）
 final isFavoriteProvider = Provider.family<bool, SavedContentTarget>((ref, target) {
-  final repo = ref.watch(savedContentRepositoryProvider);
-  return repo.isFavorite(target);
+  final notifier = ref.watch(savedContentNotifierProvider.notifier);
+  return notifier.isFavorite(target);
 });

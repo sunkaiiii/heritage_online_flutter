@@ -19,6 +19,9 @@ class SearchViewModel extends StateNotifier<SearchUiState> {
   /// 竞态保护：搜索请求版本号
   int _searchRequestVersion = 0;
 
+  /// 竞态保护：suggestions 请求版本号
+  int _suggestionRequestVersion = 0;
+
   SearchViewModel(this._repository) : super(const SearchUiState());
 
   @override
@@ -39,6 +42,7 @@ class SearchViewModel extends StateNotifier<SearchUiState> {
         () => _loadSuggestions(query.trim()),
       );
     } else {
+      _suggestionRequestVersion++;
       state = state.copyWith(suggestions: []);
     }
   }
@@ -63,25 +67,37 @@ class SearchViewModel extends StateNotifier<SearchUiState> {
     _performSearch(query, page: 1, version: version);
   }
 
-  /// 加载更多
+  /// 加载更多（带竞态保护）
   Future<void> loadMore() async {
     if (state.isLoadingMore || !state.hasMore || state.query.isEmpty) return;
+
+    final version = _searchRequestVersion;
+    final snapshotQuery = state.query.trim();
+    final snapshotTypes = state.selectedTypes.map((t) => t.wireName).toList();
+    final snapshotRegion = state.regionFilter;
+    final snapshotCategory = state.categoryFilter;
+    final snapshotYear = state.yearFilter;
+    final snapshotKind = state.kindFilter;
+    final snapshotHasImage = state.hasImageFilter;
 
     final nextPage = state.page + 1;
     state = state.copyWith(isLoadingMore: true);
 
     try {
       final data = await _repository.searchV2(
-        keywords: state.query.trim(),
-        types: state.selectedTypes.map((t) => t.wireName).toList(),
+        keywords: snapshotQuery,
+        types: snapshotTypes,
         page: nextPage,
         pageSize: _pageSize,
-        region: state.regionFilter.isNotEmpty ? state.regionFilter : null,
-        category: state.categoryFilter.isNotEmpty ? state.categoryFilter : null,
-        year: state.yearFilter,
-        kind: state.kindFilter?.wireName,
-        hasImage: state.hasImageFilter,
+        region: snapshotRegion.isNotEmpty ? snapshotRegion : null,
+        category: snapshotCategory.isNotEmpty ? snapshotCategory : null,
+        year: snapshotYear,
+        kind: snapshotKind?.wireName,
+        hasImage: snapshotHasImage,
       );
+
+      // 竞态保护：如果搜索条件已变化，丢弃结果
+      if (version != _searchRequestVersion) return;
 
       final items = _parseResults(data);
       final hasMore = (data['hasMore'] as bool?) ?? false;
@@ -93,6 +109,9 @@ class SearchViewModel extends StateNotifier<SearchUiState> {
         hasMore: hasMore,
       );
     } catch (e) {
+      // 竞态保护：如果搜索条件已变化，丢弃错误
+      if (version != _searchRequestVersion) return;
+
       state = state.copyWith(
         isLoadingMore: false,
         loadMoreError: e.toString(),
@@ -189,12 +208,18 @@ class SearchViewModel extends StateNotifier<SearchUiState> {
 
   // ==================== 内部方法 ====================
 
-  /// 加载搜索建议
+  /// 加载搜索建议（带竞态保护）
   Future<void> _loadSuggestions(String prefix) async {
+    final version = ++_suggestionRequestVersion;
     state = state.copyWith(isLoadingSuggestions: true);
 
     try {
       final data = await _repository.searchSuggestions(prefix);
+
+      // 竞态保护：如果输入已变化，丢弃结果
+      if (version != _suggestionRequestVersion) return;
+      if (state.query.trim() != prefix) return;
+
       final suggestions = data.map((e) {
         if (e is Map<String, dynamic>) {
           return SearchSuggestionDto(text: e['text']?.toString());
@@ -207,6 +232,9 @@ class SearchViewModel extends StateNotifier<SearchUiState> {
         isLoadingSuggestions: false,
       );
     } catch (e) {
+      // 竞态保护：如果输入已变化，丢弃错误
+      if (version != _suggestionRequestVersion) return;
+
       state = state.copyWith(isLoadingSuggestions: false);
     }
   }

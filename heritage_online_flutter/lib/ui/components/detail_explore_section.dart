@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
-import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
-import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
-import 'package:heritage_online_flutter/features/discovery/collection/collection_detail_page.dart';
-import 'package:heritage_online_flutter/features/discovery/explore_topic/explore_topic_detail_page.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 
 /// 详情探索区状态
 class DetailExploreState {
@@ -63,18 +58,34 @@ class DetailExploreSection extends StatelessWidget {
   final DetailExploreState state;
   final String contentType;
   final String contentId;
+  final String? contentTitle;
   final VoidCallback? onDigestRetry;
   final VoidCallback? onContextRetry;
   final VoidCallback? onBlendedRetry;
+
+  /// 导航前回调，用于记录阅读路径
+  /// 参数：目标类型、目标ID、来源(source)、目标标题、category、kind、sourceId、sourceUrl
+  final void Function({
+    required String toType,
+    required String toId,
+    required String source,
+    String? toTitle,
+    String? toCategory,
+    String? toKind,
+    String? toSourceId,
+    String? toSourceUrl,
+  })? onNavigate;
 
   const DetailExploreSection({
     super.key,
     required this.state,
     required this.contentType,
     required this.contentId,
+    this.contentTitle,
     this.onDigestRetry,
     this.onContextRetry,
     this.onBlendedRetry,
+    this.onNavigate,
   });
 
   @override
@@ -154,6 +165,10 @@ class DetailExploreSection extends StatelessWidget {
           .where((item) => item.id.isNotEmpty && item.title.isNotEmpty)
           .toList(),
       l10n: l10n,
+      fromType: contentType,
+      fromId: contentId,
+      fromTitle: contentTitle,
+      onNavigate: onNavigate,
     );
   }
 
@@ -182,6 +197,8 @@ class DetailExploreSection extends StatelessWidget {
       context: ctx,
       contentType: contentType,
       contentId: contentId,
+      contentTitle: contentTitle,
+      onNavigate: onNavigate,
       l10n: l10n,
     );
   }
@@ -259,7 +276,7 @@ class _DigestCardState extends State<_DigestCard> {
               GestureDetector(
                 onTap: () => setState(() => _expanded = !_expanded),
                 child: Text(
-                  _expanded ? '收起' : '展开',
+                  _expanded ? widget.l10n.digestCollapse : widget.l10n.digestExpand,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -298,14 +315,34 @@ class _DigestCardState extends State<_DigestCard> {
   }
 }
 
+/// 导航回调类型定义
+typedef _NavigateCallback = void Function({
+  required String toType,
+  required String toId,
+  required String source,
+  String? toTitle,
+  String? toCategory,
+  String? toKind,
+  String? toSourceId,
+  String? toSourceUrl,
+});
+
 /// 综合推荐区块
 class _BlendedRecommendationsSection extends StatelessWidget {
   final List<BlendedRecommendationItemDto> items;
   final AppLocalizations l10n;
+  final String fromType;
+  final String fromId;
+  final String? fromTitle;
+  final _NavigateCallback? onNavigate;
 
   const _BlendedRecommendationsSection({
     required this.items,
     required this.l10n,
+    required this.fromType,
+    required this.fromId,
+    this.fromTitle,
+    this.onNavigate,
   });
 
   @override
@@ -323,8 +360,13 @@ class _BlendedRecommendationsSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: items.length,
             separatorBuilder: (_, _) => const SizedBox(width: 12),
-            itemBuilder: (context, index) =>
-                _BlendedRecommendationCard(item: items[index]),
+            itemBuilder: (context, index) => _BlendedRecommendationCard(
+              item: items[index],
+              fromType: fromType,
+              fromId: fromId,
+              fromTitle: fromTitle,
+              onNavigate: onNavigate,
+            ),
           ),
         ),
       ],
@@ -335,8 +377,18 @@ class _BlendedRecommendationsSection extends StatelessWidget {
 /// 综合推荐卡片
 class _BlendedRecommendationCard extends StatelessWidget {
   final BlendedRecommendationItemDto item;
+  final String fromType;
+  final String fromId;
+  final String? fromTitle;
+  final _NavigateCallback? onNavigate;
 
-  const _BlendedRecommendationCard({required this.item});
+  const _BlendedRecommendationCard({
+    required this.item,
+    required this.fromType,
+    required this.fromId,
+    this.fromTitle,
+    this.onNavigate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -407,38 +459,27 @@ class _BlendedRecommendationCard extends StatelessWidget {
   }
 
   void _navigateToDetail(BuildContext context) {
-    final type = item.type;
-    final id = item.id;
+    // 记录阅读路径
+    onNavigate?.call(
+      toType: item.type,
+      toId: item.id,
+      source: 'blendedRecommendation',
+      toTitle: item.title,
+      toCategory: item.category,
+      toKind: item.kind,
+      toSourceId: item.sourceId,
+      toSourceUrl: item.sourceUrl.isNotEmpty ? item.sourceUrl : null,
+    );
 
-    if (type == 'article') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => ArticleDetailPage(
-            articleId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            sourceUrl: item.sourceUrl.isNotEmpty ? item.sourceUrl : null,
-            category: item.category?.isNotEmpty == true
-                ? ArticleCategory.fromWireName(item.category!)
-                : ArticleCategory.news,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    } else if (type == 'directoryItem') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => DirectoryDetailPage(
-            itemId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            kind: item.kind?.isNotEmpty == true
-                ? DirectoryItemKind.fromWireName(item.kind!)
-                : DirectoryItemKind.nationalProject,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    } else if (type == 'inheritor') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => InheritorDetailPage(
-            inheritorId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    }
+    ContentNavigator.toDetail(
+      context,
+      type: item.type,
+      id: item.id.isNotEmpty ? item.id : null,
+      sourceId: item.sourceId,
+      sourceUrl: item.sourceUrl.isNotEmpty ? item.sourceUrl : null,
+      category: item.category,
+      kind: item.kind,
+    );
   }
 }
 
@@ -447,13 +488,17 @@ class _DetailContextSection extends StatelessWidget {
   final DetailContextDto context;
   final String contentType;
   final String contentId;
+  final String? contentTitle;
   final AppLocalizations l10n;
+  final _NavigateCallback? onNavigate;
 
   const _DetailContextSection({
     required this.context,
     required this.contentType,
     required this.contentId,
+    this.contentTitle,
     required this.l10n,
+    this.onNavigate,
   });
 
   @override
@@ -487,6 +532,8 @@ class _DetailContextSection extends StatelessWidget {
                 item: item,
                 fromType: contentType,
                 fromId: contentId,
+                fromTitle: contentTitle,
+                onNavigate: onNavigate,
               )),
         ],
         if (hasRecommendations) ...[
@@ -504,6 +551,9 @@ class _DetailContextSection extends StatelessWidget {
                 item: ctx.recommendations[index],
                 fromType: contentType,
                 fromId: contentId,
+                fromTitle: contentTitle,
+                source: 'recommendation',
+                onNavigate: onNavigate,
               ),
             ),
           ),
@@ -523,6 +573,9 @@ class _DetailContextSection extends StatelessWidget {
                 item: ctx.semanticRecommendations[index],
                 fromType: contentType,
                 fromId: contentId,
+                fromTitle: contentTitle,
+                source: 'semanticRecommendation',
+                onNavigate: onNavigate,
               ),
             ),
           ),
@@ -548,13 +601,11 @@ class _DetailContextSection extends StatelessWidget {
                       label: Text(topic.title ?? topic.key ?? ''),
                       onPressed: () {
                         if (topic.type != null && topic.key != null) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => ExploreTopicDetailPage(
-                              type: topic.type!,
-                              topicKey: topic.key!,
-                              onBack: () => Navigator.of(context).pop(),
-                            ),
-                          ));
+                          ContentNavigator.toExploreTopic(
+                            context,
+                            type: topic.type!,
+                            topicKey: topic.key!,
+                          );
                         }
                       },
                     ))
@@ -578,11 +629,15 @@ class _RelatedItemRow extends StatelessWidget {
   final RelatedSummaryDto item;
   final String fromType;
   final String fromId;
+  final String? fromTitle;
+  final _NavigateCallback? onNavigate;
 
   const _RelatedItemRow({
     required this.item,
     required this.fromType,
     required this.fromId,
+    this.fromTitle,
+    this.onNavigate,
   });
 
   @override
@@ -598,32 +653,25 @@ class _RelatedItemRow extends StatelessWidget {
   }
 
   void _navigateToDetail(BuildContext context) {
-    final type = item.type ?? '';
-    final id = item.id ?? '';
+    // 记录阅读路径
+    onNavigate?.call(
+      toType: item.type ?? '',
+      toId: item.id ?? '',
+      source: 'related',
+      toTitle: item.title,
+      toCategory: item.category,
+      toKind: item.kind,
+      toSourceId: item.sourceId,
+      toSourceUrl: item.sourceUrl,
+    );
 
-    if (type == 'article') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => ArticleDetailPage(
-            articleId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    } else if (type == 'directoryItem') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => DirectoryDetailPage(
-            itemId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    } else if (type == 'inheritor') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => InheritorDetailPage(
-            inheritorId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    }
+    ContentNavigator.toDetail(
+      context,
+      type: item.type ?? '',
+      id: item.id?.isNotEmpty == true ? item.id : null,
+      sourceId: item.sourceId,
+      sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
+    );
   }
 }
 
@@ -632,11 +680,17 @@ class _RecommendationCard extends StatelessWidget {
   final RecommendationDto item;
   final String fromType;
   final String fromId;
+  final String? fromTitle;
+  final String source;
+  final _NavigateCallback? onNavigate;
 
   const _RecommendationCard({
     required this.item,
     required this.fromType,
     required this.fromId,
+    this.fromTitle,
+    this.source = 'recommendation',
+    this.onNavigate,
   });
 
   @override
@@ -674,38 +728,27 @@ class _RecommendationCard extends StatelessWidget {
   }
 
   void _navigateToDetail(BuildContext context) {
-    final type = item.type ?? '';
-    final id = item.id ?? '';
+    // 记录阅读路径
+    onNavigate?.call(
+      toType: item.type ?? '',
+      toId: item.id ?? '',
+      source: source,
+      toTitle: item.title,
+      toCategory: item.category,
+      toKind: item.kind,
+      toSourceId: item.sourceId,
+      toSourceUrl: item.sourceUrl,
+    );
 
-    if (type == 'article') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => ArticleDetailPage(
-            articleId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
-            category: item.category?.isNotEmpty == true
-                ? ArticleCategory.fromWireName(item.category!)
-                : ArticleCategory.news,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    } else if (type == 'directoryItem') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => DirectoryDetailPage(
-            itemId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            kind: item.kind?.isNotEmpty == true
-                ? DirectoryItemKind.fromWireName(item.kind!)
-                : DirectoryItemKind.nationalProject,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    } else if (type == 'inheritor') {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => InheritorDetailPage(
-            inheritorId: id.isNotEmpty ? id : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            onBack: () => Navigator.of(context).pop()),
-      ));
-    }
+    ContentNavigator.toDetail(
+      context,
+      type: item.type ?? '',
+      id: item.id?.isNotEmpty == true ? item.id : null,
+      sourceId: item.sourceId,
+      sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
+      category: item.category,
+      kind: item.kind,
+    );
   }
 }
 
@@ -722,12 +765,10 @@ class _ContextCollectionCard extends StatelessWidget {
       child: ContentCard(
         onTap: () {
           if (collection.id != null) {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => CollectionDetailPage(
-                collectionId: collection.id,
-                onBack: () => Navigator.of(context).pop(),
-              ),
-            ));
+            ContentNavigator.toCollection(
+              context,
+              collectionId: collection.id,
+            );
           }
         },
         padding: const EdgeInsets.all(12),

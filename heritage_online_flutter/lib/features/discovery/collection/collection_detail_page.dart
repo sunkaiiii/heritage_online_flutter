@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
-import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
-import 'package:heritage_online_flutter/features/articles/detail/article_detail_page.dart';
-import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
 import 'package:heritage_online_flutter/features/discovery/collection/collection_ui_state.dart';
 import 'package:heritage_online_flutter/features/discovery/collection/collection_view_model.dart';
-import 'package:heritage_online_flutter/features/inheritors/detail/inheritor_detail_page.dart';
 import 'package:heritage_online_flutter/resources/l10n/app_localizations.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
+import 'package:heritage_online_flutter/ui/utils/content_navigator.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
 
 /// 合集详情页
@@ -93,41 +90,25 @@ class CollectionDetailPage extends ConsumerWidget {
     final itemId = item.id;
 
     if (type == 'article') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => ArticleDetailPage(
-            articleId: itemId?.isNotEmpty == true ? itemId : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
-            category: item.category?.isNotEmpty == true
-                ? ArticleCategory.fromWireName(item.category!)
-                : ArticleCategory.news,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
+      ContentNavigator.toArticle(
+        context,
+        id: itemId?.isNotEmpty == true ? itemId : null,
+        sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
+        sourceUrl: item.sourceUrl?.isNotEmpty == true ? item.sourceUrl : null,
+        category: item.category,
       );
     } else if (type == 'directoryItem') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => DirectoryDetailPage(
-            itemId: itemId?.isNotEmpty == true ? itemId : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            kind: item.kind?.isNotEmpty == true
-                ? DirectoryItemKind.fromWireName(item.kind!)
-                : DirectoryItemKind.nationalProject,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
+      ContentNavigator.toDirectory(
+        context,
+        id: itemId?.isNotEmpty == true ? itemId : null,
+        sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
+        kind: item.kind,
       );
     } else if (type == 'inheritor') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => InheritorDetailPage(
-            inheritorId: itemId?.isNotEmpty == true ? itemId : null,
-            sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
-            onBack: () => Navigator.of(context).pop(),
-          ),
-        ),
+      ContentNavigator.toInheritor(
+        context,
+        id: itemId?.isNotEmpty == true ? itemId : null,
+        sourceId: item.sourceId?.isNotEmpty == true ? item.sourceId : null,
       );
     }
   }
