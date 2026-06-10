@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:heritage_online_flutter/core/cache/list_cache_provider.dart';
+import 'package:heritage_online_flutter/core/cache/list_cache_repository.dart';
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
 
 import 'inheritors_ui_state.dart';
@@ -11,6 +14,7 @@ import 'inheritors_ui_state.dart';
 /// 传承人列表 ViewModel
 class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
   final HeritageRepository _repository;
+  final ListCacheRepository _listCache;
 
   /// 搜索防抖定时器
   Timer? _searchDebounceTimer;
@@ -19,7 +23,12 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
   /// 请求版本号，用于防止旧请求覆盖新请求
   int _requestVersion = 0;
 
-  InheritorsViewModel(this._repository) : super(const InheritorsUiState()) {
+  InheritorsViewModel({
+    required HeritageRepository repository,
+    required ListCacheRepository listCache,
+  })  : _repository = repository, // ignore: prefer_initializing_formals
+        _listCache = listCache, // ignore: prefer_initializing_formals
+        super(const InheritorsUiState()) {
     loadInheritors();
   }
 
@@ -29,11 +38,34 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
     super.dispose();
   }
 
-  /// 加载传承人列表
+  /// 加载传承人列表（缓存优先）
   Future<void> loadInheritors() async {
     final requestVersion = ++_requestVersion;
     state = state.copyWith(isLoading: true, error: null);
 
+    final queryKey = QueryKeyBuilder.inheritors(
+      keywords: state.searchKeywords.isNotEmpty ? state.searchKeywords : null,
+      region: state.regionFilter.isNotEmpty ? state.regionFilter : null,
+      category: state.categoryFilter.isNotEmpty ? state.categoryFilter : null,
+      year: _parseYear(state.yearFilter),
+      gender: state.genderFilter.isNotEmpty ? state.genderFilter : null,
+    );
+
+    // 1. 尝试从缓存加载
+    final cached = _listCache.getInheritorCache(queryKey);
+    if (cached != null && requestVersion == _requestVersion) {
+      final items = cached.items
+          .map((json) => InheritorSummaryDto.fromJson(json))
+          .toList();
+      state = state.copyWith(
+        isLoading: false,
+        inheritors: items,
+        hasMore: cached.hasMore,
+        currentPage: cached.currentPage,
+      );
+    }
+
+    // 2. 从网络刷新
     try {
       final result = await _repository.inheritors(
         page: 1,
@@ -52,14 +84,30 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
         inheritors: result.items,
         hasMore: result.hasMore,
         currentPage: 1,
+        error: null,
+      );
+
+      // 3. 更新缓存
+      _listCache.saveInheritorCache(
+        queryKey,
+        ListCacheEntry(
+          items: result.items.map((e) => e.toJson()).toList(),
+          hasMore: result.hasMore,
+          currentPage: 1,
+          cachedAt: DateTime.now(),
+        ),
       );
     } catch (e) {
       if (requestVersion != _requestVersion) return;
 
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      if (state.inheritors.isNotEmpty) {
+        state = state.copyWith(isLoading: false);
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        );
+      }
     }
   }
 
@@ -90,6 +138,24 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
         hasMore: result.hasMore,
         currentPage: nextPage,
         isLoadingMore: false,
+      );
+
+      // 追加到缓存
+      final queryKey = QueryKeyBuilder.inheritors(
+        keywords: state.searchKeywords.isNotEmpty ? state.searchKeywords : null,
+        region: state.regionFilter.isNotEmpty ? state.regionFilter : null,
+        category: state.categoryFilter.isNotEmpty ? state.categoryFilter : null,
+        year: _parseYear(state.yearFilter),
+        gender: state.genderFilter.isNotEmpty ? state.genderFilter : null,
+      );
+      _listCache.appendInheritorCache(
+        queryKey,
+        ListCacheEntry(
+          items: result.items.map((e) => e.toJson()).toList(),
+          hasMore: result.hasMore,
+          currentPage: nextPage,
+          cachedAt: DateTime.now(),
+        ),
       );
     } catch (e) {
       if (requestVersion != _requestVersion) return;
@@ -182,5 +248,6 @@ class InheritorsViewModel extends StateNotifier<InheritorsUiState> {
 final inheritorsViewModelProvider =
     StateNotifierProvider<InheritorsViewModel, InheritorsUiState>((ref) {
   final repository = ref.watch(heritageRepositoryProvider);
-  return InheritorsViewModel(repository);
+  final listCache = ref.watch(listCacheRepositoryProvider);
+  return InheritorsViewModel(repository: repository, listCache: listCache);
 });

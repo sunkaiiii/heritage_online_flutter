@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:heritage_online_flutter/core/cache/list_cache_provider.dart';
+import 'package:heritage_online_flutter/core/cache/list_cache_repository.dart';
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
+import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
 import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
@@ -12,6 +15,7 @@ import 'directory_ui_state.dart';
 /// 名录列表 ViewModel
 class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
   final HeritageRepository _repository;
+  final ListCacheRepository _listCache;
 
   /// 搜索防抖定时器
   Timer? _searchDebounceTimer;
@@ -23,7 +27,12 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
   /// 统计请求版本号
   int _statisticsRequestVersion = 0;
 
-  DirectoryViewModel(this._repository) : super(const DirectoryUiState()) {
+  DirectoryViewModel({
+    required HeritageRepository repository,
+    required ListCacheRepository listCache,
+  })  : _repository = repository, // ignore: prefer_initializing_formals
+        _listCache = listCache, // ignore: prefer_initializing_formals
+        super(const DirectoryUiState()) {
     loadItems();
   }
 
@@ -33,11 +42,35 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
     super.dispose();
   }
 
-  /// 加载名录列表
+  /// 加载名录列表（缓存优先）
   Future<void> loadItems() async {
     final requestVersion = ++_itemsRequestVersion;
     state = state.copyWith(isLoadingItems: true, itemsError: null);
 
+    final queryKey = QueryKeyBuilder.directoryItems(
+      kind: state.selectedKind.wireName,
+      keywords: state.searchKeywords.isNotEmpty ? state.searchKeywords : null,
+      region: state.regionFilter.isNotEmpty ? state.regionFilter : null,
+      category: state.categoryFilter.isNotEmpty ? state.categoryFilter : null,
+      year: _parseYear(state.yearFilter),
+      listType: state.listTypeFilter.isNotEmpty ? state.listTypeFilter : null,
+    );
+
+    // 1. 尝试从缓存加载
+    final cached = _listCache.getDirectoryCache(queryKey);
+    if (cached != null && requestVersion == _itemsRequestVersion) {
+      final items = cached.items
+          .map((json) => DirectoryItemSummaryDto.fromJson(json))
+          .toList();
+      state = state.copyWith(
+        isLoadingItems: false,
+        items: items,
+        hasMore: cached.hasMore,
+        currentPage: cached.currentPage,
+      );
+    }
+
+    // 2. 从网络刷新
     try {
       final result = await _repository.directoryItems(
         kind: state.selectedKind.wireName,
@@ -57,14 +90,30 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
         items: result.items,
         hasMore: result.hasMore,
         currentPage: 1,
+        itemsError: null,
+      );
+
+      // 3. 更新缓存
+      _listCache.saveDirectoryCache(
+        queryKey,
+        ListCacheEntry(
+          items: result.items.map((e) => e.toJson()).toList(),
+          hasMore: result.hasMore,
+          currentPage: 1,
+          cachedAt: DateTime.now(),
+        ),
       );
     } catch (e) {
       if (requestVersion != _itemsRequestVersion) return;
 
-      state = state.copyWith(
-        isLoadingItems: false,
-        itemsError: e.toString(),
-      );
+      if (state.items.isNotEmpty) {
+        state = state.copyWith(isLoadingItems: false);
+      } else {
+        state = state.copyWith(
+          isLoadingItems: false,
+          itemsError: e.toString(),
+        );
+      }
     }
   }
 
@@ -96,6 +145,25 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
         hasMore: result.hasMore,
         currentPage: nextPage,
         isLoadingMore: false,
+      );
+
+      // 追加到缓存
+      final queryKey = QueryKeyBuilder.directoryItems(
+        kind: state.selectedKind.wireName,
+        keywords: state.searchKeywords.isNotEmpty ? state.searchKeywords : null,
+        region: state.regionFilter.isNotEmpty ? state.regionFilter : null,
+        category: state.categoryFilter.isNotEmpty ? state.categoryFilter : null,
+        year: _parseYear(state.yearFilter),
+        listType: state.listTypeFilter.isNotEmpty ? state.listTypeFilter : null,
+      );
+      _listCache.appendDirectoryCache(
+        queryKey,
+        ListCacheEntry(
+          items: result.items.map((e) => e.toJson()).toList(),
+          hasMore: result.hasMore,
+          currentPage: nextPage,
+          cachedAt: DateTime.now(),
+        ),
       );
     } catch (e) {
       if (requestVersion != _itemsRequestVersion) return;
@@ -277,5 +345,6 @@ class DirectoryViewModel extends StateNotifier<DirectoryUiState> {
 final directoryViewModelProvider =
     StateNotifierProvider<DirectoryViewModel, DirectoryUiState>((ref) {
   final repository = ref.watch(heritageRepositoryProvider);
-  return DirectoryViewModel(repository);
+  final listCache = ref.watch(listCacheRepositoryProvider);
+  return DirectoryViewModel(repository: repository, listCache: listCache);
 });
