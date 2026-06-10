@@ -1244,5 +1244,65 @@
   "storyCategoryTraditionalDrama": "Traditional Drama",
   "storyCategoryTraditionalArt": "Traditional Art",
   "storyCategoryFolkCustom": "Folk Custom",
-  "storyCategoryFolkLiterature": "Folk Literature"
+  "storyCategoryFolkLiterature": "Folk Literature",
+
+  "statisticsYearTitle": "Year Distribution",
+  "@statisticsYearTitle": {
+    "description": "Statistics section: year distribution title"
+  },
+
+  "statisticsCategoryTitle": "Category Distribution",
+  "@statisticsCategoryTitle": {
+    "description": "Statistics section: category distribution title"
+  },
+
+  "statisticsRegionTitle": "Region Ranking",
+  "@statisticsRegionTitle": {
+    "description": "Statistics section: region ranking title"
+  },
+
+  "statisticsPercentageFormat": "{value}%",
+  "@statisticsPercentageFormat": {
+    "description": "Statistics percentage format",
+    "placeholders": {
+      "value": {
+        "type": "double"
+      }
+    }
+  },
+
+  "statisticsGeneratedAt": "Generated: {date}",
+  "@statisticsGeneratedAt": {
+    "description": "Statistics: generation timestamp",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "statisticsDimensionsCount": "{count} dimensions",
+  "@statisticsDimensionsCount": {
+    "description": "Statistics: number of dimensions",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "statisticsEmptyMessage": "No statistics data available",
+  "@statisticsEmptyMessage": {
+    "description": "Statistics empty state message"
+  },
+
+  "statisticsLoadFailed": "Failed to load statistics",
+  "@statisticsLoadFailed": {
+    "description": "Statistics error title"
+  },
+
+  "statisticsLoading": "Loading statistics…",
+  "@statisticsLoading": {
+    "description": "Statistics loading text"
+  }
 }

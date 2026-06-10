@@ -762,4 +762,37 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get storyCategoryFolkLiterature => '民间文学';
+
+  @override
+  String get statisticsYearTitle => '年份分布';
+
+  @override
+  String get statisticsCategoryTitle => '类别分布';
+
+  @override
+  String get statisticsRegionTitle => '地区排行';
+
+  @override
+  String statisticsPercentageFormat(double value) {
+    return '$value%';
+  }
+
+  @override
+  String statisticsGeneratedAt(String date) {
+    return '生成时间：$date';
+  }
+
+  @override
+  String statisticsDimensionsCount(int count) {
+    return '$count 个维度';
+  }
+
+  @override
+  String get statisticsEmptyMessage => '暂无统计数据';
+
+  @override
+  String get statisticsLoadFailed => '统计数据加载失败';
+
+  @override
+  String get statisticsLoading => '统计数据加载中…';
 }

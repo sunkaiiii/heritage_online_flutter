@@ -1244,5 +1244,65 @@
   "storyCategoryTraditionalDrama": "传统戏剧",
   "storyCategoryTraditionalArt": "传统美术",
   "storyCategoryFolkCustom": "民俗",
-  "storyCategoryFolkLiterature": "民间文学"
+  "storyCategoryFolkLiterature": "民间文学",
+
+  "statisticsYearTitle": "年份分布",
+  "@statisticsYearTitle": {
+    "description": "统计区块：年份分布标题"
+  },
+
+  "statisticsCategoryTitle": "类别分布",
+  "@statisticsCategoryTitle": {
+    "description": "统计区块：类别分布标题"
+  },
+
+  "statisticsRegionTitle": "地区排行",
+  "@statisticsRegionTitle": {
+    "description": "统计区块：地区排行标题"
+  },
+
+  "statisticsPercentageFormat": "{value}%",
+  "@statisticsPercentageFormat": {
+    "description": "统计百分比格式",
+    "placeholders": {
+      "value": {
+        "type": "double"
+      }
+    }
+  },
+
+  "statisticsGeneratedAt": "生成时间：{date}",
+  "@statisticsGeneratedAt": {
+    "description": "统计：生成时间戳",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "statisticsDimensionsCount": "{count} 个维度",
+  "@statisticsDimensionsCount": {
+    "description": "统计：维度数量",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "statisticsEmptyMessage": "暂无统计数据",
+  "@statisticsEmptyMessage": {
+    "description": "统计空状态消息"
+  },
+
+  "statisticsLoadFailed": "统计数据加载失败",
+  "@statisticsLoadFailed": {
+    "description": "统计错误标题"
+  },
+
+  "statisticsLoading": "统计数据加载中…",
+  "@statisticsLoading": {
+    "description": "统计加载中文案"
+  }
 }

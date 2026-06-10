@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
 import 'package:heritage_online_flutter/core/utils/year_filter_parser.dart';
+import 'package:heritage_online_flutter/features/directory/directory_statistics_content.dart';
 import 'package:heritage_online_flutter/features/directory/directory_ui_state.dart';
 import 'package:heritage_online_flutter/features/directory/directory_view_model.dart';
 import 'package:heritage_online_flutter/features/directory/detail/directory_detail_page.dart';
@@ -92,6 +92,12 @@ class _DirectoryPageState extends ConsumerState<DirectoryPage> {
               children: [
                 // Tab 切换：名录 / 统计
                 _buildTabBar(context, state, l10n),
+
+                // Kind chips – 两个 Tab 都可见（与 Android 行为一致）
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: _buildKindChips(context, state, l10n),
+                ),
 
                 // 内容区域
                 Expanded(
@@ -220,14 +226,6 @@ class _DirectoryPageState extends ConsumerState<DirectoryPage> {
                 placeholder: l10n.directorySearchPlaceholder,
                 onSearch: (_) => ref.read(directoryViewModelProvider.notifier).search(),
               ),
-            ),
-          ),
-
-          // Kind chips
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _buildKindChips(context, state, l10n),
             ),
           ),
 
@@ -441,136 +439,10 @@ class _DirectoryPageState extends ConsumerState<DirectoryPage> {
     DirectoryUiState state,
     AppLocalizations l10n,
   ) {
-    final stats = state.statisticsState;
-
-    // Loading
-    if (stats.isLoading && stats.overview == null) {
-      return const LoadingPlaceholder();
-    }
-
-    // Error
-    if (stats.error != null && stats.overview == null) {
-      return ErrorRetryRow(
-        message: stats.error!,
-        onRetry: () => ref.read(directoryViewModelProvider.notifier).refreshStatistics(),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: () async => ref.read(directoryViewModelProvider.notifier).refreshStatistics(),
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // 总览
-          if (stats.overview != null) ...[
-            _buildOverviewCard(context, stats.overview!, state.selectedKind, l10n),
-            const SizedBox(height: 16),
-          ],
-
-          // 年份分布
-          if (stats.yearBreakdown != null) ...[
-            _buildBreakdownCard(context, stats.yearBreakdown!, l10n.directoryStatisticsYearBreakdown, l10n),
-            const SizedBox(height: 16),
-          ],
-
-          // 类别分布
-          if (stats.categoryBreakdown != null) ...[
-            _buildBreakdownCard(context, stats.categoryBreakdown!, l10n.directoryStatisticsCategoryBreakdown, l10n),
-            const SizedBox(height: 16),
-          ],
-
-          // 地区排行
-          if (stats.regionBreakdown != null) ...[
-            _buildBreakdownCard(context, stats.regionBreakdown!, l10n.directoryStatisticsRegionBreakdown, l10n),
-            const SizedBox(height: 16),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOverviewCard(
-    BuildContext context,
-    DirectoryStatisticsOverviewDto overview,
-    DirectoryItemKind kind,
-    AppLocalizations l10n,
-  ) {
-    final kindLabel = localizedDirectoryKind(context, kind.wireName) ?? kind.wireName;
-    return ContentCard(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.directoryStatisticsOverviewFormat(kindLabel),
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.directoryStatisticsTotalItems(overview.total),
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          if (overview.generatedAt != null && overview.generatedAt!.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              l10n.directoryStatisticsGeneratedAt(
-                overview.generatedAt!.length >= 10
-                    ? overview.generatedAt!.substring(0, 10)
-                    : overview.generatedAt!,
-              ),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-          ],
-          const SizedBox(height: 12),
-          Text(
-            l10n.directoryStatisticsDimensions(overview.dimensions.length),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBreakdownCard(
-    BuildContext context,
-    DirectoryStatisticDimensionDto breakdown,
-    String title,
-    AppLocalizations l10n,
-  ) {
-    return ContentCard(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 12),
-          ...breakdown.items.take(10).map((item) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        item.name ?? item.key ?? '',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ),
-                    Text(
-                      '${item.value}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ],
-                ),
-              )),
-        ],
-      ),
+    return DirectoryStatisticsContent(
+      stats: state.statisticsState,
+      selectedKind: state.selectedKind,
+      onRetry: () => ref.read(directoryViewModelProvider.notifier).refreshStatistics(),
     );
   }
 }

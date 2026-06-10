@@ -767,4 +767,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get storyCategoryFolkLiterature => 'Folk Literature';
+
+  @override
+  String get statisticsYearTitle => 'Year Distribution';
+
+  @override
+  String get statisticsCategoryTitle => 'Category Distribution';
+
+  @override
+  String get statisticsRegionTitle => 'Region Ranking';
+
+  @override
+  String statisticsPercentageFormat(double value) {
+    return '$value%';
+  }
+
+  @override
+  String statisticsGeneratedAt(String date) {
+    return 'Generated: $date';
+  }
+
+  @override
+  String statisticsDimensionsCount(int count) {
+    return '$count dimensions';
+  }
+
+  @override
+  String get statisticsEmptyMessage => 'No statistics data available';
+
+  @override
+  String get statisticsLoadFailed => 'Failed to load statistics';
+
+  @override
+  String get statisticsLoading => 'Loading statistics…';
 }

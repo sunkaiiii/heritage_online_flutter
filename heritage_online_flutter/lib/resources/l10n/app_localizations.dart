@@ -1554,6 +1554,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Folk Literature'**
   String get storyCategoryFolkLiterature;
+
+  /// Statistics section: year distribution title
+  ///
+  /// In en, this message translates to:
+  /// **'Year Distribution'**
+  String get statisticsYearTitle;
+
+  /// Statistics section: category distribution title
+  ///
+  /// In en, this message translates to:
+  /// **'Category Distribution'**
+  String get statisticsCategoryTitle;
+
+  /// Statistics section: region ranking title
+  ///
+  /// In en, this message translates to:
+  /// **'Region Ranking'**
+  String get statisticsRegionTitle;
+
+  /// Statistics percentage format
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String statisticsPercentageFormat(double value);
+
+  /// Statistics: generation timestamp
+  ///
+  /// In en, this message translates to:
+  /// **'Generated: {date}'**
+  String statisticsGeneratedAt(String date);
+
+  /// Statistics: number of dimensions
+  ///
+  /// In en, this message translates to:
+  /// **'{count} dimensions'**
+  String statisticsDimensionsCount(int count);
+
+  /// Statistics empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'No statistics data available'**
+  String get statisticsEmptyMessage;
+
+  /// Statistics error title
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load statistics'**
+  String get statisticsLoadFailed;
+
+  /// Statistics loading text
+  ///
+  /// In en, this message translates to:
+  /// **'Loading statistics…'**
+  String get statisticsLoading;
 }
 
 class _AppLocalizationsDelegate
