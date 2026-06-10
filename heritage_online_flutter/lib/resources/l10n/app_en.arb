@@ -411,6 +411,11 @@
     "description": "Serendipity button loading text"
   },
 
+  "discoveryDeepDive": "Deep Dive",
+  "@discoveryDeepDive": {
+    "description": "Deep dive button and page title"
+  },
+
   "discoveryToday": "Today's Discovery",
   "@discoveryToday": {
     "description": "Discovery page today section title"

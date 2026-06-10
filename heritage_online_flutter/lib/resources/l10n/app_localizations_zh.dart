@@ -254,6 +254,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discoverySerendipityLoading => '正在探索…';
 
   @override
+  String get discoveryDeepDive => '深度探索';
+
+  @override
   String get discoveryToday => '今日发现';
 
   @override

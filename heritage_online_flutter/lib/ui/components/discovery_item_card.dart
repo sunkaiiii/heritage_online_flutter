@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:heritage_online_flutter/core/network/dto/common_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/discovery_dtos.dart';
 import 'package:heritage_online_flutter/core/utils/content_labels.dart';
 import 'package:heritage_online_flutter/ui/components/components.dart';
 import 'package:heritage_online_flutter/ui/utils/image_url_selector.dart';
@@ -29,18 +30,16 @@ class DiscoveryItemCard extends StatelessWidget {
     this.onTap,
   });
 
-  /// 从动态 JSON Map 构建
-  factory DiscoveryItemCard.fromMap(Map<String, dynamic> map, {VoidCallback? onTap}) {
+  /// 从 DiscoveryItemDto 直接构建（推荐，避免序列化开销）
+  factory DiscoveryItemCard.fromDto(DiscoveryItemDto item, {VoidCallback? onTap}) {
     return DiscoveryItemCard(
-      id: map['id']?.toString(),
-      type: map['type']?.toString(),
-      title: map['title']?.toString() ?? '',
-      summary: map['summary']?.toString(),
-      category: map['category']?.toString(),
-      region: map['region']?.toString(),
-      coverImage: map['coverImage'] != null
-          ? MediaAssetDto.fromJson(Map<String, dynamic>.from(map['coverImage'] as Map))
-          : null,
+      id: item.id,
+      type: item.type,
+      title: item.title ?? '',
+      summary: item.summary,
+      category: item.category,
+      region: item.region,
+      coverImage: item.coverImage,
       onTap: onTap,
     );
   }
@@ -61,7 +60,7 @@ class DiscoveryItemCard extends StatelessWidget {
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
               child: SizedBox(
-                height: 118,
+                height: 100,
                 width: double.infinity,
                 child: imageUrl != null
                     ? ListImage(imageUrl: imageUrl, fallbackText: title.isNotEmpty ? title.substring(0, 1) : '')
@@ -71,46 +70,51 @@ class DiscoveryItemCard extends StatelessWidget {
               ),
             ),
 
-            // 文本区域
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (summary != null && summary!.isNotEmpty) ...[
-                    const SizedBox(height: 4),
+            // 文本区域（使用 Expanded 约束高度）
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
-                      summary!,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
                           ),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                  const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 4,
-                    runSpacing: 2,
-                    children: [
-                      if (type != null && type!.isNotEmpty)
-                        MetaChip(
-                            text: localizedContentType(context, type!) ?? type!),
-                      if (category != null && category!.isNotEmpty)
-                        MetaChip(text: category!),
-                      if (region != null && region!.isNotEmpty)
-                        MetaChip(text: region!),
+                    if (summary != null && summary!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Expanded(
+                        child: Text(
+                          summary!,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ],
-                  ),
-                ],
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 2,
+                      children: [
+                        if (type != null && type!.isNotEmpty)
+                          MetaChip(
+                              text: localizedContentType(context, type!) ?? type!),
+                        if (category != null && category!.isNotEmpty)
+                          MetaChip(text: category!),
+                        if (region != null && region!.isNotEmpty)
+                          MetaChip(text: region!),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -144,18 +148,16 @@ class DiscoveryItemRow extends StatelessWidget {
     this.onTap,
   });
 
-  /// 从动态 JSON Map 构建
-  factory DiscoveryItemRow.fromMap(Map<String, dynamic> map, {VoidCallback? onTap}) {
+  /// 从 DiscoveryItemDto 直接构建（推荐，避免序列化开销）
+  factory DiscoveryItemRow.fromDto(DiscoveryItemDto item, {VoidCallback? onTap}) {
     return DiscoveryItemRow(
-      id: map['id']?.toString(),
-      type: map['type']?.toString(),
-      title: map['title']?.toString() ?? '',
-      summary: map['summary']?.toString(),
-      category: map['category']?.toString(),
-      region: map['region']?.toString(),
-      coverImage: map['coverImage'] != null
-          ? MediaAssetDto.fromJson(Map<String, dynamic>.from(map['coverImage'] as Map))
-          : null,
+      id: item.id,
+      type: item.type,
+      title: item.title ?? '',
+      summary: item.summary,
+      category: item.category,
+      region: item.region,
+      coverImage: item.coverImage,
       onTap: onTap,
     );
   }

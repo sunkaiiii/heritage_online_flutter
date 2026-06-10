@@ -1,4 +1,8 @@
 import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/discovery_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/explore_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/learning_path_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 
 /// 发现区块状态
 class DiscoverySectionState<T> {
@@ -15,7 +19,6 @@ class DiscoverySectionState<T> {
   bool get hasData => data != null;
   bool get hasError => error != null && !hasData;
 
-  /// 注意：data 参数显式传递 null 可清空数据，省略则保留原值
   DiscoverySectionState<T> copyWith({
     bool? isLoading,
     Object? data = _sentinel,
@@ -29,80 +32,63 @@ class DiscoverySectionState<T> {
   }
 }
 
-/// 用于区分“未传递”与“显式传 null”的哨兵值
 const Object _sentinel = Object();
 
 /// 发现页 UI 状态
 class DiscoveryUiState {
-  /// 今日发现
-  final DiscoverySectionState today;
-  /// 正在被看见（趋势）
-  final DiscoverySectionState trending;
-  /// 本周非遗包
-  final DiscoverySectionState weekly;
-  /// 探索索引（主题、学习路径等会分别填充到子字段）
-  final DiscoverySectionState exploreIndex;
-  /// 探索主题列表
-  final DiscoverySectionState<List<dynamic>> topics;
-  /// 学习路径列表
-  final DiscoverySectionState<List<dynamic>> learningPaths;
-  /// 精选合集列表
+  final DiscoverySectionState<DiscoveryTodayDto> today;
+  final DiscoverySectionState<DiscoveryTrendingDto> trending;
+  final DiscoverySectionState<DiscoveryWeeklyDto> weekly;
+  final DiscoverySectionState<List<ExploreTopicInfoDto>> topics;
+  final DiscoverySectionState<List<LearningPathDto>> learningPaths;
   final DiscoverySectionState<List<FeaturedCollectionDto>> collections;
-  /// 地区图谱数据
-  final DiscoverySectionState regionAtlas;
-  /// 随便看看按钮 loading
+  final DiscoverySectionState<RegionAtlasDto> regionAtlas;
   final bool serendipityLoading;
+  final DiscoveryItemDto? serendipityItem;
 
   const DiscoveryUiState({
     this.today = const DiscoverySectionState(),
     this.trending = const DiscoverySectionState(),
     this.weekly = const DiscoverySectionState(),
-    this.exploreIndex = const DiscoverySectionState(),
     this.topics = const DiscoverySectionState(),
     this.learningPaths = const DiscoverySectionState(),
     this.collections = const DiscoverySectionState(),
     this.regionAtlas = const DiscoverySectionState(),
     this.serendipityLoading = false,
+    this.serendipityItem,
   });
 
-  /// 是否有任何内容区块在加载
   bool get isAnyLoading =>
-      today.isLoading ||
-      trending.isLoading ||
-      weekly.isLoading ||
-      exploreIndex.isLoading ||
-      topics.isLoading ||
-      learningPaths.isLoading ||
-      collections.isLoading ||
-      regionAtlas.isLoading;
+      today.isLoading || trending.isLoading || weekly.isLoading ||
+      topics.isLoading || learningPaths.isLoading ||
+      collections.isLoading || regionAtlas.isLoading;
 
-  /// 是否所有内容区块都加载失败（用于全页错误判断）
   bool get isAllFailed {
-    final sections = [today, trending, weekly, exploreIndex, topics, learningPaths, collections, regionAtlas];
+    final sections = [today, trending, weekly, topics, learningPaths, collections, regionAtlas];
     return sections.every((s) => s.hasError);
   }
 
   DiscoveryUiState copyWith({
-    DiscoverySectionState? today,
-    DiscoverySectionState? trending,
-    DiscoverySectionState? weekly,
-    DiscoverySectionState? exploreIndex,
-    DiscoverySectionState<List<dynamic>>? topics,
-    DiscoverySectionState<List<dynamic>>? learningPaths,
+    DiscoverySectionState<DiscoveryTodayDto>? today,
+    DiscoverySectionState<DiscoveryTrendingDto>? trending,
+    DiscoverySectionState<DiscoveryWeeklyDto>? weekly,
+    DiscoverySectionState<List<ExploreTopicInfoDto>>? topics,
+    DiscoverySectionState<List<LearningPathDto>>? learningPaths,
     DiscoverySectionState<List<FeaturedCollectionDto>>? collections,
-    DiscoverySectionState? regionAtlas,
+    DiscoverySectionState<RegionAtlasDto>? regionAtlas,
     bool? serendipityLoading,
+    DiscoveryItemDto? serendipityItem,
   }) {
     return DiscoveryUiState(
       today: today ?? this.today,
       trending: trending ?? this.trending,
       weekly: weekly ?? this.weekly,
-      exploreIndex: exploreIndex ?? this.exploreIndex,
       topics: topics ?? this.topics,
       learningPaths: learningPaths ?? this.learningPaths,
       collections: collections ?? this.collections,
       regionAtlas: regionAtlas ?? this.regionAtlas,
       serendipityLoading: serendipityLoading ?? this.serendipityLoading,
+      serendipityItem: serendipityItem ?? this.serendipityItem,
     );
   }
 }

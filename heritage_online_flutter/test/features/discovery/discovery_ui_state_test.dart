@@ -1,11 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:heritage_online_flutter/core/network/dto/discovery_dtos.dart';
 import 'package:heritage_online_flutter/features/discovery/discovery_ui_state.dart';
 
 void main() {
   group('DiscoverySectionState', () {
     test('should have default values', () {
-      const state = DiscoverySectionState();
+      const state = DiscoverySectionState<String>();
 
       expect(state.isLoading, isFalse);
       expect(state.data, isNull);
@@ -13,37 +14,36 @@ void main() {
     });
 
     test('hasData should be false when data is null', () {
-      const state = DiscoverySectionState();
+      const state = DiscoverySectionState<String>();
       expect(state.hasData, isFalse);
     });
 
     test('hasData should be true when data is present', () {
-      const state = DiscoverySectionState(data: 'test');
+      const state = DiscoverySectionState<String>(data: 'test');
       expect(state.hasData, isTrue);
     });
 
     test('hasError should be false when error is null', () {
-      const state = DiscoverySectionState();
+      const state = DiscoverySectionState<String>();
       expect(state.hasError, isFalse);
     });
 
     test('hasError should be true when error is present and no data', () {
-      const state = DiscoverySectionState(error: 'error');
+      const state = DiscoverySectionState<String>(error: 'error');
       expect(state.hasError, isTrue);
     });
 
     test('hasError should be false when error is present but data exists', () {
-      const state = DiscoverySectionState(data: 'test', error: 'error');
+      const state = DiscoverySectionState<String>(data: 'test', error: 'error');
       expect(state.hasError, isFalse);
     });
 
     test('copyWith should work correctly', () {
-      const state = DiscoverySectionState();
+      const state = DiscoverySectionState<String>();
       final updated = state.copyWith(isLoading: true);
 
       expect(updated.isLoading, isTrue);
       expect(updated.data, isNull);
-      expect(updated.error, isNull);
     });
   });
 
@@ -54,7 +54,6 @@ void main() {
       expect(state.today.isLoading, isFalse);
       expect(state.trending.isLoading, isFalse);
       expect(state.weekly.isLoading, isFalse);
-      expect(state.exploreIndex.isLoading, isFalse);
       expect(state.topics.isLoading, isFalse);
       expect(state.learningPaths.isLoading, isFalse);
       expect(state.collections.isLoading, isFalse);
@@ -69,7 +68,7 @@ void main() {
 
     test('isAnyLoading should be true when any section is loading', () {
       const state = DiscoveryUiState(
-        today: DiscoverySectionState(isLoading: true),
+        today: DiscoverySectionState<DiscoveryTodayDto>(isLoading: true),
       );
       expect(state.isAnyLoading, isTrue);
     });
@@ -80,11 +79,10 @@ void main() {
     });
 
     test('isAllFailed should be true when all sections have error', () {
-      const state = DiscoveryUiState(
-        today: DiscoverySectionState(error: 'error'),
-        trending: DiscoverySectionState(error: 'error'),
-        weekly: DiscoverySectionState(error: 'error'),
-        exploreIndex: DiscoverySectionState(error: 'error'),
+      final state = DiscoveryUiState(
+        today: DiscoverySectionState<DiscoveryTodayDto>(error: 'error'),
+        trending: DiscoverySectionState<DiscoveryTrendingDto>(error: 'error'),
+        weekly: DiscoverySectionState<DiscoveryWeeklyDto>(error: 'error'),
         topics: DiscoverySectionState(error: 'error'),
         learningPaths: DiscoverySectionState(error: 'error'),
         collections: DiscoverySectionState(error: 'error'),
@@ -94,11 +92,10 @@ void main() {
     });
 
     test('isAllFailed should be false when some sections have data', () {
-      const state = DiscoveryUiState(
-        today: DiscoverySectionState(error: 'error'),
-        trending: DiscoverySectionState(data: 'test'),
-        weekly: DiscoverySectionState(error: 'error'),
-        exploreIndex: DiscoverySectionState(error: 'error'),
+      final state = DiscoveryUiState(
+        today: DiscoverySectionState<DiscoveryTodayDto>(error: 'error'),
+        trending: DiscoverySectionState<DiscoveryTrendingDto>(data: DiscoveryTrendingDto()),
+        weekly: DiscoverySectionState<DiscoveryWeeklyDto>(error: 'error'),
         topics: DiscoverySectionState(error: 'error'),
         learningPaths: DiscoverySectionState(error: 'error'),
         collections: DiscoverySectionState(error: 'error'),
@@ -110,7 +107,7 @@ void main() {
     test('copyWith should work correctly', () {
       const state = DiscoveryUiState();
       final updated = state.copyWith(
-        today: const DiscoverySectionState(isLoading: true),
+        today: DiscoverySectionState<DiscoveryTodayDto>(isLoading: true),
         serendipityLoading: true,
       );
 

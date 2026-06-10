@@ -322,17 +322,54 @@ class ComparePlaceholderPage extends StatelessWidget {
   }
 }
 
-/// 随便看看页占位
-class SerendipityPage extends StatelessWidget {
-  const SerendipityPage({super.key});
+/// 深度探索页 — 对齐 Android DeepDiveScreen
+class DeepDivePage extends StatelessWidget {
+  final String seedType;
+  final String seedId;
+  final VoidCallback onBack;
+
+  const DeepDivePage({
+    super.key,
+    required this.seedType,
+    required this.seedId,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.discoverySerendipity)),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: onBack,
+          tooltip: l10n.actionBack,
+        ),
+        title: Text(l10n.discoveryDeepDive),
+      ),
       body: PageBackground(
-        child: Center(child: Text(l10n.commonEmpty)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.travel_explore,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.primary),
+              const SizedBox(height: 16),
+              Text(
+                l10n.discoveryDeepDive,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '$seedType / $seedId',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

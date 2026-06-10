@@ -7,7 +7,10 @@ import 'package:heritage_online_flutter/core/network/dto/compare_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/discovery_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/explore_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/learning_path_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/story_dtos.dart';
@@ -364,33 +367,35 @@ class DefaultHeritageRepository implements HeritageRepository {
   // ==================== 发现页 ====================
 
   @override
-  Future<dynamic> exploreIndex() async {
+  Future<ExploreIndexDto> exploreIndex() async {
     final response = await _apiClient.getExploreIndex();
-    return response.data;
+    return ExploreIndexDto.fromJson(_toMap(response.data));
   }
 
   @override
-  Future<List<dynamic>> exploreTopics({String? type, int limit = 20}) async {
+  Future<List<ExploreTopicInfoDto>> exploreTopics({String? type, int limit = 20}) async {
     final response = await _apiClient.getExploreTopics(type: type, limit: limit);
-    return response.data as List<dynamic>;
+    final list = response.data as List<dynamic>;
+    return list.map((j) => ExploreTopicInfoDto.fromJson(j as Map<String, dynamic>)).toList();
   }
 
   @override
-  Future<dynamic> exploreTopic(String type, String key, {int limit = 6}) async {
+  Future<ExploreTopicV2Dto> exploreTopic(String type, String key, {int limit = 6}) async {
     final response = await _apiClient.getExploreTopic(type, key, limit: limit);
-    return response.data;
+    return ExploreTopicV2Dto.fromJson(_toMap(response.data));
   }
 
   @override
-  Future<List<dynamic>> learningPaths() async {
+  Future<List<LearningPathDto>> learningPaths() async {
     final response = await _apiClient.getLearningPaths();
-    return response.data as List<dynamic>;
+    final list = response.data as List<dynamic>;
+    return list.map((j) => LearningPathDto.fromJson(j as Map<String, dynamic>)).toList();
   }
 
   @override
-  Future<dynamic> learningPathDetail(String id, {int limit = 6}) async {
+  Future<LearningPathDetailDto> learningPathDetail(String id, {int limit = 6}) async {
     final response = await _apiClient.getLearningPathDetail(id, limit: limit);
-    return response.data;
+    return LearningPathDetailDto.fromJson(_toMap(response.data));
   }
 
   @override
@@ -510,33 +515,37 @@ class DefaultHeritageRepository implements HeritageRepository {
   // ==================== 发现增强 ====================
 
   @override
-  Future<dynamic> discoveryToday() async {
+  Future<DiscoveryTodayDto> discoveryToday() async {
     final response = await _apiClient.getDiscoveryToday();
-    return response.data;
+    return DiscoveryTodayDto.fromJson(_toMap(response.data));
   }
 
   @override
-  Future<dynamic> discoveryTrending() async {
+  Future<DiscoveryTrendingDto> discoveryTrending() async {
     final response = await _apiClient.getDiscoveryTrending();
-    return response.data;
+    return DiscoveryTrendingDto.fromJson(_toMap(response.data));
   }
 
   @override
-  Future<dynamic> discoveryWeekly() async {
+  Future<DiscoveryWeeklyDto> discoveryWeekly() async {
     final response = await _apiClient.getDiscoveryWeekly();
-    return response.data;
+    return DiscoveryWeeklyDto.fromJson(_toMap(response.data));
   }
 
   @override
-  Future<dynamic> discoverySerendipity() async {
+  Future<DiscoveryItemDto?> discoverySerendipity() async {
     final response = await _apiClient.getDiscoverySerendipity();
-    return response.data;
+    final data = response.data;
+    if (data == null) return null;
+    return DiscoveryItemDto.fromJson(_toMap(data));
   }
 
   @override
-  Future<dynamic> discoveryRandom({String? type}) async {
+  Future<DiscoveryItemDto?> discoveryRandom({String? type}) async {
     final response = await _apiClient.getDiscoveryRandom(type: type);
-    return response.data;
+    final data = response.data;
+    if (data == null) return null;
+    return DiscoveryItemDto.fromJson(_toMap(data));
   }
 
   // ==================== 时间线 ====================

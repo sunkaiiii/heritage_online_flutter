@@ -255,6 +255,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverySerendipityLoading => 'Exploring…';
 
   @override
+  String get discoveryDeepDive => 'Deep Dive';
+
+  @override
   String get discoveryToday => 'Today\'s Discovery';
 
   @override

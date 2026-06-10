@@ -4,7 +4,10 @@ import 'package:heritage_online_flutter/core/network/dto/compare_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/discovery_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/explore_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/learning_path_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/story_dtos.dart';
@@ -165,19 +168,19 @@ abstract class HeritageRepository {
   // ==================== 发现页 ====================
 
   /// 获取探索索引
-  Future<dynamic> exploreIndex();
+  Future<ExploreIndexDto> exploreIndex();
 
   /// 获取探索主题列表
-  Future<List<dynamic>> exploreTopics({String? type, int limit = 20});
+  Future<List<ExploreTopicInfoDto>> exploreTopics({String? type, int limit = 20});
 
   /// 获取探索主题详情
-  Future<dynamic> exploreTopic(String type, String key, {int limit = 6});
+  Future<ExploreTopicV2Dto> exploreTopic(String type, String key, {int limit = 6});
 
   /// 获取学习路径列表
-  Future<List<dynamic>> learningPaths();
+  Future<List<LearningPathDto>> learningPaths();
 
   /// 获取学习路径详情
-  Future<dynamic> learningPathDetail(String id, {int limit = 6});
+  Future<LearningPathDetailDto> learningPathDetail(String id, {int limit = 6});
 
   /// 获取精选合集
   Future<List<FeaturedCollectionDto>> featuredCollections();
@@ -236,19 +239,19 @@ abstract class HeritageRepository {
   // ==================== 发现增强 ====================
 
   /// 获取今日发现
-  Future<dynamic> discoveryToday();
+  Future<DiscoveryTodayDto> discoveryToday();
 
   /// 获取趋势内容
-  Future<dynamic> discoveryTrending();
+  Future<DiscoveryTrendingDto> discoveryTrending();
 
   /// 获取本周精选
-  Future<dynamic> discoveryWeekly();
+  Future<DiscoveryWeeklyDto> discoveryWeekly();
 
   /// 偶遇内容
-  Future<dynamic> discoverySerendipity();
+  Future<DiscoveryItemDto?> discoverySerendipity();
 
   /// 随机内容
-  Future<dynamic> discoveryRandom({String? type});
+  Future<DiscoveryItemDto?> discoveryRandom({String? type});
 
   // ==================== 时间线 ====================
 

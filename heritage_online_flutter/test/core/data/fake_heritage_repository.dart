@@ -6,7 +6,10 @@ import 'package:heritage_online_flutter/core/network/dto/compare_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/content_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/context_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/digest_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/discovery_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/enums.dart';
+import 'package:heritage_online_flutter/core/network/dto/explore_dtos.dart';
+import 'package:heritage_online_flutter/core/network/dto/learning_path_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/recommendation_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/region_dtos.dart';
 import 'package:heritage_online_flutter/core/network/dto/story_dtos.dart';
@@ -269,33 +272,33 @@ class FakeHeritageRepository implements HeritageRepository {
   }
 
   @override
-  Future<dynamic> exploreIndex() async {
+  Future<ExploreIndexDto> exploreIndex() async {
     _checkError();
-    return null;
+    throw UnimplementedError('exploreIndex not mocked');
   }
 
   @override
-  Future<List<dynamic>> exploreTopics({String? type, int limit = 20}) async {
+  Future<List<ExploreTopicInfoDto>> exploreTopics({String? type, int limit = 20}) async {
     _checkError();
     return [];
   }
 
   @override
-  Future<dynamic> exploreTopic(String type, String key, {int limit = 6}) async {
+  Future<ExploreTopicV2Dto> exploreTopic(String type, String key, {int limit = 6}) async {
     _checkError();
-    return null;
+    throw UnimplementedError('exploreTopic not mocked');
   }
 
   @override
-  Future<List<dynamic>> learningPaths() async {
+  Future<List<LearningPathDto>> learningPaths() async {
     _checkError();
     return [];
   }
 
   @override
-  Future<dynamic> learningPathDetail(String id, {int limit = 6}) async {
+  Future<LearningPathDetailDto> learningPathDetail(String id, {int limit = 6}) async {
     _checkError();
-    return null;
+    throw UnimplementedError('learningPathDetail not mocked');
   }
 
   /// 模拟精选合集
@@ -345,31 +348,31 @@ class FakeHeritageRepository implements HeritageRepository {
   }
 
   @override
-  Future<dynamic> discoveryToday() async {
+  Future<DiscoveryTodayDto> discoveryToday() async {
+    _checkError();
+    return const DiscoveryTodayDto();
+  }
+
+  @override
+  Future<DiscoveryTrendingDto> discoveryTrending() async {
+    _checkError();
+    return const DiscoveryTrendingDto();
+  }
+
+  @override
+  Future<DiscoveryWeeklyDto> discoveryWeekly() async {
+    _checkError();
+    return const DiscoveryWeeklyDto();
+  }
+
+  @override
+  Future<DiscoveryItemDto?> discoverySerendipity() async {
     _checkError();
     return null;
   }
 
   @override
-  Future<dynamic> discoveryTrending() async {
-    _checkError();
-    return null;
-  }
-
-  @override
-  Future<dynamic> discoveryWeekly() async {
-    _checkError();
-    return null;
-  }
-
-  @override
-  Future<dynamic> discoverySerendipity() async {
-    _checkError();
-    return null;
-  }
-
-  @override
-  Future<dynamic> discoveryRandom({String? type}) async {
+  Future<DiscoveryItemDto?> discoveryRandom({String? type}) async {
     _checkError();
     return null;
   }

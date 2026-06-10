@@ -584,6 +584,12 @@ abstract class AppLocalizations {
   /// **'Exploring…'**
   String get discoverySerendipityLoading;
 
+  /// Deep dive button and page title
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Dive'**
+  String get discoveryDeepDive;
+
   /// Discovery page today section title
   ///
   /// In en, this message translates to:

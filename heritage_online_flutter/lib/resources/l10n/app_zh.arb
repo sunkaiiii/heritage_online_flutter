@@ -411,6 +411,11 @@
     "description": "随便看看按钮加载中文本"
   },
 
+  "discoveryDeepDive": "深度探索",
+  "@discoveryDeepDive": {
+    "description": "深度探索按钮/页面标题"
+  },
+
   "discoveryToday": "今日发现",
   "@discoveryToday": {
     "description": "发现页今日发现区块标题"

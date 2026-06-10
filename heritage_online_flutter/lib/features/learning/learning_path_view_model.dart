@@ -26,18 +26,41 @@ class LearningPathViewModel extends StateNotifier<LearningPathUiState> {
     try {
       final data = await _repository.learningPathDetail(_pathId, limit: 6);
 
-      final map = data as Map<String, dynamic>;
-
       state = LearningPathUiState(
         isLoading: false,
-        title: map['title']?.toString(),
-        subtitle: map['subtitle']?.toString(),
-        tags: _parseTags(map['tags']),
-        estimatedItemCount: (map['estimatedItemCount'] as int?) ?? 0,
-        stepCount: (map['stepCount'] as int?) ?? 0,
-        steps: _parseSteps(map['steps']),
-        featuredItems: _parseFeaturedItems(map['featuredItems']),
-        relatedTopics: _parseRelatedTopics(map['relatedTopics']),
+        title: data.title,
+        subtitle: data.subtitle,
+        tags: data.tags,
+        estimatedItemCount: data.featuredItems.length,
+        stepCount: data.steps.length,
+        steps: data.steps.asMap().entries.map((entry) {
+          return LearningPathStep(
+            index: entry.key + 1,
+            title: entry.value.title,
+            description: entry.value.subtitle,
+            items: entry.value.items.map((item) => LearningPathFeaturedItem(
+              id: item.id,
+              type: item.type,
+              title: item.title,
+              summary: item.summary,
+              sourceUrl: item.sourceUrl,
+              category: item.category,
+            )).toList(),
+          );
+        }).toList(),
+        featuredItems: data.featuredItems.map((item) => LearningPathFeaturedItem(
+          id: item.id,
+          type: item.type,
+          title: item.title,
+          summary: item.summary,
+          sourceUrl: item.sourceUrl,
+          category: item.category,
+        )).toList(),
+        relatedTopics: data.relatedTopics.map((topic) => LearningPathRelatedTopic(
+          type: topic.type,
+          key: topic.key,
+          title: topic.title,
+        )).toList(),
       );
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -45,57 +68,6 @@ class LearningPathViewModel extends StateNotifier<LearningPathUiState> {
   }
 
   void retry() => load();
-
-  // ==================== JSON 解析 ====================
-
-  List<String> _parseTags(dynamic tagsData) {
-    final list = (tagsData as List?) ?? [];
-    return list.map((e) => e.toString()).toList();
-  }
-
-  List<LearningPathStep> _parseSteps(dynamic stepsData) {
-    final list = (stepsData as List?) ?? [];
-    return list.asMap().entries.map((entry) {
-      final i = entry.key;
-      final map = entry.value as Map<String, dynamic>;
-      return LearningPathStep(
-        index: i + 1,
-        title: map['title']?.toString(),
-        description: map['description']?.toString(),
-        items: _parseFeaturedItems(map['items']),
-      );
-    }).toList();
-  }
-
-  List<LearningPathFeaturedItem> _parseFeaturedItems(dynamic itemsData) {
-    final list = (itemsData as List?) ?? [];
-    return list.map((item) {
-      final map = item as Map<String, dynamic>;
-      return LearningPathFeaturedItem(
-        id: map['id']?.toString(),
-        type: map['type']?.toString(),
-        title: map['title']?.toString(),
-        summary: map['summary']?.toString(),
-        imageUrl: map['imageUrl']?.toString(),
-        sourceId: map['sourceId']?.toString(),
-        sourceUrl: map['sourceUrl']?.toString(),
-        category: map['category']?.toString(),
-        kind: map['kind']?.toString(),
-      );
-    }).toList();
-  }
-
-  List<LearningPathRelatedTopic> _parseRelatedTopics(dynamic relatedData) {
-    final list = (relatedData as List?) ?? [];
-    return list.map((item) {
-      final map = item as Map<String, dynamic>;
-      return LearningPathRelatedTopic(
-        type: map['type']?.toString(),
-        key: map['key']?.toString(),
-        title: map['title']?.toString(),
-      );
-    }).toList();
-  }
 }
 
 /// 学习路径详情 ViewModel Provider
