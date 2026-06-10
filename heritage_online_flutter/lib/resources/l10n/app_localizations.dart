@@ -740,6 +740,12 @@ abstract class AppLocalizations {
   /// **'Related Topics'**
   String get learningRelatedTopics;
 
+  /// Learning path featured content section title
+  ///
+  /// In en, this message translates to:
+  /// **'Featured Content'**
+  String get learningPathFeatured;
+
   /// Filter button
   ///
   /// In en, this message translates to:
@@ -769,6 +775,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Year'**
   String get filterFieldYear;
+
+  /// Year filter chip label
+  ///
+  /// In en, this message translates to:
+  /// **'Year: {year}'**
+  String filterLabelYear(String year);
 
   /// Year filter field placeholder
   ///

@@ -541,6 +541,11 @@
     "description": "学习路径相关主题区块标题"
   },
 
+  "learningPathFeatured": "精选内容",
+  "@learningPathFeatured": {
+    "description": "学习路径精选内容区块标题"
+  },
+
   "filterButton": "筛选",
   "@filterButton": {
     "description": "筛选按钮"
@@ -564,6 +569,16 @@
   "filterFieldYear": "年份",
   "@filterFieldYear": {
     "description": "年份筛选字段标签"
+  },
+
+  "filterLabelYear": "年份: {year}",
+  "@filterLabelYear": {
+    "description": "年份筛选chip标签",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
   },
 
   "filterPlaceholderYear": "例如 2024",

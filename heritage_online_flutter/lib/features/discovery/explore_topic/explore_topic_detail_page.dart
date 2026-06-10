@@ -137,7 +137,7 @@ class _ExploreTopicDetailPageState extends ConsumerState<ExploreTopicDetailPage>
             if (data.relatedTopics.isNotEmpty) ...[
               const SizedBox(height: 24),
               Text(
-                '相关主题',
+                l10n.exploreTopicRelated,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),

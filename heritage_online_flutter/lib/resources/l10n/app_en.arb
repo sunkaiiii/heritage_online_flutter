@@ -541,6 +541,11 @@
     "description": "Learning path related topics section title"
   },
 
+  "learningPathFeatured": "Featured Content",
+  "@learningPathFeatured": {
+    "description": "Learning path featured content section title"
+  },
+
   "filterButton": "Filter",
   "@filterButton": {
     "description": "Filter button"
@@ -564,6 +569,16 @@
   "filterFieldYear": "Year",
   "@filterFieldYear": {
     "description": "Year filter field label"
+  },
+
+  "filterLabelYear": "Year: {year}",
+  "@filterLabelYear": {
+    "description": "Year filter chip label",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
   },
 
   "filterPlaceholderYear": "e.g. 2024",

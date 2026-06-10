@@ -332,6 +332,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get learningRelatedTopics => '相关主题';
 
   @override
+  String get learningPathFeatured => '精选内容';
+
+  @override
   String get filterButton => '筛选';
 
   @override
@@ -345,6 +348,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get filterFieldYear => '年份';
+
+  @override
+  String filterLabelYear(String year) {
+    return '年份: $year';
+  }
 
   @override
   String get filterPlaceholderYear => '例如 2024';

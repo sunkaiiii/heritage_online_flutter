@@ -336,6 +336,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learningRelatedTopics => 'Related Topics';
 
   @override
+  String get learningPathFeatured => 'Featured Content';
+
+  @override
   String get filterButton => 'Filter';
 
   @override
@@ -349,6 +352,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterFieldYear => 'Year';
+
+  @override
+  String filterLabelYear(String year) {
+    return 'Year: $year';
+  }
 
   @override
   String get filterPlaceholderYear => 'e.g. 2024';

@@ -48,7 +48,7 @@ void main() {
 
     test('activeFilterChips should include year filter', () {
       const state = ArticlesUiState(yearFilter: '2024');
-      expect(state.activeFilterChips, contains('年份: 2024'));
+      expect(state.activeFilterChips, contains('2024'));
     });
 
     test('copyWith should work correctly', () {

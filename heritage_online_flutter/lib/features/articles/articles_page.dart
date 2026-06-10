@@ -288,11 +288,16 @@ class _ArticlesPageState extends ConsumerState<ArticlesPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Wrap(
           spacing: 8,
-          children: state.activeFilterChips.map((chip) => Chip(
-                label: Text(chip),
-                onDeleted: () =>
-                    ref.read(articlesViewModelProvider.notifier).clearFilters(),
-              )).toList(),
+          children: state.activeFilterChips.map((chip) {
+            // 年份筛选：格式化为本地化标签
+            final isYear = state.yearFilter.isNotEmpty && chip == state.yearFilter;
+            final label = isYear ? l10n.filterLabelYear(chip) : chip;
+            return Chip(
+              label: Text(label),
+              onDeleted: () =>
+                  ref.read(articlesViewModelProvider.notifier).clearFilters(),
+            );
+          }).toList(),
         ),
       ),
     );

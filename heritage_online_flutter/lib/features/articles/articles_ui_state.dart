@@ -73,7 +73,8 @@ class ArticlesUiState {
   List<String> get activeFilterChips {
     final chips = <String>[];
     if (searchKeywords.isNotEmpty) chips.add(searchKeywords);
-    if (yearFilter.isNotEmpty) chips.add('年份: $yearFilter');
+    // Note: yearFilter label is localized in the page, here we store raw data
+    if (yearFilter.isNotEmpty) chips.add(yearFilter);
     return chips;
   }
 }

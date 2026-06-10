@@ -311,7 +311,7 @@ class _SavedContentCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 16),
         color: Theme.of(context).colorScheme.error,
-        child: const Icon(Icons.delete, color: Colors.white),
+        child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onError),
       ),
       onDismissed: (_) => onRemove(),
       child: ListCard(

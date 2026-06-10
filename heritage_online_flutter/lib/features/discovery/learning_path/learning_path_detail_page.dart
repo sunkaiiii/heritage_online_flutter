@@ -140,7 +140,7 @@ class _LearningPathDetailPageState extends ConsumerState<LearningPathDetailPage>
             // Steps
             if (data.steps.isNotEmpty) ...[
               Text(
-                '学习步骤',
+                l10n.learningPathSteps,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
@@ -153,7 +153,7 @@ class _LearningPathDetailPageState extends ConsumerState<LearningPathDetailPage>
             if (data.featuredItems.isNotEmpty) ...[
               const SizedBox(height: 24),
               Text(
-                '精选内容',
+                l10n.learningPathFeatured,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
@@ -164,7 +164,7 @@ class _LearningPathDetailPageState extends ConsumerState<LearningPathDetailPage>
             if (data.relatedTopics.isNotEmpty) ...[
               const SizedBox(height: 24),
               Text(
-                '相关主题',
+                l10n.learningRelatedTopics,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
