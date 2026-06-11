@@ -988,14 +988,6 @@
     "description": "地区详情相关地区标题"
   },
 
-  "collectionItemCount": "共 {count} 项",
-  "@collectionItemCount": {
-    "description": "合集条目数量",
-    "placeholders": {
-      "count": { "type": "int" }
-    }
-  },
-
   "collectionEmptyItems": "该合集暂无内容",
   "@collectionEmptyItems": {
     "description": "合集空内容消息"
@@ -1004,6 +996,11 @@
   "exploreSectionTitle": "探索",
   "@exploreSectionTitle": {
     "description": "详情页探索区标题"
+  },
+
+  "exploreSectionSubtitle": "从摘要、推荐与关系线索继续了解这项非遗内容",
+  "@exploreSectionSubtitle": {
+    "description": "详情页探索区副标题"
   },
 
   "digestTitle": "速览",
@@ -1029,9 +1026,19 @@
     "description": "速览关键信息区块"
   },
 
+  "digestKeywords": "关键词",
+  "@digestKeywords": {
+    "description": "速览关键词区块标题"
+  },
+
   "blendedRecommendationsTitle": "为你推荐",
   "@blendedRecommendationsTitle": {
     "description": "综合推荐区块标题"
+  },
+
+  "blendedSubtitle": "根据内容关系与语义线索推荐",
+  "@blendedSubtitle": {
+    "description": "综合推荐区块副标题"
   },
 
   "contextRelatedTitle": "相关",
@@ -1299,6 +1306,51 @@
   "statisticsLoadFailed": "统计数据加载失败",
   "@statisticsLoadFailed": {
     "description": "统计错误标题"
+  },
+
+  "blendedReasons": "推荐理由",
+  "@blendedReasons": {
+    "description": "综合推荐：理由标签"
+  },
+
+  "blendedScore": "综合得分",
+  "@blendedScore": {
+    "description": "综合推荐：得分标签"
+  },
+
+  "contextLoading": "加载中...",
+  "@contextLoading": {
+    "description": "Context区块加载文本"
+  },
+
+  "graphFromLabel": "来源",
+  "@graphFromLabel": {
+    "description": "图边：来源标签"
+  },
+
+  "graphToLabel": "目标",
+  "@graphToLabel": {
+    "description": "图边：目标标签"
+  },
+
+  "collectionItemCount": "{count} 个内容",
+  "@collectionItemCount": {
+    "description": "合集：内容数量显示",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "showMore": "展开更多",
+  "@showMore": {
+    "description": "展开更多按钮"
+  },
+
+  "showLess": "收起",
+  "@showLess": {
+    "description": "收起按钮"
   },
 
   "statisticsLoading": "统计数据加载中…",

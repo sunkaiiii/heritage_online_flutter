@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:heritage_online_flutter/core/data/heritage_repository.dart';
 import 'package:heritage_online_flutter/core/data/repository_provider.dart';
+import 'package:heritage_online_flutter/core/network/api_error.dart';
+import 'package:heritage_online_flutter/core/network/dto/collection_dtos.dart';
 
 import 'collection_ui_state.dart';
 
@@ -42,6 +44,16 @@ class CollectionDetailViewModel extends StateNotifier<CollectionDetailUiState> {
     try {
       final collection = await _fetchCollection();
       state = state.copyWith(isLoading: false, collection: collection);
+    } on ApiError catch (e) {
+      // 404 时返回空合集而非报错（context 中的合集 id 可能是 topic key）
+      if (e.type == ApiErrorType.notFound) {
+        state = state.copyWith(
+          isLoading: false,
+          collection: const CollectionDto(),
+        );
+      } else {
+        state = state.copyWith(isLoading: false, error: e.message);
+      }
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }

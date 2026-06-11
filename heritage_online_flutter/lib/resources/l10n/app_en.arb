@@ -988,14 +988,6 @@
     "description": "Region detail related regions title"
   },
 
-  "collectionItemCount": "{count} items",
-  "@collectionItemCount": {
-    "description": "Collection item count",
-    "placeholders": {
-      "count": { "type": "int" }
-    }
-  },
-
   "collectionEmptyItems": "This collection is empty",
   "@collectionEmptyItems": {
     "description": "Collection empty items message"
@@ -1004,6 +996,11 @@
   "exploreSectionTitle": "Explore",
   "@exploreSectionTitle": {
     "description": "Detail page explore section title"
+  },
+
+  "exploreSectionSubtitle": "Continue discovering this heritage item through summaries, recommendations, and related clues",
+  "@exploreSectionSubtitle": {
+    "description": "Detail page explore section subtitle"
   },
 
   "digestTitle": "Quick Read",
@@ -1029,9 +1026,19 @@
     "description": "Digest key facts section"
   },
 
+  "digestKeywords": "Keywords",
+  "@digestKeywords": {
+    "description": "Digest keywords section title"
+  },
+
   "blendedRecommendationsTitle": "Recommended for You",
   "@blendedRecommendationsTitle": {
     "description": "Blended recommendations section title"
+  },
+
+  "blendedSubtitle": "Recommended based on content relationships and semantic clues",
+  "@blendedSubtitle": {
+    "description": "Blended recommendations section subtitle"
   },
 
   "contextRelatedTitle": "Related",
@@ -1299,6 +1306,51 @@
   "statisticsLoadFailed": "Failed to load statistics",
   "@statisticsLoadFailed": {
     "description": "Statistics error title"
+  },
+
+  "blendedReasons": "Reasons",
+  "@blendedReasons": {
+    "description": "Blended recommendation: reasons label"
+  },
+
+  "blendedScore": "Score",
+  "@blendedScore": {
+    "description": "Blended recommendation: score label"
+  },
+
+  "contextLoading": "Loading...",
+  "@contextLoading": {
+    "description": "Context section loading text"
+  },
+
+  "graphFromLabel": "From",
+  "@graphFromLabel": {
+    "description": "Graph edge: from label"
+  },
+
+  "graphToLabel": "To",
+  "@graphToLabel": {
+    "description": "Graph edge: to label"
+  },
+
+  "collectionItemCount": "{count} items",
+  "@collectionItemCount": {
+    "description": "Collection: item count display",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "showMore": "Show more",
+  "@showMore": {
+    "description": "Button to show more items"
+  },
+
+  "showLess": "Show less",
+  "@showLess": {
+    "description": "Button to show fewer items"
   },
 
   "statisticsLoading": "Loading statistics…",

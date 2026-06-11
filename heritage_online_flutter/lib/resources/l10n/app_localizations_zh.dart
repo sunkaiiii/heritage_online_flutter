@@ -590,15 +590,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get regionAtlasRelatedRegions => '相关地区';
 
   @override
-  String collectionItemCount(int count) {
-    return '共 $count 项';
-  }
-
-  @override
   String get collectionEmptyItems => '该合集暂无内容';
 
   @override
   String get exploreSectionTitle => '探索';
+
+  @override
+  String get exploreSectionSubtitle => '从摘要、推荐与关系线索继续了解这项非遗内容';
 
   @override
   String get digestTitle => '速览';
@@ -615,7 +613,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get digestKeyFacts => '关键信息';
 
   @override
+  String get digestKeywords => '关键词';
+
+  @override
   String get blendedRecommendationsTitle => '为你推荐';
+
+  @override
+  String get blendedSubtitle => '根据内容关系与语义线索推荐';
 
   @override
   String get contextRelatedTitle => '相关';
@@ -792,6 +796,32 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get statisticsLoadFailed => '统计数据加载失败';
+
+  @override
+  String get blendedReasons => '推荐理由';
+
+  @override
+  String get blendedScore => '综合得分';
+
+  @override
+  String get contextLoading => '加载中...';
+
+  @override
+  String get graphFromLabel => '来源';
+
+  @override
+  String get graphToLabel => '目标';
+
+  @override
+  String collectionItemCount(int count) {
+    return '$count 个内容';
+  }
+
+  @override
+  String get showMore => '展开更多';
+
+  @override
+  String get showLess => '收起';
 
   @override
   String get statisticsLoading => '统计数据加载中…';

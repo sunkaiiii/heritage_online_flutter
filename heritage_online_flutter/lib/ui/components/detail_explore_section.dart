@@ -52,8 +52,21 @@ class DetailExploreState {
       blended!.items.any((item) => item.id.isNotEmpty && item.title.isNotEmpty);
 }
 
+/// 导航回调类型定义
+typedef NavigateCallback = void Function({
+  required String toType,
+  required String toId,
+  required String source,
+  String? toTitle,
+  String? toCategory,
+  String? toKind,
+  String? toSourceId,
+  String? toSourceUrl,
+});
+
 /// 详情页底部探索区
-/// 按顺序渲染：Digest → Blended Recommendations → Context (Related, Recommendations, Semantic, Collections, Topics, Graph)
+/// 匹配 Android DetailExploreSection 的视觉设计
+/// 顺序：Digest → Blended Recommendations → Context (Related, Recommendations, Semantic, Collections, Topics, Graph)
 class DetailExploreSection extends StatelessWidget {
   final DetailExploreState state;
   final String contentType;
@@ -62,19 +75,7 @@ class DetailExploreSection extends StatelessWidget {
   final VoidCallback? onDigestRetry;
   final VoidCallback? onContextRetry;
   final VoidCallback? onBlendedRetry;
-
-  /// 导航前回调，用于记录阅读路径
-  /// 参数：目标类型、目标ID、来源(source)、目标标题、category、kind、sourceId、sourceUrl
-  final void Function({
-    required String toType,
-    required String toId,
-    required String source,
-    String? toTitle,
-    String? toCategory,
-    String? toKind,
-    String? toSourceId,
-    String? toSourceUrl,
-  })? onNavigate;
+  final NavigateCallback? onNavigate;
 
   const DetailExploreSection({
     super.key,
@@ -100,7 +101,17 @@ class DetailExploreSection extends StatelessWidget {
       children: [
         const SizedBox(height: 24),
         SectionHeader(title: l10n.exploreSectionTitle),
-        const SizedBox(height: 12),
+        const SizedBox(height: 4),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            l10n.exploreSectionSubtitle,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+        ),
+        const SizedBox(height: 16),
 
         // 1. Digest
         _buildDigest(context, l10n),
@@ -118,75 +129,66 @@ class DetailExploreSection extends StatelessWidget {
 
   Widget _buildDigest(BuildContext context, AppLocalizations l10n) {
     if (state.digestLoading) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 12),
-        child: LoadingPlaceholder(),
-      );
+      return _ContextLoadingPlaceholder(l10n: l10n);
     }
 
     if (state.digestError != null) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: ErrorRetryRow(
-          message: l10n.commonError,
-          onRetry: onDigestRetry ?? () {},
-        ),
+      return _ContextErrorRow(
+        message: l10n.commonError,
+        onRetry: onDigestRetry ?? () {},
+        l10n: l10n,
       );
     }
 
     final digest = state.digest;
     if (digest == null) return const SizedBox.shrink();
 
-    return _DigestCard(digest: digest, l10n: l10n);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: _DigestCard(digest: digest, l10n: l10n),
+    );
   }
 
   Widget _buildBlended(BuildContext context, AppLocalizations l10n) {
     if (state.blendedLoading) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 12),
-        child: LoadingPlaceholder(),
-      );
+      return _ContextLoadingPlaceholder(l10n: l10n);
     }
 
     if (state.blendedError != null) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: ErrorRetryRow(
-          message: l10n.commonError,
-          onRetry: onBlendedRetry ?? () {},
-        ),
+      return _ContextErrorRow(
+        message: l10n.commonError,
+        onRetry: onBlendedRetry ?? () {},
+        l10n: l10n,
       );
     }
 
     if (!state.hasValidBlendedItems) return const SizedBox.shrink();
 
-    return _BlendedRecommendationsSection(
-      items: state.blended!.items
-          .where((item) => item.id.isNotEmpty && item.title.isNotEmpty)
-          .toList(),
-      l10n: l10n,
-      fromType: contentType,
-      fromId: contentId,
-      fromTitle: contentTitle,
-      onNavigate: onNavigate,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: _BlendedRecommendationsSection(
+        items: state.blended!.items
+            .where((item) => item.id.isNotEmpty && item.title.isNotEmpty)
+            .toList(),
+        l10n: l10n,
+        fromType: contentType,
+        fromId: contentId,
+        fromTitle: contentTitle,
+        onNavigate: onNavigate,
+      ),
     );
   }
 
   Widget _buildContext(BuildContext context, AppLocalizations l10n) {
     if (state.contextLoading) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 12),
-        child: LoadingPlaceholder(),
-      );
+      return _ContextLoadingPlaceholder(l10n: l10n);
     }
 
     if (state.contextError != null) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: ErrorRetryRow(
-          message: l10n.commonError,
-          onRetry: onContextRetry ?? () {},
-        ),
+      return _ContextErrorRow(
+        message: l10n.commonError,
+        onRetry: onContextRetry ?? () {},
+        l10n: l10n,
       );
     }
 
@@ -204,7 +206,8 @@ class DetailExploreSection extends StatelessWidget {
   }
 }
 
-/// 速览卡片
+// ==================== Digest 卡片 ====================
+
 class _DigestCard extends StatefulWidget {
   final ContentDigestDto digest;
   final AppLocalizations l10n;
@@ -227,114 +230,154 @@ class _DigestCardState extends State<_DigestCard> {
     final showKeywords = digest.keywords.isNotEmpty;
 
     return ContentCard(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 标题
-          Text(l10n.digestTitle,
-              style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8),
-
-          // quickRead
-          if (digest.quickRead != null && digest.quickRead!.isNotEmpty) ...[
-            Text(digest.quickRead!,
-                style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: 8),
-          ],
-
-          // 阅读时间
-          if (digest.readingTimeMinutes > 0)
-            Text(l10n.digestReadingTime(digest.readingTimeMinutes),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+      padding: const EdgeInsets.all(14),
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 标题
+            Text(l10n.digestTitle,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                     )),
+            const SizedBox(height: 10),
 
-          // 要点
-          if (showHighlights) ...[
-            const SizedBox(height: 12),
-            Text(l10n.digestHighlights,
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            ...digest.highlights
-                .take(_expanded ? digest.highlights.length : 3)
-                .map((h) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('• ',
-                              style: Theme.of(context).textTheme.bodyMedium),
-                          Expanded(
-                              child: Text(h,
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium)),
-                        ],
-                      ),
-                    )),
-            if (digest.highlights.length > 3)
-              GestureDetector(
-                onTap: () => setState(() => _expanded = !_expanded),
-                child: Text(
-                  _expanded ? widget.l10n.digestCollapse : widget.l10n.digestExpand,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            // quickRead
+            if (digest.quickRead != null && digest.quickRead!.isNotEmpty) ...[
+              Text(digest.quickRead!,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      )),
+              const SizedBox(height: 10),
+            ],
+
+            // 阅读时间
+            if (digest.readingTimeMinutes > 0) ...[
+              Text(l10n.digestReadingTime(digest.readingTimeMinutes),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
-                      ),
+                      )),
+              const SizedBox(height: 10),
+            ],
+
+            // 要点
+            if (showHighlights) ...[
+              Text(l10n.digestHighlights,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      )),
+              const SizedBox(height: 4),
+              ...digest.highlights
+                  .take(_expanded ? digest.highlights.length : 3)
+                  .map((h) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('• ',
+                                style: Theme.of(context).textTheme.bodySmall),
+                            Expanded(
+                                child: Text(h,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ))),
+                          ],
+                        ),
+                      )),
+              if (digest.highlights.length > 3)
+                TextButton(
+                  onPressed: () => setState(() => _expanded = !_expanded),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    _expanded ? l10n.showLess : l10n.showMore,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
                 ),
+            ],
+
+            // 关键信息
+            if (showKeyFacts) ...[
+              const SizedBox(height: 10),
+              Text(l10n.digestKeyFacts,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      )),
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: digest.keyFacts
+                    .map((f) => ActionChip(
+                          label: Text('${f.label}: ${f.value}',
+                              style: Theme.of(context).textTheme.bodySmall),
+                          onPressed: () {},
+                          visualDensity: VisualDensity.compact,
+                          side: BorderSide(
+                            color:
+                                Theme.of(context).colorScheme.outlineVariant,
+                          ),
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          pressElevation: 0,
+                        ))
+                    .toList(),
               ),
-          ],
+            ],
 
-          // 关键信息
-          if (showKeyFacts) ...[
-            const SizedBox(height: 12),
-            Text(l10n.digestKeyFacts,
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Wrap(
-              spacing: 8,
-              runSpacing: 4,
-              children: digest.keyFacts
-                  .map((f) => MetaChip(text: '${f.label}: ${f.value}'))
-                  .toList(),
-            ),
+            // 关键词
+            if (showKeywords) ...[
+              const SizedBox(height: 10),
+              Text(l10n.digestKeywords,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      )),
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children:
+                    digest.keywords.map((k) => ActionChip(
+                      label: Text(k, style: Theme.of(context).textTheme.bodySmall),
+                      onPressed: () {},
+                      visualDensity: VisualDensity.compact,
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                      ),
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      pressElevation: 0,
+                    )).toList(),
+              ),
+            ],
           ],
-
-          // 关键词
-          if (showKeywords) ...[
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 6,
-              runSpacing: 4,
-              children:
-                  digest.keywords.map((k) => MetaChip(text: k)).toList(),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
 }
 
-/// 导航回调类型定义
-typedef _NavigateCallback = void Function({
-  required String toType,
-  required String toId,
-  required String source,
-  String? toTitle,
-  String? toCategory,
-  String? toKind,
-  String? toSourceId,
-  String? toSourceUrl,
-});
+// ==================== 综合推荐 ====================
 
-/// 综合推荐区块
 class _BlendedRecommendationsSection extends StatelessWidget {
   final List<BlendedRecommendationItemDto> items;
   final AppLocalizations l10n;
   final String fromType;
   final String fromId;
   final String? fromTitle;
-  final _NavigateCallback? onNavigate;
+  final NavigateCallback? onNavigate;
 
   const _BlendedRecommendationsSection({
     required this.items,
@@ -350,14 +393,26 @@ class _BlendedRecommendationsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
-        Text(l10n.blendedRecommendationsTitle,
-            style: Theme.of(context).textTheme.titleMedium),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(l10n.blendedRecommendationsTitle,
+              style: Theme.of(context).textTheme.titleMedium),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Text(
+            l10n.blendedSubtitle,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+        ),
         const SizedBox(height: 8),
         SizedBox(
-          height: 180,
+          height: 200,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: items.length,
             separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) => _BlendedRecommendationCard(
@@ -366,6 +421,7 @@ class _BlendedRecommendationsSection extends StatelessWidget {
               fromId: fromId,
               fromTitle: fromTitle,
               onNavigate: onNavigate,
+              l10n: l10n,
             ),
           ),
         ),
@@ -374,13 +430,13 @@ class _BlendedRecommendationsSection extends StatelessWidget {
   }
 }
 
-/// 综合推荐卡片
-class _BlendedRecommendationCard extends StatelessWidget {
+class _BlendedRecommendationCard extends StatefulWidget {
   final BlendedRecommendationItemDto item;
   final String fromType;
   final String fromId;
   final String? fromTitle;
-  final _NavigateCallback? onNavigate;
+  final NavigateCallback? onNavigate;
+  final AppLocalizations l10n;
 
   const _BlendedRecommendationCard({
     required this.item,
@@ -388,79 +444,142 @@ class _BlendedRecommendationCard extends StatelessWidget {
     required this.fromId,
     this.fromTitle,
     this.onNavigate,
+    required this.l10n,
   });
 
   @override
+  State<_BlendedRecommendationCard> createState() =>
+      _BlendedRecommendationCardState();
+}
+
+class _BlendedRecommendationCardState
+    extends State<_BlendedRecommendationCard> {
+  bool _showAllReasons = false;
+
+  @override
   Widget build(BuildContext context) {
+    final item = widget.item;
+    final l10n = widget.l10n;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SizedBox(
-      width: 200,
+      width: 240,
       child: ContentCard(
         onTap: () => _navigateToDetail(context),
         padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 类型和分类
-            Wrap(
-              spacing: 4,
-              runSpacing: 2,
-              children: [
-                if (item.type.isNotEmpty)
-                  MetaChip(
-                      text:
-                          localizedContentType(context, item.type) ?? item.type),
-                if (item.category != null && item.category!.isNotEmpty)
-                  MetaChip(text: item.category!),
+        child: AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 标题行 + 箭头
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(item.title,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                  Icon(Icons.chevron_right,
+                      size: 18, color: colorScheme.onSurfaceVariant),
+                ],
+              ),
+
+              // 副标题
+              if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(item.subtitle!,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
               ],
-            ),
-            const SizedBox(height: 6),
 
-            // 标题
-            Text(item.title,
-                style: Theme.of(context).textTheme.titleSmall,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis),
+              // Meta chips
+              const SizedBox(height: 6),
+              Wrap(
+                spacing: 4,
+                runSpacing: 2,
+                children: [
+                  if (item.type.isNotEmpty)
+                    MetaChip(
+                        text: localizedContentType(context, item.type) ??
+                            item.type),
+                  if (item.category != null && item.category!.isNotEmpty)
+                    MetaChip(text: item.category!),
+                  if (item.region != null && item.region!.isNotEmpty)
+                    MetaChip(text: item.region!),
+                ],
+              ),
 
-            // 副标题
-            if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(item.subtitle!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis),
+              // 推荐理由
+              if (item.reasons.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(l10n.blendedReasons,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.primary,
+                        )),
+                const SizedBox(height: 2),
+                ...item.reasons
+                    .take(_showAllReasons ? item.reasons.length : 2)
+                    .map((r) => Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('• ',
+                                  style:
+                                      Theme.of(context).textTheme.bodySmall),
+                              Expanded(
+                                child: Text(r,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ],
+                          ),
+                        )),
+                if (item.reasons.length > 2)
+                  TextButton(
+                    onPressed: () =>
+                        setState(() => _showAllReasons = !_showAllReasons),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      _showAllReasons ? l10n.showLess : l10n.showMore,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: colorScheme.primary,
+                          ),
+                    ),
+                  ),
+              ],
+
+              const Spacer(),
+
+              // 得分分解条
+              if (item.score > 0)
+                _ScoreBreakdownBar(breakdown: item.scoreBreakdown),
             ],
-
-            // 地区
-            if (item.region != null && item.region!.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(item.region!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      )),
-            ],
-
-            const Spacer(),
-
-            // 推荐理由
-            if (item.reasons.isNotEmpty)
-              Text(item.reasons.first,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontStyle: FontStyle.italic,
-                      ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis),
-          ],
+          ),
         ),
       ),
     );
   }
 
   void _navigateToDetail(BuildContext context) {
-    // 记录阅读路径
-    onNavigate?.call(
+    final item = widget.item;
+    widget.onNavigate?.call(
       toType: item.type,
       toId: item.id,
       source: 'blendedRecommendation',
@@ -483,14 +602,70 @@ class _BlendedRecommendationCard extends StatelessWidget {
   }
 }
 
-/// Context 区块（Related, Recommendations, Semantic, Collections, Topics, Graph）
+/// 得分分解条
+class _ScoreBreakdownBar extends StatelessWidget {
+  final RecommendationScoreBreakdownDto breakdown;
+
+  const _ScoreBreakdownBar({required this.breakdown});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final total = breakdown.explicit +
+        breakdown.inferred +
+        breakdown.embedding +
+        breakdown.sameCategory +
+        breakdown.sameRegion;
+
+    if (total <= 0) return const SizedBox.shrink();
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(3),
+      child: SizedBox(
+        height: 6,
+        child: Row(
+          children: [
+            if (breakdown.explicit > 0)
+              Expanded(
+                flex: (breakdown.explicit * 1000).round(),
+                child: Container(color: colorScheme.primary),
+              ),
+            if (breakdown.inferred > 0)
+              Expanded(
+                flex: (breakdown.inferred * 1000).round(),
+                child: Container(color: colorScheme.secondary),
+              ),
+            if (breakdown.embedding > 0)
+              Expanded(
+                flex: (breakdown.embedding * 1000).round(),
+                child: Container(color: colorScheme.tertiary),
+              ),
+            if (breakdown.sameCategory > 0)
+              Expanded(
+                flex: (breakdown.sameCategory * 1000).round(),
+                child: Container(color: colorScheme.primaryContainer),
+              ),
+            if (breakdown.sameRegion > 0)
+              Expanded(
+                flex: (breakdown.sameRegion * 1000).round(),
+                child: Container(color: colorScheme.secondaryContainer),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ==================== Context 区块 ====================
+
 class _DetailContextSection extends StatelessWidget {
   final DetailContextDto context;
   final String contentType;
   final String contentId;
   final String? contentTitle;
   final AppLocalizations l10n;
-  final _NavigateCallback? onNavigate;
+  final NavigateCallback? onNavigate;
 
   const _DetailContextSection({
     required this.context,
@@ -524,9 +699,7 @@ class _DetailContextSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (hasRelated) ...[
-          const SizedBox(height: 16),
-          Text(l10n.contextRelatedTitle,
-              style: Theme.of(context).textTheme.titleMedium),
+          SectionHeader(title: l10n.contextRelatedTitle),
           const SizedBox(height: 8),
           ...ctx.related.map((item) => _RelatedItemRow(
                 item: item,
@@ -535,16 +708,16 @@ class _DetailContextSection extends StatelessWidget {
                 fromTitle: contentTitle,
                 onNavigate: onNavigate,
               )),
+          const SizedBox(height: 16),
         ],
         if (hasRecommendations) ...[
-          const SizedBox(height: 16),
-          Text(l10n.contextRecommendationsTitle,
-              style: Theme.of(context).textTheme.titleMedium),
+          SectionHeader(title: l10n.contextRecommendationsTitle),
           const SizedBox(height: 8),
           SizedBox(
-            height: 120,
+            height: 140,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: ctx.recommendations.length,
               separatorBuilder: (_, _) => const SizedBox(width: 12),
               itemBuilder: (context, index) => _RecommendationCard(
@@ -557,16 +730,16 @@ class _DetailContextSection extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 16),
         ],
         if (hasSemantic) ...[
-          const SizedBox(height: 16),
-          Text(l10n.contextSemanticTitle,
-              style: Theme.of(context).textTheme.titleMedium),
+          SectionHeader(title: l10n.contextSemanticTitle),
           const SizedBox(height: 8),
           SizedBox(
-            height: 120,
+            height: 140,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: ctx.semanticRecommendations.length,
               separatorBuilder: (_, _) => const SizedBox(width: 12),
               itemBuilder: (context, index) => _RecommendationCard(
@@ -579,58 +752,75 @@ class _DetailContextSection extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 16),
         ],
         if (hasCollections) ...[
-          const SizedBox(height: 16),
-          Text(l10n.contextCollectionsTitle,
-              style: Theme.of(context).textTheme.titleMedium),
+          SectionHeader(title: l10n.contextCollectionsTitle),
           const SizedBox(height: 8),
-          ...ctx.collections
-              .map((c) => _ContextCollectionCard(collection: c)),
+          SizedBox(
+            height: 100,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: ctx.collections.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              itemBuilder: (context, index) =>
+                  _ContextCollectionCard(collection: ctx.collections[index], l10n: l10n),
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
         if (hasTopics) ...[
-          const SizedBox(height: 16),
-          Text(l10n.contextTopicsTitle,
-              style: Theme.of(context).textTheme.titleMedium),
+          SectionHeader(title: l10n.contextTopicsTitle),
           const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            children: ctx.exploreTopics
-                .map((topic) => ActionChip(
-                      label: Text(topic.title ?? topic.key ?? ''),
-                      onPressed: () {
-                        if (topic.type != null && topic.key != null) {
-                          ContentNavigator.toExploreTopic(
-                            context,
-                            type: topic.type!,
-                            topicKey: topic.key!,
-                          );
-                        }
-                      },
-                    ))
-                .toList(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: ctx.exploreTopics
+                  .map((topic) => FilterChip(
+                        label: Text(topic.title ?? topic.key ?? ''),
+                        selected: false,
+                        onSelected: (_) {
+                          if (topic.type != null && topic.key != null) {
+                            ContentNavigator.toExploreTopic(
+                              context,
+                              type: topic.type!,
+                              topicKey: topic.key!,
+                            );
+                          }
+                        },
+                      ))
+                  .toList(),
+            ),
           ),
+          const SizedBox(height: 16),
         ],
         if (hasGraph) ...[
-          const SizedBox(height: 16),
-          Text(l10n.contextGraphTitle,
-              style: Theme.of(context).textTheme.titleMedium),
+          SectionHeader(title: l10n.contextGraphTitle),
           const SizedBox(height: 8),
-          ...ctx.graph!.edges.map((edge) => _GraphEdgeRow(edge: edge)),
+          ...ctx.graph!.edges.map((edge) => _GraphEdgeRow(
+                edge: edge,
+                nodes: ctx.graph!.nodes,
+                fromType: contentType,
+                fromId: contentId,
+                onNavigate: onNavigate,
+              )),
         ],
       ],
     );
   }
 }
 
-/// 相关内容行
+// ==================== 相关内容行 ====================
+
 class _RelatedItemRow extends StatelessWidget {
   final RelatedSummaryDto item;
   final String fromType;
   final String fromId;
   final String? fromTitle;
-  final _NavigateCallback? onNavigate;
+  final NavigateCallback? onNavigate;
 
   const _RelatedItemRow({
     required this.item,
@@ -642,18 +832,26 @@ class _RelatedItemRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 构建 meta 字符串：category . region . kind
+    final metaParts = <String>[];
+    if (item.category != null && item.category!.isNotEmpty) metaParts.add(item.category!);
+    if (item.region != null && item.region!.isNotEmpty) metaParts.add(item.region!);
+    if (item.kind != null && item.kind!.isNotEmpty) metaParts.add(item.kind!);
+    final meta = metaParts.isNotEmpty
+        ? metaParts.join(' · ')
+        : (localizedContentType(context, item.type ?? '') ?? item.type);
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: ReferenceCard(
         title: item.title ?? '',
-        meta: localizedContentType(context, item.type ?? '') ?? item.type,
+        meta: meta,
         onTap: () => _navigateToDetail(context),
       ),
     );
   }
 
   void _navigateToDetail(BuildContext context) {
-    // 记录阅读路径
     onNavigate?.call(
       toType: item.type ?? '',
       toId: item.id ?? '',
@@ -675,14 +873,15 @@ class _RelatedItemRow extends StatelessWidget {
   }
 }
 
-/// 推荐卡片（横向滚动）
+// ==================== 推荐卡片 ====================
+
 class _RecommendationCard extends StatelessWidget {
   final RecommendationDto item;
   final String fromType;
   final String fromId;
   final String? fromTitle;
   final String source;
-  final _NavigateCallback? onNavigate;
+  final NavigateCallback? onNavigate;
 
   const _RecommendationCard({
     required this.item,
@@ -699,36 +898,49 @@ class _RecommendationCard extends StatelessWidget {
       width: 180,
       child: ContentCard(
         onTap: () => _navigateToDetail(context),
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (item.type != null)
-              MetaChip(
-                  text: localizedContentType(context, item.type!) ??
-                      item.type!),
-            const SizedBox(height: 4),
-            Text(item.title ?? '',
-                style: Theme.of(context).textTheme.titleSmall,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis),
-            if (item.reason != null && item.reason!.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(item.reason!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis),
-            ],
-          ],
+        padding: EdgeInsets.zero,
+        child: Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Meta chip
+                if (item.type != null)
+                  MetaChip(
+                      text:
+                          localizedContentType(context, item.type!) ?? item.type!),
+                if (item.category != null && item.category!.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  MetaChip(text: item.category!),
+                ],
+                const SizedBox(height: 4),
+                // 标题
+                Text(item.title ?? '',
+                    style: Theme.of(context).textTheme.titleSmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+                // 理由
+                if (item.reason != null && item.reason!.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Expanded(
+                    child: Text(item.reason!,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
   void _navigateToDetail(BuildContext context) {
-    // 记录阅读路径
     onNavigate?.call(
       toType: item.type ?? '',
       toId: item.id ?? '',
@@ -752,16 +964,18 @@ class _RecommendationCard extends StatelessWidget {
   }
 }
 
-/// Context 中的合集卡片
+// ==================== 合集卡片 ====================
+
 class _ContextCollectionCard extends StatelessWidget {
   final ContextCollectionDto collection;
+  final AppLocalizations l10n;
 
-  const _ContextCollectionCard({required this.collection});
+  const _ContextCollectionCard({required this.collection, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+    return SizedBox(
+      width: 160,
       child: ContentCard(
         onTap: () {
           if (collection.id != null) {
@@ -771,57 +985,213 @@ class _ContextCollectionCard extends StatelessWidget {
             );
           }
         },
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            Icon(Icons.collections_bookmark,
-                color: Theme.of(context).colorScheme.primary),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(collection.title ?? '',
-                  style: Theme.of(context).textTheme.titleSmall),
+        padding: EdgeInsets.zero,
+        child: Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(collection.title ?? '',
+                    style: Theme.of(context).textTheme.titleSmall,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis),
+                const Spacer(),
+                Text(
+                  l10n.collectionItemCount(collection.items.length),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+              ],
             ),
-            Icon(Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// 图边行
+// ==================== 图边行 ====================
+
 class _GraphEdgeRow extends StatelessWidget {
   final GraphEdgeDto edge;
+  final List<GraphNodeDto> nodes;
+  final String fromType;
+  final String fromId;
+  final NavigateCallback? onNavigate;
 
-  const _GraphEdgeRow({required this.edge});
+  const _GraphEdgeRow({
+    required this.edge,
+    required this.nodes,
+    required this.fromType,
+    required this.fromId,
+    this.onNavigate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    // 查找 from/to 节点标题
+    final fromNode = _findNode(edge.fromId);
+    final toNode = _findNode(edge.toId);
+    final fromTitle = fromNode?.title ?? edge.fromId ?? '';
+    final toTitle = toNode?.title ?? edge.toId ?? '';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: ContentCard(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // From -> To 行
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: fromNode != null ? () => _navigateToNode(context, fromNode) : null,
+                    child: Text(fromTitle,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.primary,
+                            ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text('→',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: colorScheme.primary,
+                          )),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: toNode != null ? () => _navigateToNode(context, toNode) : null,
+                    child: Text(toTitle,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.primary,
+                            ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                ),
+              ],
+            ),
+            // 标签和理由
+            if (edge.label != null && edge.label!.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(edge.label!,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      )),
+            ],
+            if (edge.reason != null && edge.reason!.isNotEmpty) ...[
+              const SizedBox(height: 2),
+              Text(edge.reason!,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  GraphNodeDto? _findNode(String? id) {
+    if (id == null) return null;
+    try {
+      return nodes.firstWhere((n) => n.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void _navigateToNode(BuildContext context, GraphNodeDto node) {
+    final type = node.type ?? '';
+    final id = node.id ?? '';
+
+    onNavigate?.call(
+      toType: type,
+      toId: id,
+      source: 'graph',
+      toTitle: node.title,
+      toCategory: node.category,
+      toSourceUrl: node.sourceUrl,
+    );
+
+    ContentNavigator.toDetail(
+      context,
+      type: type,
+      id: id.isNotEmpty ? id : null,
+      sourceUrl: node.sourceUrl,
+      category: node.category,
+    );
+  }
+}
+
+// ==================== 辅助组件 ====================
+
+/// Context 区块加载占位
+class _ContextLoadingPlaceholder extends StatelessWidget {
+  final AppLocalizations l10n;
+
+  const _ContextLoadingPlaceholder({required this.l10n});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(edge.fromId ?? '',
-                style: Theme.of(context).textTheme.bodySmall,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text('→',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    )),
-          ),
-          Expanded(
-            child: Text(edge.label ?? edge.toId ?? '',
-                style: Theme.of(context).textTheme.bodySmall,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis),
-          ),
-        ],
+      padding: const EdgeInsets.only(bottom: 16),
+      child: ContentCard(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          l10n.contextLoading,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Context 区块错误行
+class _ContextErrorRow extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+  final AppLocalizations l10n;
+
+  const _ContextErrorRow({
+    required this.message,
+    required this.onRetry,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: ContentCard(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(message,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      )),
+            ),
+            TextButton(
+              onPressed: onRetry,
+              child: Text(l10n.commonRetry),
+            ),
+          ],
+        ),
       ),
     );
   }

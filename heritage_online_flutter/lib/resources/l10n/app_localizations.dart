@@ -1219,12 +1219,6 @@ abstract class AppLocalizations {
   /// **'Related Regions'**
   String get regionAtlasRelatedRegions;
 
-  /// Collection item count
-  ///
-  /// In en, this message translates to:
-  /// **'{count} items'**
-  String collectionItemCount(int count);
-
   /// Collection empty items message
   ///
   /// In en, this message translates to:
@@ -1236,6 +1230,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Explore'**
   String get exploreSectionTitle;
+
+  /// Detail page explore section subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Continue discovering this heritage item through summaries, recommendations, and related clues'**
+  String get exploreSectionSubtitle;
 
   /// Content digest section title
   ///
@@ -1261,11 +1261,23 @@ abstract class AppLocalizations {
   /// **'Key Facts'**
   String get digestKeyFacts;
 
+  /// Digest keywords section title
+  ///
+  /// In en, this message translates to:
+  /// **'Keywords'**
+  String get digestKeywords;
+
   /// Blended recommendations section title
   ///
   /// In en, this message translates to:
   /// **'Recommended for You'**
   String get blendedRecommendationsTitle;
+
+  /// Blended recommendations section subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended based on content relationships and semantic clues'**
+  String get blendedSubtitle;
 
   /// Context related items section title
   ///
@@ -1602,6 +1614,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load statistics'**
   String get statisticsLoadFailed;
+
+  /// Blended recommendation: reasons label
+  ///
+  /// In en, this message translates to:
+  /// **'Reasons'**
+  String get blendedReasons;
+
+  /// Blended recommendation: score label
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get blendedScore;
+
+  /// Context section loading text
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get contextLoading;
+
+  /// Graph edge: from label
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get graphFromLabel;
+
+  /// Graph edge: to label
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get graphToLabel;
+
+  /// Collection: item count display
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items'**
+  String collectionItemCount(int count);
+
+  /// Button to show more items
+  ///
+  /// In en, this message translates to:
+  /// **'Show more'**
+  String get showMore;
+
+  /// Button to show fewer items
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get showLess;
 
   /// Statistics loading text
   ///

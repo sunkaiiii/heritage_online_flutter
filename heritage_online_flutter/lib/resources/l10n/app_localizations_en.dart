@@ -595,15 +595,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get regionAtlasRelatedRegions => 'Related Regions';
 
   @override
-  String collectionItemCount(int count) {
-    return '$count items';
-  }
-
-  @override
   String get collectionEmptyItems => 'This collection is empty';
 
   @override
   String get exploreSectionTitle => 'Explore';
+
+  @override
+  String get exploreSectionSubtitle =>
+      'Continue discovering this heritage item through summaries, recommendations, and related clues';
 
   @override
   String get digestTitle => 'Quick Read';
@@ -620,7 +619,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digestKeyFacts => 'Key Facts';
 
   @override
+  String get digestKeywords => 'Keywords';
+
+  @override
   String get blendedRecommendationsTitle => 'Recommended for You';
+
+  @override
+  String get blendedSubtitle =>
+      'Recommended based on content relationships and semantic clues';
 
   @override
   String get contextRelatedTitle => 'Related';
@@ -797,6 +803,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statisticsLoadFailed => 'Failed to load statistics';
+
+  @override
+  String get blendedReasons => 'Reasons';
+
+  @override
+  String get blendedScore => 'Score';
+
+  @override
+  String get contextLoading => 'Loading...';
+
+  @override
+  String get graphFromLabel => 'From';
+
+  @override
+  String get graphToLabel => 'To';
+
+  @override
+  String collectionItemCount(int count) {
+    return '$count items';
+  }
+
+  @override
+  String get showMore => 'Show more';
+
+  @override
+  String get showLess => 'Show less';
 
   @override
   String get statisticsLoading => 'Loading statistics…';

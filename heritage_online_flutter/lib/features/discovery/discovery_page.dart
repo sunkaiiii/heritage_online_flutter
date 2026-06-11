@@ -526,18 +526,17 @@ class DiscoveryPage extends ConsumerWidget {
                   }
                 },
                 padding: EdgeInsets.zero,
-                child: Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(c.title ?? '',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis),
-                      if (c.subtitle != null && c.subtitle!.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Expanded(
-                          child: Text(c.subtitle!,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(c.title ?? '',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                    if (c.subtitle != null && c.subtitle!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Expanded(
+                        child: Text(c.subtitle!,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),
@@ -552,7 +551,6 @@ class DiscoveryPage extends ConsumerWidget {
                                 )),
                     ]),
                   ),
-                ),
               ),
             );
           },
